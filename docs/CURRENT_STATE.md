@@ -1,21 +1,22 @@
-# Current state — 2026-11-02 (America/Chicago)
+# Current state — 2026-11-03 (America/Chicago)
 
-## Implemented in repository
-- Web-first dependency-free HTML/CSS/JavaScript prototype.
-- Synthetic demo project timeline with three zoom levels, project switching, search and inspector.
-- Manual schema-validated JSON import held only in browser tab memory.
-- Project-scoped plain-text context export; no external AI handoff.
-- Node test suite, syntax check, local development server, CI workflow.
-- WiseCore-style project metadata and documentation.
+## Implemented and verified
+- Live Firebase Hosting: https://contextwise-4a846.web.app (project `contextwise-4a846`).
+- Google Firebase authentication and Google Drive folder OAuth, with a browser-only provider preference.
+- Browser timeline prototype with synthetic data; manual validated JSON import and local text export.
+- Client-side version and diagnostics including Firebase auth, Drive API errors and module startup.
+- Google Drive **ChatGPT plugin** archive writer path is operational: `tasker_complete_development_history_contextwise.json` uploaded to `/Google Drive/ContextWise` and verified against Drive metadata.
+- Connector-first archivist workflow documented in `.agents/skills/contextwise-archivist/SKILL.md`.
+- `npm run verify` previously passed 14 tests for the deployed 0.1.8 UI (re-run when code changes).
 
-## Verification status
-Code committed to GitHub; automated tests have **not yet been executed in this report**. Do not confuse source review with a passing build, deployment, or security audit.
+## Boundaries
+- ChatGPT plugin connection and website's browser OAuth are **independent**. The browser token is session-only; connecting the plugin does not make browser Drive authorization permanent.
+- The website **does not auto-load** JSON uploaded by the archivist. Files written through the plugin may not be visible under the website's `drive.file` access scope.
+- The repo skill is **source-controlled agent guidance**, not an installed always-on ChatGPT skill or a background task.
+- No encrypted personal vault, brokered writer, cross-chat continuous ingestion, agent MCP service, or BuildWise gateway.
+- Do not import private archives into the website without a security review.
 
-## Not implemented
-Authentication, encryption, IndexedDB persistence, backups, multi-device sync, secure import connectors, AI memory retrieval, MCP, hosting/deployment.
-
-## Next engineering slice
-1. Run `npm run verify` and browser smoke tests.
-2. Build a user-tested interactive timeline/zoom model beyond this list-based proof of concept.
-3. Specify vetted local encryption and unlock/recovery before enabling stored private data.
-4. Add local-first persistence behind security gates; test lock/unlock, tamper behavior and backup/restore.
+## Next slice
+1. Continue archivist imports using the connected Google Drive plugin, with schema validation, provenance and verified readback.
+2. Design a deliberately scoped, user-tested reader path for archived files; keep the current manual import behavior until authorized and tested.
+3. **Later, not now:** BuildWise-backed credential broker, authenticated archive API, automatic uploads and sync (see `INTEGRATIONS.md`).

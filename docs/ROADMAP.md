@@ -8,4 +8,6 @@ P0.3 Data experience: evidence-linked import review, duplicates, versions/supers
 P0 exit: repeatable tests, usability evidence, and security review for stored personal data.
 
 ## P1 — AI interoperability (deferred)
-Optional MCP server, agent skill instructions, connectors, token-budgeted retrieval, consent and scoped grants, source-grounded summaries, sharing audit. Not part of P0.
+Current early P1: connected Google Drive plugin is the archivist write path; one Tasker JSON snapshot uploaded and verified. Repo agent instructions: `.agents/skills/contextwise-archivist/SKILL.md`. This is **not** continuous background ingestion, installed global skill, server-side MCP or browser archive synchronization.
+
+Later, on separate owner authorization: BuildWise-backed credential broker, per-user archive API, audited idempotent writes, secure reader, and website sync. The backend is explicitly **deferred** as of 2026-11-03.
