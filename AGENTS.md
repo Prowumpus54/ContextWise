@@ -1,6 +1,7 @@
 # ContextWise development instructions
 
-Start with `docs/AI_CONTEXT.md`, `docs/CURRENT_STATE.md`, and `docs/INDEX.md`.
+Start with `docs/AI_CONTEXT.md`, `docs/CURRENT_STATE.md`, `docs/INDEX.md`, and `docs/STANDARDS.md`.
+Read `docs/FEATURES.md` before feature work; distinguish implemented, active-branch-only, verified connector workflow, and planned states.
 Treat `main` as the source of truth. Use `feature/<scope>` for subsequent nontrivial changes.
 
 Product boundaries:
