@@ -11,6 +11,7 @@
   <script type="module" src="./src/auth.mjs"></script>
   <script type="module" src="./src/storage.mjs"></script>
   <script type="module" src="./src/drive.mjs"></script>
+  <script type="module" src="./src/diagnostics.mjs"></script>
 </head>
 <body>
   <div class="app-shell">
@@ -99,7 +100,8 @@
           <div class="detail-footer"><span aria-hidden="true">⬡</span><div><strong>Your history stays yours.</strong><p>Google sign-in does not encrypt or sync your archive. Do not import private information yet.</p></div></div>
         </aside>
       </div>
-      <footer><span>✧ CONTEXTWISE</span><span>BUILT FOR CONTINUITY. <strong>PREVIEW v0.1</strong></span></footer>
+      <details id="diagnostics-panel" style="margin:18px 0;padding:16px;border:1px solid #31445a;border-radius:12px"><summary>Diagnostics · <strong id="app-version">loading</strong></summary><p>Safe troubleshooting report. No account identifiers, access tokens, or archive contents. Copy and share only when you choose.</p><button type="button" id="diagnostics-refresh" class="secondary">Refresh diagnostics</button> <button type="button" id="diagnostics-copy" class="secondary">Copy diagnostics</button><pre id="diagnostics-output" style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px"></pre></details>
+      <footer><span>✧ CONTEXTWISE</span><span>BUILT FOR CONTINUITY. <strong>PREVIEW <span id="footer-version">v0.1.4</span></strong></span></footer>
     </main>
   </div>
 </body>
