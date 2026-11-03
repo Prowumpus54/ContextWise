@@ -18,6 +18,9 @@ function render() {
     : "Choose a future archive location. No provider is connected yet.";
 }
 window.addEventListener("contextwise:auth", event => { uid = event.detail?.uid || null; render(); });
+// Firebase Auth can resolve before this module has attached its listener.
+uid = window.contextwiseCurrentUid || null;
+render();
 save.addEventListener("click", () => {
   if (!uid || !supported.includes(select.value)) return;
   try {
