@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0a111f">
+  <title>ContextWise | Project Memory</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./src/app.mjs"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="./"><span class="brand-mark" aria-hidden="true">◈</span> ContextWise</a>
+      <p class="eyebrow">PROJECT MEMORY · P0 PROTOTYPE</p>
+      <nav class="sidebar-links" aria-label="Sections">
+        <span class="nav-active">◉ Timeline</span>
+        <span>▤ Projects</span>
+        <span>◷ Decisions</span>
+      </nav>
+      <div class="sidebar-bottom">
+        <strong>Local preview only</strong>
+        <p>No cloud sync. No vault encryption. Imports stay in this browser tab until closed.</p>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div><p class="eyebrow">YOUR PROJECT HISTORY, IN CONTEXT</p><h1>Timeline</h1></div>
+        <div class="top-actions">
+          <button type="button" id="import-button" class="secondary">Import JSON</button>
+          <input id="import-file" class="sr-only" type="file" accept="application/json,.json">
+          <button type="button" id="export-button">Export context</button>
+        </div>
+      </header>
+
+      <section class="hero" aria-label="Project and timeline controls">
+        <div class="hero-info">
+          <label for="project-select" class="label">PROJECT</label>
+          <select id="project-select"></select>
+          <p id="project-description" class="description"></p>
+        </div>
+        <div class="zoom-panel">
+          <span class="label">ZOOM LEVEL</span>
+          <div class="segment" role="group" aria-label="Timeline zoom">
+            <button type="button" data-zoom="overview" aria-pressed="true">Milestones</button>
+            <button type="button" data-zoom="project" aria-pressed="false">Decisions</button>
+            <button type="button" data-zoom="detail" aria-pressed="false">Everything</button>
+          </div>
+        </div>
+      </section>
+
+      <p id="status" class="status" role="status">Viewing synthetic sample history. No files are saved or uploaded.</p>
+      <div class="content-grid">
+        <section class="timeline-panel" aria-labelledby="timeline-heading">
+          <div class="section-head"><h2 id="timeline-heading">History</h2><span id="event-count" class="count"></span></div>
+          <label for="search-input" class="sr-only">Search event history</label>
+          <input id="search-input" class="search" placeholder="Search events and decisions…">
+          <div id="timeline" class="timeline"></div>
+        </section>
+        <aside class="detail-panel" aria-labelledby="detail-heading">
+          <p class="eyebrow">INSPECTOR</p>
+          <h2 id="detail-heading">Event details</h2>
+          <div id="event-detail" class="detail-body">Select an event to view its details and source references.</div>
+          <hr>
+          <h3>What happens to your data?</h3>
+          <p class="muted">Import and context export are manual. This prototype contains no AI integrations, background uploads, persistent storage, or security claims.</p>
+        </aside>
+      </div>
+      <footer>CONTEXTWISE · P0 EXPLORATION · NOT A SECURE VAULT YET</footer>
+    </main>
+  </div>
+</body>
+</html>

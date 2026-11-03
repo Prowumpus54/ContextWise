@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "standardVersion": "1.0.0",
+  "project": {
+    "name": "ContextWise",
+    "slug": "contextwise",
+    "role": "human-first project context vault",
+    "platform": "web",
+    "packageId": "io.contextwise.web",
+    "defaultStableBranch": "main",
+    "integrationBranch": "develop",
+    "activeBranch": "main"
+  },
+  "documentation": {
+    "startHere": "docs/INDEX.md",
+    "aiContext": "docs/AI_CONTEXT.md",
+    "currentState": "docs/CURRENT_STATE.md",
+    "project": "docs/PROJECT.md",
+    "architecture": "docs/ARCHITECTURE.md",
+    "dataModel": "docs/DATA_MODEL.md",
+    "integrations": "docs/INTEGRATIONS.md",
+    "ui": "docs/UI_SPEC.md",
+    "diagnostics": "docs/DIAGNOSTICS.md",
+    "knownIssues": "docs/KNOWN_ISSUES.md",
+    "testMatrix": "docs/TEST_MATRIX.md",
+    "releaseChecklist": "docs/RELEASE_CHECKLIST.md",
+    "decisions": "docs/DECISIONS.md",
+    "changelog": "docs/CHANGELOG.md",
+    "roadmap": "docs/ROADMAP.md"
+  },
+  "diagnostics": {
+    "standard": "WiseCore diagnostics principles",
+    "localEventLimit": 0,
+    "platformLogTag": "ContextWise",
+    "implementation": []
+  },
+  "verification": {
+    "primaryCommand": "npm run verify",
+    "statusDocument": "docs/CURRENT_STATE.md"
+  },
+  "wiseCore": {
+    "enabled": true,
+    "adoptedModules": [
+      "documentation standard",
+      "UI conventions"
+    ],
+    "localPrototypeCandidates": [
+      "timeline",
+      "provenance",
+      "context bundle"
+    ]
+  }
+}
