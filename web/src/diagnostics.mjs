@@ -1,6 +1,6 @@
-// ContextWise diagnostics v0.1.7. No tokens, email addresses, user IDs or archive contents.
-const VERSION = "0.1.7";
-const build = "2026-11-03.4";
+// ContextWise diagnostics v0.1.8. No tokens, email addresses, user IDs or archive contents.
+const VERSION = "0.1.8";
+const build = "2026-11-03.5";
 const version = document.getElementById("app-version");
 const output = document.getElementById("diagnostics-output");
 const copy = document.getElementById("diagnostics-copy");
@@ -43,5 +43,6 @@ copy.addEventListener("click", async () => {
 });
 window.addEventListener("contextwise:auth", update);
 window.addEventListener("contextwise:storage-diagnostics", update);
+window.addEventListener("contextwise:drive-diagnostics", update);
 setTimeout(update, 1200);
 update();

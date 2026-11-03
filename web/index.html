@@ -24,11 +24,11 @@
     }, true);
     window.addEventListener("unhandledrejection", () => { window.contextwiseBoot.promiseRejections += 1; });
   </script>
-  <script type="module" data-module="app" src="./src/app.mjs?v=0.1.7"></script>
-  <script type="module" data-module="auth" src="./src/auth.mjs?v=0.1.7"></script>
-  <script type="module" data-module="storage" src="./src/storage.mjs?v=0.1.7"></script>
-  <script type="module" data-module="drive" src="./src/drive.mjs?v=0.1.7"></script>
-  <script type="module" data-module="diagnostics" src="./src/diagnostics.mjs?v=0.1.7"></script>
+  <script type="module" data-module="app" src="./src/app.mjs?v=0.1.8"></script>
+  <script type="module" data-module="auth" src="./src/auth.mjs?v=0.1.8"></script>
+  <script type="module" data-module="storage" src="./src/storage.mjs?v=0.1.8"></script>
+  <script type="module" data-module="drive" src="./src/drive.mjs?v=0.1.8"></script>
+  <script type="module" data-module="diagnostics" src="./src/diagnostics.mjs?v=0.1.8"></script>
 </head>
 <body>
   <div class="app-shell">
@@ -75,7 +75,7 @@
           <button type="button" id="storage-save" class="secondary">Save preference</button>
         </div>
         <p id="storage-status" role="status" style="margin:10px 0 0">Sign in to select a storage preference.</p>
-        <div style="margin-top:12px"><button type="button" id="drive-connect" class="secondary">Connect Google Drive</button><p id="drive-status" role="status">Drive not connected.</p></div>
+        <div style="margin-top:12px"><button type="button" id="drive-connect" class="secondary">Connect Google Drive</button><p id="drive-status" role="status">Drive not connected.</p><p><a id="drive-api-help" href="https://console.cloud.google.com/apis/library/drive.googleapis.com?project=contextwise-4a846" target="_blank" rel="noopener noreferrer" hidden>Open Google Cloud: Enable Drive API for ContextWise</a></p></div>
       </section>
       <section class="hero" aria-label="Project and timeline controls">
         <div class="hero-glow" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><span>✧</span></div>
@@ -118,7 +118,7 @@
         </aside>
       </div>
       <details id="diagnostics-panel" style="margin:18px 0;padding:16px;border:1px solid #31445a;border-radius:12px"><summary>Diagnostics · <strong id="app-version">loading</strong></summary><p>Safe troubleshooting report. No account identifiers, access tokens, or archive contents. Copy and share only when you choose.</p><button type="button" id="diagnostics-refresh" class="secondary">Refresh diagnostics</button> <button type="button" id="diagnostics-copy" class="secondary">Copy diagnostics</button><pre id="diagnostics-output" style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px"></pre></details>
-      <footer><span>✧ CONTEXTWISE</span><span>BUILT FOR CONTINUITY. <strong>PREVIEW <span id="footer-version">v0.1.7</span></strong></span></footer>
+      <footer><span>✧ CONTEXTWISE</span><span>BUILT FOR CONTINUITY. <strong>PREVIEW <span id="footer-version">v0.1.8</span></strong></span></footer>
     </main>
   </div>
 </body>
