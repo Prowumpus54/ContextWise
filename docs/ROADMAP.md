@@ -10,4 +10,6 @@ P0 exit: repeatable tests, usability evidence, and security review for stored pe
 ## P1 — AI interoperability (deferred)
 Current early P1: connected Google Drive plugin is the archivist write path; one Tasker JSON snapshot uploaded and verified. Repo agent instructions: `.agents/skills/contextwise-archivist/SKILL.md`. This is **not** continuous background ingestion, installed global skill, server-side MCP or browser archive synchronization.
 
-Later, on separate owner authorization: BuildWise-backed credential broker, per-user archive API, audited idempotent writes, secure reader, and website sync. The backend is explicitly **deferred** as of 2026-11-03.
+New 2026-11-03 owner requirement: connected agent conversations should exchange messages and consult earlier decisions. CW-CHAT-001 adds a local, ephemeral, source-linked project room and manual handoff preview in v0.1.11. **True independent ChatGPT/BuildWise agent messaging is not implemented**; see CHAT_RELAY_DESIGN.md for CW-CHAT-002 through CW-CHAT-007 (identity, secure message storage, relay, acknowledgements, decision-aware job signoff).
+
+Later, on separate owner authorization: BuildWise-backed credential broker, per-user archive API, audited idempotent writes, secure reader, and website sync. The previous backend deferral is not silently overridden by the local conversation preview.

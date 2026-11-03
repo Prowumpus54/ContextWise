@@ -1,16 +1,19 @@
-# Test matrix — v0.1.10 site access diagnostics (2026-11-03)
+# Test matrix — v0.1.11 local conversations and decision-linked handoff (2026-11-03)
 
 | Check | Method | Result |
 |---|---|---|
-| Node syntax and unit tests | `npm run verify` in integration worktree | **Passed: 24 tests, 0 failed; JS syntax check passed**, Node v24.22.2 |
+| Node syntax and unit tests | `npm run verify` in integration worktree | **Passed: 31 tests, 0 failed; JS syntax check passed**, Node v24.22.2 |
 | JSON schema v1 validation | Unit tests for event IDs/dates/type, duplicated/invalid/dangling relations, legacy archives | Automated coverage |
 | Project scope and context export | Existing unit tests | Automated coverage |
 | Dependency/module release wiring | Versioned module URL tests and local-server allowlist tests | Automated coverage |
 | Google Drive API error privacy | Sanitized error parser tests | Automated coverage |
 | Browser access diagnostics | 4 tests for bounded event counts, sanitized error codes, missing resource/error capture and no automatic network telemetry | Passed |
+| Decision-linked project conversation | 7 tests: linked context choices, sanitized local messages, rejects invalid refs and spoofed authority, source-grounded handoff, scoped packet bounds, UI wiring, and no automatic network/chat-backend calls | Passed |
+| Local project room UI | Fresh Edge headless shows room and context inspector; isolated three-tab CDP smoke with simulated auth identities and local BroadcastChannel delivery | **Passed**: same-identity tabs exchanged a post; other-identity tab excluded. Not a real Firebase-authenticated security test |
+| External ChatGPT agents talking to each other | Requires brokered agent identity, consent, storage and authenticated relay | **Not implemented** |
 | Owner Cloud Logging | Hosting request export integration requires Firebase project admin to link and verify | **Not activated or verified** |
 | Private reader wiring | Tests for explicit click, read-only OAuth scope and no static archive bundling | Automated source contract; not authenticated E2E |
-| Local browser startup | Fresh headless Edge on loopback, diagnostics/version/graph | **Passed v0.1.10**; access trace initialized, runtime errors 0, promise rejections 0, module errors 0 |
+| Local browser startup | Fresh headless Edge on loopback, diagnostics/version/graph | **Passed v0.1.11**; project room and context chooser rendered; runtime errors 0, promise rejections 0, module errors 0 |
 | Deployed browser startup | Fresh headless Edge v0.1.9 | Passed before merge |
 | Firebase Hosting release | `firebase deploy --only hosting` to `contextwise-4a846` | v0.1.9 deployed; main merge is Git-only |
 | Signed-in Google Drive archive import | Owner browser popup consent then load | **Not verified** |

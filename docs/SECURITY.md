@@ -14,6 +14,11 @@ The Firebase web apiKey is a public client configuration value, not an administr
 - **Privacy metadata:** Public docs and the reusable Archivist skill should resolve each user's Drive folder dynamically, not embed a personal Drive folder/file ID. Identifiers removed from current branch files in this audit; prior Git commits may retain them. The IDs alone are not Drive access credentials.
 - **Abuse limits:** JSON import is bounded to 2 MB and counts are validated. The Drive reader currently relies on provider file-size metadata before parsing; streaming/body-size enforcement and pagination tests are still needed.
 
+## Local project conversation preview boundary (v0.1.11)
+- Same-origin BroadcastChannel posts may be visible to other open tabs under the same Firebase UID. This is client-side scoping, **not** a secure authenticated agent relay or encrypted persistent message store.
+- Do not use the local demo for confidential messages or API tokens. User-entered author labels and chat messages have no verified authority and cannot approve/supersede project decisions.
+- Agent handoff is explicitly copied by a person, and may contain selected event summaries/source refs; review before sharing. See CHAT_RELAY_DESIGN.md.
+
 ## Required before private-production readiness
 Threat model; verified Google OAuth scopes and browser tests; encryption at rest with authenticated encryption and approved key recovery; authorization checks on reads/writes, deduplication/versions and rollback; XSS/security review; mobile, accessibility, consent-revocation and error-path tests. No unapproved native credential bypass or BuildWise broker is authorized.
 

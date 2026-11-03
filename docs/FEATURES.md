@@ -28,6 +28,7 @@ ContextWise is the user-controlled, visual memory layer for a project. It turns 
 | Hosted website | Live at contextwise-4a846.web.app; v0.1.10 adds local access troubleshooting | Verify release/version on every deployment |
 | ChatGPT Archivist writer | Connector workflow verified: Tasker JSON snapshot placed in user's authorized Drive ContextWise folder | Repeatable source review, incrementals and website reader |
 | Visitor access diagnostics | v0.1.10: in-memory per-tab traces of page loads, sign-in attempts and failures; no automatic telemetry | Optional owner Cloud Logging for site-wide Hosting requests; link in Firebase console |
+| Project conversations | v0.1.11 local same-account browser-tab room preview, replies, decision/context refs and manual agent handoff packet | Authenticated cross-chat agent relay, durable encrypted chat/acknowledgements and decision-aware job context |
 | Website auto-sync of uploaded JSON | **Not implemented**; explicit user-click Load archived projects reader is implemented but owner-authenticated E2E unverified | Validate consent/reader and design a scoped sync path |
 | Encrypted portable vault | **Not implemented** | Threat model, vetted crypto, recovery and tests |
 | Continuous background Archivist | **Not implemented**; no daemon/scheduler | Optional, separately authorized workflow |

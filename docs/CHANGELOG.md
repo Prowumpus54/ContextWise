@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.11 — Project conversations and decision-aware handoffs (2026-11-03)
+- Added a Project conversations panel with same-account open-browser-tab messaging, reply threading, event/decision attachments, and linked-idea navigation.
+- Added an explicit Copy agent handoff packet with bounded, source-linked decision context; browser messages never create authoritative decisions.
+- Sender labels are unverified and local chat is not encrypted, durable, agent-authenticated or connected to external ChatGPT conversations. No server, Firestore chat store, new provider permission or BuildWise broker was introduced.
+- Added validation and regression tests, new local dev-server modules and a roadmap for true authenticated cross-chat relay in CHAT_RELAY_DESIGN.md.
+
 ## 0.1.10 — Site access diagnostics (2026-11-03)
 - Added per-browser in-memory access tracing of page open, authentication attempts/cancellations/errors, resource failures, Drive connection and archive-load outcomes.
 - Added access-status summary to the existing copyable diagnostics panel. Events are bounded and sanitized; they do not send telemetry or collect accounts, tokens, private URLs or archive content.

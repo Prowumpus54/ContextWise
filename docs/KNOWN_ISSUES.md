@@ -15,5 +15,6 @@
 | CW-011 | P2 | Open | Browser storage preference is not a real OneDrive, Dropbox or desktop adapter |
 | CW-012 | P2 | Open | BuildWise credential backend/MCP explicitly deferred by owner; not a blocker for connector-only archivist |
 | CW-013 | P2 | Open | Firebase Hosting Cloud Logging integration is optional and not enabled by the v0.1.10 browser changes; owner must link it to view actual site-wide HTTP requests |
+| CW-014 | P1 | Open | v0.1.11 project rooms are ephemeral same-origin browser-tab transport only. They are not persistent multi-device messaging, external ChatGPT-to-ChatGPT chat, or verified agent identity. See CHAT_RELAY_DESIGN.md |
 
 Prior issue claiming hosting was not deployed is obsolete: Firebase Hosting v0.1.9 is live. See `AUDIT_2026-11-03.md`.
