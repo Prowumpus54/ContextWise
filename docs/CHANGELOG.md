@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.10 — Site access diagnostics (2026-11-03)
+- Added per-browser in-memory access tracing of page open, authentication attempts/cancellations/errors, resource failures, Drive connection and archive-load outcomes.
+- Added access-status summary to the existing copyable diagnostics panel. Events are bounded and sanitized; they do not send telemetry or collect accounts, tokens, private URLs or archive content.
+- Documented optional Firebase Hosting Cloud Logging integration for owner-wide web requests. The integration must be activated by an authorized administrator; no hosted collection backend or automatic visitor telemetry was added.
+- Expanded automated suite by four access-trace/privacy tests. Owner-side logging and authenticated sign-in E2E verification remain separate acceptance items.
+
 ## 2026-11-03 — Integration into main (Git merge)
 - Merged previously deployed Firebase/Google authentication, storage preference, Drive connection and diagnostics changes from the feature branch.
 - Merged Connected Ideas graph and optional schema v1 relationships; BuildWise/Tasker/VaultWise/Atlas/ContextWise private combined archive remains in the owner's Google Drive, not the public repository.

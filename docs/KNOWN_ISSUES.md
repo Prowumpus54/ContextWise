@@ -14,5 +14,6 @@
 | CW-010 | P2 | Open | Historical Git commits contain a personal Google Drive folder/file identifier in documentation; current main removes it. IDs are not credentials but remain in immutable older commits unless separately rewritten |
 | CW-011 | P2 | Open | Browser storage preference is not a real OneDrive, Dropbox or desktop adapter |
 | CW-012 | P2 | Open | BuildWise credential backend/MCP explicitly deferred by owner; not a blocker for connector-only archivist |
+| CW-013 | P2 | Open | Firebase Hosting Cloud Logging integration is optional and not enabled by the v0.1.10 browser changes; owner must link it to view actual site-wide HTTP requests |
 
 Prior issue claiming hosting was not deployed is obsolete: Firebase Hosting v0.1.9 is live. See `AUDIT_2026-11-03.md`.

@@ -1,6 +1,6 @@
-# Diagnostics — deployed v0.1.9
+# Diagnostics — deployed v0.1.10
 
-The website's expandable Diagnostics panel includes version/build, signed-in/signed-out state without account identity, storage preference state, Drive button/connection status, JS module startup errors, and bounded error codes. It does **not** intentionally log OAuth tokens, email, archive JSON or private source text.
+The website's expandable Diagnostics panel includes version/build, signed-in/signed-out state without account identity, storage preference state, Drive button/connection status, JS module startup errors, and bounded error codes. Since v0.1.10 it also includes `accessDiagnostics` for the current browser tab: page opening, sign-in attempts/cancellations/failures, Drive and archive-load attempts/failures, and missing script/resource errors. No automatic transmission occurs. It does **not** intentionally log OAuth tokens, email, archive JSON or private source text.
 
 The Drive diagnostic section also reports `archiveLoad`, `archiveProjectCount`, `archiveRelationCount`, the last Drive operation and safe API status/reason strings. Click **Refresh diagnostics** or **Copy diagnostics** in the live site after a failure; do not paste OAuth tokens or browser cookies.
 
