@@ -40,6 +40,10 @@ function render() {
   }));
   select.value=selected.id;
   $("project-description").textContent=selected.description;
+  $("stat-projects").textContent=String(state.workspace.projects.length);
+  $("stat-events").textContent=String(selected.events.length);
+  const last=selected.events.map(e=>e.date).sort().at(-1);
+  $("stat-latest").textContent=last ? new Date(last+"T12:00:00").toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"}) : "None";
   document.querySelectorAll("[data-zoom]").forEach(button => button.setAttribute("aria-pressed",String(button.dataset.zoom===state.zoom)));
   const events=visibleEvents(selected,state.zoom,state.query);
   $("event-count").textContent=`${events.length} event${events.length===1?"":"s"}`;
