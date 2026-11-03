@@ -1,4 +1,5 @@
 // Preferences only. No cloud provider OAuth, tokens, or archive contents are stored.
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 const supported = ["google-drive", "onedrive", "dropbox", "desktop"];
 const labels = {"google-drive":"Google Drive","onedrive":"OneDrive","dropbox":"Dropbox","desktop":"This computer"};
 const select = document.getElementById("storage-provider");
@@ -17,10 +18,7 @@ function render() {
     ? `Preference: ${labels[saved]}. Connection not yet available; no files are synced.`
     : "Choose a future archive location. No provider is connected yet.";
 }
-window.addEventListener("contextwise:auth", event => { uid = event.detail?.uid || null; render(); });
-// Firebase Auth can resolve before this module has attached its listener.
-uid = window.contextwiseCurrentUid || null;
-render();
+onAuthStateChanged(getAuth(), user => { uid = user?.uid || null; render(); }, () => { uid = null; render(); });
 save.addEventListener("click", () => {
   if (!uid || !supported.includes(select.value)) return;
   try {
