@@ -19,4 +19,6 @@ Open http://127.0.0.1:4173. In another terminal, run `npm test`.
 - P0: human-first web timeline, project context import/export, source references, local encrypted vault design and validation.
 - P1: optional MCP server, AI connectors, agent skills, and approved cross-agent handoffs.
 
+New here? Start with the [Lessons Learned & Beginner Bootstrap](docs/LESSONS_LEARNED.md) guide.
+
 Read `docs/INDEX.md` and `docs/CURRENT_STATE.md` before extending this prototype. The repo is not hosted or deployed yet.
