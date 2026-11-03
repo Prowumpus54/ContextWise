@@ -22,6 +22,7 @@
         <p class="eyebrow nav-heading">WORKSPACE</p>
         <nav class="sidebar-links" aria-label="Page sections">
           <a class="nav-active" href="#timeline-heading"><span aria-hidden="true">◉</span> Timeline <span class="mini-tag">P0</span></a>
+          <a href="#atlas-heading"><span aria-hidden="true">◇</span> Atlas 3D</a>
           <a href="#details-heading"><span aria-hidden="true">◎</span> Event inspector</a>
         </nav>
       </div>
@@ -141,6 +142,15 @@
             <p id="conversation-action-status" class="conversation-small" role="status">Handoffs include selected decision evidence and recent local messages; review them before sharing.</p>
           </div>
         </div>
+      </section>
+      <section class="atlas-panel" aria-labelledby="atlas-heading">
+        <div class="section-head">
+          <div><p class="eyebrow">EXPLORE THE SYSTEM</p><h2 id="atlas-heading">BuildWise Atlas</h2></div>
+          <a class="atlas-open" href="./atlas/" target="_blank" rel="noopener noreferrer">Open full-screen Atlas</a>
+        </div>
+        <p class="muted">Interactive 3D architecture of the Wise software factory. This is a read-only topology preview, not a live operational feed. Private controls are unavailable.</p>
+        <iframe class="atlas-frame" title="BuildWise Atlas 3D system topology" src="./atlas/" loading="lazy" sandbox="allow-scripts allow-downloads" referrerpolicy="no-referrer"></iframe>
+        <p class="muted">Drag to orbit, scroll to zoom, or open the full-screen viewer. The 3D renderer requires WebGL and an internet connection for its pinned Three.js library.</p>
       </section>
       <details id="diagnostics-panel" style="margin:18px 0;padding:16px;border:1px solid #31445a;border-radius:12px"><summary>Diagnostics · <strong id="app-version">loading</strong></summary><p>Safe troubleshooting report: page startup, sign-in attempts, resource failures, Drive access and archive loading. No account identifiers, access tokens, or archive contents. Browser event traces stay in this tab; use Copy diagnostics only when you choose.</p><p id="access-status" role="status">Browser access trace initializing.</p><button type="button" id="diagnostics-refresh" class="secondary">Refresh diagnostics</button> <button type="button" id="diagnostics-copy" class="secondary">Copy diagnostics</button><pre id="diagnostics-output" style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px"></pre></details>
       <footer><span>✧ CONTEXTWISE</span><span>BUILT FOR CONTINUITY. <strong>PREVIEW <span id="footer-version">v0.1.11</span></strong></span></footer>
