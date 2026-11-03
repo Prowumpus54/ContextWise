@@ -1,5 +1,6 @@
 // Preferences only. No cloud provider OAuth, tokens, or archive contents are stored.
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+import { auth } from "./auth.mjs";
 const supported = ["google-drive", "onedrive", "dropbox", "desktop"];
 const labels = {"google-drive":"Google Drive","onedrive":"OneDrive","dropbox":"Dropbox","desktop":"This computer"};
 const select = document.getElementById("storage-provider");
@@ -18,7 +19,23 @@ function render() {
     ? `Preference: ${labels[saved]}. Connection not yet available; no files are synced.`
     : "Choose a future archive location. No provider is connected yet.";
 }
-onAuthStateChanged(getAuth(), user => { uid = user?.uid || null; render(); }, () => { uid = null; render(); });
+window.contextwiseStorageDiagnostics = { moduleLoaded: true, authSubscribed: false, callbackCount: 0, lastAuthState: "pending", lastErrorCode: null };
+try {
+  onAuthStateChanged(auth, user => {
+    uid = user?.uid || null;
+    Object.assign(window.contextwiseStorageDiagnostics, { authSubscribed: true, callbackCount: window.contextwiseStorageDiagnostics.callbackCount + 1, lastAuthState: uid ? "signed-in" : "signed-out" });
+    render();
+    window.dispatchEvent(new Event("contextwise:storage-diagnostics"));
+  }, error => {
+    uid = null;
+    Object.assign(window.contextwiseStorageDiagnostics, { lastAuthState: "error", lastErrorCode: String(error?.code || "unknown").slice(0,80) });
+    render();
+    window.dispatchEvent(new Event("contextwise:storage-diagnostics"));
+  });
+} catch (error) {
+  window.contextwiseStorageDiagnostics.lastErrorCode = String(error?.code || error?.name || "unknown").slice(0,80);
+  window.dispatchEvent(new Event("contextwise:storage-diagnostics"));
+}
 save.addEventListener("click", () => {
   if (!uid || !supported.includes(select.value)) return;
   try {

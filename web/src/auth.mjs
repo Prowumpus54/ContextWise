@@ -8,7 +8,7 @@ const config = {
   projectId: "contextwise-4a846",
   appId: "1:605877300235:web:98ae8cdb0f8491844e6b0e",
 };
-const auth = getAuth(initializeApp(config));
+export const auth = getAuth(initializeApp(config));
 const button = document.getElementById("auth-button");
 const label = document.getElementById("auth-status");
 let currentUser = null;

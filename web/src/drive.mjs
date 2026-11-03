@@ -1,9 +1,10 @@
 // Least-privilege Google Drive connection: only files created/opened by this app.
 // Access tokens remain in memory, never localStorage or Firebase.
-import { getAuth, GoogleAuthProvider, reauthenticateWithPopup } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+import { GoogleAuthProvider, reauthenticateWithPopup } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+import { auth } from "./auth.mjs";
 const connect = document.getElementById("drive-connect");
 const driveStatus = document.getElementById("drive-status");
-const auth = getAuth();
+// Reuse the initialized Firebase Auth instance from auth.mjs.
 const DRIVE_SCOPE = "https://www.googleapis.com/auth/drive.file";
 let token = null;
 let folderId = null;

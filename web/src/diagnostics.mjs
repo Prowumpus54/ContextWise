@@ -1,6 +1,6 @@
 // ContextWise diagnostics v0.1.4. No tokens, email addresses, user IDs or archive contents.
-const VERSION = "0.1.4";
-const build = "2026-11-03.1";
+const VERSION = "0.1.5";
+const build = "2026-11-03.2";
 const version = document.getElementById("app-version");
 const output = document.getElementById("diagnostics-output");
 const copy = document.getElementById("diagnostics-copy");
@@ -27,6 +27,7 @@ function snapshot() {
     drive: { buttonDisabled: !!document.getElementById("drive-connect")?.disabled,
       state: driveStatus?.textContent?.startsWith("Connected") ? "connected" : driveStatus?.textContent?.startsWith("Drive connection failed") ? "error" : "not-connected" },
     browser: { online: navigator.onLine, language: navigator.language },
+    storageDiagnostics: window.contextwiseStorageDiagnostics ? { ...window.contextwiseStorageDiagnostics } : { moduleLoaded: false, suspectedIssue: "storage module failed before initialization" },
     errors: [...errors]
   };
 }
@@ -38,5 +39,6 @@ copy.addEventListener("click", async () => {
   catch { copy.textContent = "Select text below to copy"; }
 });
 window.addEventListener("contextwise:auth", update);
+window.addEventListener("contextwise:storage-diagnostics", update);
 setTimeout(update, 1200);
 update();
