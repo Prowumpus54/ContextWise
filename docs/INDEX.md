@@ -2,6 +2,7 @@
 
 Read order for continuing agents: [AI_CONTEXT](AI_CONTEXT.md) → [CURRENT_STATE](CURRENT_STATE.md) → this index.
 
+- [LESSONS LEARNED & BOOTSTRAP](LESSONS_LEARNED.md): candid Wise project failures, development workflow, security lessons, and a beginner's first-week plan.
 - [PROJECT](PROJECT.md): product boundaries and user problem.
 - [ROADMAP](ROADMAP.md): P0 web milestones; P1 MCP explicitly deferred.
 - [ARCHITECTURE](ARCHITECTURE.md): browser and future vault boundaries.
