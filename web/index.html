@@ -8,6 +8,7 @@
   <title>ContextWise — Your work, remembered</title>
   <link rel="stylesheet" href="./styles.css">
   <script type="module" src="./src/app.mjs"></script>
+  <script type="module" src="./src/auth.mjs"></script>
 </head>
 <body>
   <div class="app-shell">
@@ -26,7 +27,7 @@
         <strong>Know where you left off.</strong>
         <p>Reconnect the milestones, decisions and details that shaped your work.</p>
       </div>
-      <div class="sidebar-bottom"><span class="live-dot" aria-hidden="true"></span><strong>Public prototype</strong><p>Sample projects only. No login, cloud sync or encrypted vault yet. Imports remain in this browser tab.</p></div>
+      <div class="sidebar-bottom"><span class="live-dot" aria-hidden="true"></span><strong>Public prototype</strong><p>Sample projects only. Google sign-in is available; cloud sync and encrypted vault are not. Imports remain in this browser tab.</p></div>
     </aside>
 
     <main class="main">
@@ -37,6 +38,8 @@
           <p>One place to understand what happened, why it mattered, and where to go next.</p>
         </div>
         <div class="top-actions">
+          <span id="auth-status" role="status" style="font-size:0.8rem;max-width:200px">Not signed in</span>
+          <button type="button" id="auth-button" class="secondary">Sign in with Google</button>
           <button type="button" id="import-button" class="secondary"><span aria-hidden="true">↥</span> Import JSON</button>
           <input id="import-file" class="sr-only" type="file" accept="application/json,.json">
           <button type="button" id="export-button"><span aria-hidden="true">↗</span> Export context</button>
@@ -80,7 +83,7 @@
         <aside class="detail-panel" aria-labelledby="details-heading">
           <div class="detail-top"><span class="detail-icon" aria-hidden="true">◎</span><p class="eyebrow">LOOK CLOSER</p><h2 id="details-heading">The details</h2><p>Select an event to understand the story behind it.</p></div>
           <div id="event-detail" class="detail-body">Choose a moment on the timeline to inspect its details and source references.</div>
-          <div class="detail-footer"><span aria-hidden="true">⬡</span><div><strong>Your history stays yours.</strong><p>This demo has no authentication, encrypted storage or cloud sync. Do not import private information yet.</p></div></div>
+          <div class="detail-footer"><span aria-hidden="true">⬡</span><div><strong>Your history stays yours.</strong><p>Google sign-in does not encrypt or sync your archive. Do not import private information yet.</p></div></div>
         </aside>
       </div>
       <footer><span>✧ CONTEXTWISE</span><span>BUILT FOR CONTINUITY. <strong>PREVIEW v0.1</strong></span></footer>
