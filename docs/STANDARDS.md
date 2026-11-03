@@ -30,7 +30,7 @@ The **implemented JSON import contract** is schemaVersion 1:
 - Project title <= 120 characters; description <= 3,000; event title <= 160; summary <= 4,000; each source ref <= 400.
 - Browser imports must not exceed 2,000,000 bytes. These are implementation limits in web/src/validate.mjs and MUST be kept synchronized with tests, docs, and any archive writer.
 
-**Graph schema v2 is planned, not deployed.** It SHOULD add conversations, source entities, typed relationships, evidence confidence, revisions, resolution/supersession, and one-to-many project links. The intended relationships include DISCUSSED_IN, INFLUENCED, RESULTED_IN, BLOCKED_BY, RESOLVED_BY and SUPERSEDED_BY. Edges MUST distinguish explicit source-grounded relationships from analyst-inferred relationships. A visual branch is not proof of causation. Every migration from v1 MUST be deterministic, reversible through retained originals and tested for loss.
+**Graph schema v2 remains planned.** The deployed v0.1.9 code has a backward-compatible optional `relations` array in schemaVersion 1, linking existing events across projects. That extension does not yet express evidence confidence or inferred-vs-confirmed status, so the visual edges are not proof of causation. v2 SHOULD add conversations, source entities, typed relationships, evidence confidence, revisions, resolution/supersession, and one-to-many project links. The intended relationships include DISCUSSED_IN, INFLUENCED, RESULTED_IN, BLOCKED_BY, RESOLVED_BY and SUPERSEDED_BY. Edges MUST distinguish explicit source-grounded relationships from analyst-inferred relationships. A visual branch is not proof of causation. Every migration from v1 MUST be deterministic, reversible through retained originals and tested for loss.
 
 ## 3. Provenance, summarization and truthfulness
 
@@ -53,7 +53,7 @@ The **implemented JSON import contract** is schemaVersion 1:
 8. ChatGPT connector writes DO NOT imply that the ContextWise website can read the same file. The website uses separate authorization and may lack rights under the drive.file scope.
 9. A repository agent skill is an instruction set, not an always-on service, installed account-wide feature or background scheduler. Runs require explicit invocation or separately approved scheduling.
 
-The active branch's workflow contract is .agents/skills/contextwise-archivist/SKILL.md on feature/firebase-hosting-contextwise-4a846.
+The maintained workflow contract is `.agents/skills/contextwise-archivist/SKILL.md` on `main` after the 2026-11-03 integration.
 
 ## 5. Portable vault and storage contract (planned)
 
@@ -117,6 +117,6 @@ Planned operations: list_projects, search_context, get_event, get_conversation_s
 - docs/INTEGRATIONS.md: verified external service connections.
 - docs/BUILD_PLAN_2026-11-02.md: milestone IDs/dependencies and P0/P1 scope.
 - docs/DECISIONS.md: approved design decisions and amendments.
-- .agents/skills/contextwise-archivist/SKILL.md (feature branch): actual connector-driven writer procedure.
+- .agents/skills/contextwise-archivist/SKILL.md (on main): actual connector-driven writer procedure.
 
 If documents disagree: **observed code/test/deployment evidence wins for current capability**, approved owner decisions control future intent, and the strictest documented security boundary applies until formally reviewed. Update contradictory documentation rather than quietly choosing a more convenient claim.

@@ -3,7 +3,9 @@
 Read order for continuing agents: [AI_CONTEXT](AI_CONTEXT.md) → [CURRENT_STATE](CURRENT_STATE.md) → this index.
 
 - [STANDARDS](STANDARDS.md): normative rules for architecture, source evidence, privacy, storage, AI/agent access, schemas and releases.
-- [FEATURES](FEATURES.md): complete feature catalog, user stories, current/branch-specific capabilities, acceptance criteria and roadmap.
+- [AUDIT 2026-11-03](AUDIT_2026-11-03.md): integration verification, security review, open findings and disposition.
+- [CONNECTED IDEAS](CONNECTED_IDEAS.md): BuildWise/Tasker archive relationship schema, private Drive reader and boundaries.
+- [FEATURES](FEATURES.md): complete feature catalog, user stories, merged/deployed capabilities, acceptance criteria and roadmap.
 - [LESSONS LEARNED & BOOTSTRAP](LESSONS_LEARNED.md): candid Wise project failures, development workflow, security lessons, and a beginner's first-week plan.
 - [PROJECT](PROJECT.md): product boundaries and user problem.
 - [ROADMAP](ROADMAP.md): P0 web milestones; P1 MCP explicitly deferred.

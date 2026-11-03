@@ -20,3 +20,4 @@ coverage/
 *.backup
 exports/
 user-data/
+.firebase/

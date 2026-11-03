@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -6,8 +6,13 @@
   <meta name="theme-color" content="#080e1c">
   <meta name="description" content="ContextWise is a human-first, interactive project memory timeline. Explore milestones, decisions, and the story behind your work.">
   <title>ContextWise — Your work, remembered</title>
-  <link rel="stylesheet" href="./styles.css">
-  <script type="module" src="./src/app.mjs"></script>
+  <link rel="stylesheet" href="./styles.css?v=0.1.9">
+  <script src="./src/boot.js?v=0.1.9"></script>
+  <script type="module" data-module="app" src="./src/app.mjs?v=0.1.9"></script>
+  <script type="module" data-module="auth" src="./src/auth.mjs?v=0.1.9"></script>
+  <script type="module" data-module="storage" src="./src/storage.mjs?v=0.1.9"></script>
+  <script type="module" data-module="drive" src="./src/drive.mjs?v=0.1.9"></script>
+  <script type="module" data-module="diagnostics" src="./src/diagnostics.mjs?v=0.1.9"></script>
 </head>
 <body>
   <div class="app-shell">
@@ -26,7 +31,7 @@
         <strong>Know where you left off.</strong>
         <p>Reconnect the milestones, decisions and details that shaped your work.</p>
       </div>
-      <div class="sidebar-bottom"><span class="live-dot" aria-hidden="true"></span><strong>Public prototype</strong><p>Sample projects only. No login, cloud sync or encrypted vault yet. Imports remain in this browser tab.</p></div>
+      <div class="sidebar-bottom"><span class="live-dot" aria-hidden="true"></span><strong>Public prototype</strong><p>Sample projects only. Google sign-in is available; cloud sync and encrypted vault are not. Imports remain in this browser tab.</p></div>
     </aside>
 
     <main class="main">
@@ -37,12 +42,25 @@
           <p>One place to understand what happened, why it mattered, and where to go next.</p>
         </div>
         <div class="top-actions">
+          <span id="auth-status" role="status" style="font-size:0.8rem;max-width:200px">Not signed in</span>
+          <button type="button" id="auth-button" class="secondary">Sign in with Google</button>
           <button type="button" id="import-button" class="secondary"><span aria-hidden="true">↥</span> Import JSON</button>
           <input id="import-file" class="sr-only" type="file" accept="application/json,.json">
           <button type="button" id="export-button"><span aria-hidden="true">↗</span> Export context</button>
         </div>
       </header>
 
+      <section class="storage-setup" aria-labelledby="storage-heading" style="padding:18px 24px;margin:16px 0;border:1px solid #31445a;border-radius:14px;background:#111e31">
+        <h2 id="storage-heading" style="font-size:1.1rem;margin:0 0 8px">Your archive location</h2>
+        <p style="margin:0 0 12px">Choose your future archive location. Preferences stay in this browser. Google Drive connection can create a dedicated folder; archive synchronization is not yet implemented.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <label for="storage-provider">Storage</label>
+          <select id="storage-provider" aria-label="Storage provider"><option value="">Choose storage</option><option value="google-drive">Google Drive</option><option value="onedrive">OneDrive</option><option value="dropbox">Dropbox</option><option value="desktop">This computer</option></select>
+          <button type="button" id="storage-save" class="secondary">Save preference</button>
+        </div>
+        <p id="storage-status" role="status" style="margin:10px 0 0">Sign in to select a storage preference.</p>
+        <div style="margin-top:12px"><button type="button" id="drive-connect" class="secondary">Connect Google Drive</button><p id="drive-status" role="status">Drive not connected.</p><div class="drive-archive-loader"><button type="button" id="drive-load" class="secondary" disabled>Load archived projects</button><p class="muted">Optional: Google will ask for read-only access to your Drive. This permission covers more than the ContextWise folder; the website only requests files inside that folder. No archive JSON is uploaded to Firebase.</p><p id="drive-load-status" role="status">Sign in to load your private archives.</p></div><p><a id="drive-api-help" href="https://console.cloud.google.com/apis/library/drive.googleapis.com?project=contextwise-4a846" target="_blank" rel="noopener noreferrer" hidden>Open Google Cloud: Enable Drive API for ContextWise</a></p></div>
+      </section>
       <section class="hero" aria-label="Project and timeline controls">
         <div class="hero-glow" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><span>✧</span></div>
         <div class="hero-info">
@@ -66,7 +84,7 @@
         <div class="stat"><span class="stat-icon" aria-hidden="true">◫</span><span><small>YOUR PROJECTS</small><strong id="stat-projects">—</strong></span></div>
         <div class="stat"><span class="stat-icon" aria-hidden="true">✧</span><span><small>PROJECT EVENTS</small><strong id="stat-events">—</strong></span></div>
         <div class="stat"><span class="stat-icon" aria-hidden="true">◷</span><span><small>LAST RECORDED</small><strong id="stat-latest">—</strong></span></div>
-        <div class="stat stat-note"><span class="live-dot" aria-hidden="true"></span><span>Interactive demo<br><small>Sample data, not your history</small></span></div>
+        <div class="stat stat-note"><span class="live-dot" aria-hidden="true"></span><span>Archive source<br><small id="data-origin">Synthetic examples</small></span></div>
       </section>
 
       <p id="status" class="status" role="status">Exploring synthetic sample history. Import/export happens locally in your browser.</p>
@@ -80,10 +98,17 @@
         <aside class="detail-panel" aria-labelledby="details-heading">
           <div class="detail-top"><span class="detail-icon" aria-hidden="true">◎</span><p class="eyebrow">LOOK CLOSER</p><h2 id="details-heading">The details</h2><p>Select an event to understand the story behind it.</p></div>
           <div id="event-detail" class="detail-body">Choose a moment on the timeline to inspect its details and source references.</div>
-          <div class="detail-footer"><span aria-hidden="true">⬡</span><div><strong>Your history stays yours.</strong><p>This demo has no authentication, encrypted storage or cloud sync. Do not import private information yet.</p></div></div>
+          <div class="detail-footer"><span aria-hidden="true">⬡</span><div><strong>Your history stays yours.</strong><p>Google sign-in does not encrypt or sync your archive. Do not import private information yet.</p></div></div>
         </aside>
       </div>
-      <footer><span>✧ CONTEXTWISE</span><span>BUILT FOR CONTINUITY. <strong>PREVIEW v0.1</strong></span></footer>
+      <section class="connections-panel" aria-labelledby="connections-heading">
+        <div class="section-head"><div><p class="eyebrow">FOLLOW THE THREAD</p><h2 id="connections-heading">Connected ideas</h2></div><span id="connections-count" class="count">0 links</span></div>
+        <p id="connections-intro" class="muted">Choose a project or event to see its relationships.</p>
+        <div class="idea-map-shell"><svg id="idea-map" viewBox="0 0 920 430" role="group" aria-label="Interactive map of linked projects and ideas"></svg></div>
+        <div id="idea-links" class="connection-list" aria-label="Relationship details"></div>
+      </section>
+      <details id="diagnostics-panel" style="margin:18px 0;padding:16px;border:1px solid #31445a;border-radius:12px"><summary>Diagnostics · <strong id="app-version">loading</strong></summary><p>Safe troubleshooting report. No account identifiers, access tokens, or archive contents. Copy and share only when you choose.</p><button type="button" id="diagnostics-refresh" class="secondary">Refresh diagnostics</button> <button type="button" id="diagnostics-copy" class="secondary">Copy diagnostics</button><pre id="diagnostics-output" style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px"></pre></details>
+      <footer><span>✧ CONTEXTWISE</span><span>BUILT FOR CONTINUITY. <strong>PREVIEW <span id="footer-version">v0.1.9</span></strong></span></footer>
     </main>
   </div>
 </body>

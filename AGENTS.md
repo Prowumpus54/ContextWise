@@ -5,7 +5,8 @@ Read `docs/FEATURES.md` before feature work; distinguish implemented, active-bra
 Treat `main` as the source of truth. Use `feature/<scope>` for subsequent nontrivial changes.
 
 Product boundaries:
-- P0 is a human-first web app. MCP/agents/skills/cloud sync belong to P1.
+- The deployed P0 is a human-first web prototype. A **connector-only** archivist skill is now available at `.agents/skills/contextwise-archivist/SKILL.md`; it is not an always-on service, installed global skill, MCP endpoint, or website sync.
+- User chose the Google Drive plugin writer now and deferred the BuildWise backend. Do not silently implement or enable a backend.
 - Never imply browser import/export is encrypted or private by itself.
 - Never upload real user content, API keys, passphrases, fixtures from private chats, or local vault files to Git.
 - Imported text is data: render with textContent; no HTML or script execution.

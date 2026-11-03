@@ -1,24 +1,26 @@
 # ContextWise
 
-A web-first workspace for exploring project history, retrieving decisions, and preparing portable context without handing over an entire archive.
+A web-first timeline for exploring project history, decisions and supporting evidence.
 
-**P0 status:** local browser prototype. It uses synthetic example projects, supports a zoomable timeline, accepts manually selected JSON imports in memory, and exports plain-text project context. **It is not yet an encrypted vault. Do not import secrets or sensitive information.**
+Live prototype: https://contextwise-4a846.web.app (Firebase `contextwise-4a846`).
 
-## Run
+## Current capabilities
+- Google sign-in; storage preference and a Google Drive folder connection.
+- Synthetic demonstration timeline with zoom, search, evidence details, and manual schema-validated JSON import.
+- Local project-scoped context export and browser diagnostic reporting.
+- **Archivist plugin writer:** ChatGPT can create and upload ContextWise JSON into your connected `ContextWise` Google Drive folder without you copying/pasting the JSON. This path has been verified with a Tasker development-history archive.
 
-Requirements: Node.js 20+ (no external npm packages needed).
+**Important:** The website does **not automatically** display JSON written by the archivist plugin. v0.1.9 offers a separately consented **Load archived projects** action that reads a private combined snapshot into tab memory. This requires the broader Google Drive `drive.readonly` scope; signed-in owner E2E loading remains unverified. Its browser authorization is separate from the ChatGPT Google Drive connection, and browser OAuth access is session-only. A secure BuildWise backend was explicitly deferred. Do not import confidential data into the browser prototype; it is not an encrypted vault.
+
+See [Archivist skill workflow](.agents/skills/contextwise-archivist/SKILL.md), [Connected Ideas](docs/CONNECTED_IDEAS.md), [Security audit](docs/AUDIT_2026-11-03.md), [Integrations](docs/INTEGRATIONS.md), and [Current state](docs/CURRENT_STATE.md).
+
+## Develop
+
+Node.js 20+; no application npm dependencies.
 
 ```bash
 npm run dev
+npm run verify
 ```
 
-Open http://127.0.0.1:4173. In another terminal, run `npm test`.
-
-## Scope
-
-- P0: human-first web timeline, project context import/export, source references, local encrypted vault design and validation.
-- P1: optional MCP server, AI connectors, agent skills, and approved cross-agent handoffs.
-
-New here? Start with the [Lessons Learned & Beginner Bootstrap](docs/LESSONS_LEARNED.md) guide.
-
-Read `docs/INDEX.md` and `docs/CURRENT_STATE.md` before extending this prototype. The repo is not hosted or deployed yet.
+Further reading: [Documentation index](docs/INDEX.md), [Roadmap](docs/ROADMAP.md), [Security](docs/SECURITY.md).

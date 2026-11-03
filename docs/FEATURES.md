@@ -1,6 +1,6 @@
 # ContextWise Feature Documentation
 
-Version: 1.0 | Date: 2026-11-02 (America/Chicago)  
+Version: 1.1 | Updated: 2026-11-03 (America/Chicago)
 Purpose: human-readable feature inventory, intended experience and acceptance criteria. **Planned features are not promises of implemented functionality.**
 
 ## Goal
@@ -10,7 +10,7 @@ ContextWise is the user-controlled, visual memory layer for a project. It turns 
 ## Status legend
 
 - **In main prototype:** present in repository main; not necessarily deployed.
-- **On Firebase feature branch:** implemented/reported on feature/firebase-hosting-contextwise-4a846 (v0.1.8); integration/verification is described there, not assumed merged to main.
+- **On main and deployed:** code merged from the Firebase feature branch into main; the v0.1.9 website was separately deployed to Firebase Hosting before the merge. Git merging does not deploy Firebase.
 - **Connector workflow verified:** external ChatGPT Google Drive writer operated independently of the website.
 - **Planned P0/P1:** design/milestone scope only; no functional release claim.
 
@@ -19,15 +19,15 @@ ContextWise is the user-controlled, visual memory layer for a project. It turns 
 | Capability | Current evidence and boundary | Next requirement |
 |---|---|---|
 | Project timeline | In main prototype: synthetic sample projects and date-sorted event list | True time-axis pan/zoom and clustering |
-| Zoom/search/inspector | In main prototype: category-based overview/detail/all, search, event summary and inert source refs | Linked graph, keyboard/visual polish |
+| Zoom/search/inspector | In main/deployed: category-based overview/detail/all, search, inspector and interactive Connected Ideas map with optional schema v1 cross-project event links | Evidence/confidence labels, continuous time-axis zoom, mobile and keyboard tests |
 | Manual ContextWise JSON import | In main prototype: bounded schemaVersion 1 file; tab-memory only | Archive-backed reading and review |
 | Project-scoped text export | In main prototype: local plaintext file of selected project | Privacy preview, citations and token budget |
-| Firebase sign-in | On Firebase feature branch: Google authentication | Isolate account metadata and test auth rules |
-| User storage choice | On Firebase feature branch: browser-local preference for Drive/OneDrive/Dropbox/desktop | Real adapter for each user-selected location |
-| Google Drive browser connection | On Firebase feature branch: limited drive.file OAuth; browser token is session-only | Secure approved reader and renewal design |
-| Hosted website | Firebase feature branch: contextwise-4a846.web.app | Verify release/version on every deployment |
+| Firebase sign-in | In main/deployed v0.1.9: Google authentication, previously verified by signed-in user diagnostics | Isolate account metadata; test denied/wrong-account paths |
+| User storage choice | In main/deployed: account-keyed browser-local preference for Drive/OneDrive/Dropbox/desktop (latter three are selection only) | Real adapter for each user-selected location |
+| Google Drive browser connection | In main/deployed: folder connection via drive.file; separately consented drive.readonly loader for combined snapshots. Browser token is session-only | Reduce read scope and verify signed-in archive loading |
+| Hosted website | Live at contextwise-4a846.web.app, serving v0.1.9 before main merge | Verify release/version on every deployment |
 | ChatGPT Archivist writer | Connector workflow verified: Tasker JSON snapshot placed in user's authorized Drive ContextWise folder | Repeatable source review, incrementals and website reader |
-| Website auto-sync of uploaded JSON | **Not implemented**; plugin and browser OAuth are separate | Authorized verified read path |
+| Website auto-sync of uploaded JSON | **Not implemented**; explicit user-click Load archived projects reader is implemented but owner-authenticated E2E unverified | Validate consent/reader and design a scoped sync path |
 | Encrypted portable vault | **Not implemented** | Threat model, vetted crypto, recovery and tests |
 | Continuous background Archivist | **Not implemented**; no daemon/scheduler | Optional, separately authorized workflow |
 | MCP and third-party AI access | **Not implemented** | P1, read-only-first, scoped grants and audit |
@@ -62,13 +62,13 @@ ContextWise is the user-controlled, visual memory layer for a project. It turns 
 
 ### F06 — Login and ownership
 **User story:** sign into one ContextWise site and see only my vault registration.  
-**Current path:** Google Firebase sign-in on the active feature branch.  
+**Current path:** Google Firebase sign-in on main and the deployed Firebase v0.1.9 website.
 **Future behavior:** Firebase holds identity/minimal provider registration only, not project histories. Login must never be equated with vault unlock.  
 **P0 acceptance:** sign-out revokes unlocked browser state, cross-account registration is denied, and no raw conversation content appears in Firebase metadata.
 
 ### F07 — User-selectable storage
 **User story:** choose Google Drive, OneDrive, Dropbox or desktop storage from ContextWise.  
-**Current path:** local browser preference and limited Google Drive connection.  
+**Current path:** browser-local preference, Google Drive folder connection, and separately consented read-only Drive snapshot loader. No OneDrive/Dropbox/desktop provider adapter is implemented.
 **Planned behavior:** portable versioned encrypted vault created/read at chosen destination; provider can be migrated with history intact.  
 **P0 acceptance:** provider auth, error handling, migration, backup and conflict-safe sync tested. Desktop arbitrary-folder access needs a separately approved helper if browser limitations prevent it.
 
@@ -106,6 +106,6 @@ ContextWise is the user-controlled, visual memory layer for a project. It turns 
 
 ## Critical user experience distinction
 
-The **Archivist can write a JSON archive to Drive** using its connected plugin. The **ContextWise website does not yet automatically consume that file**. Logging into ContextWise and selecting Drive is not equivalent to encrypted storage or persistent browser OAuth. The end-to-end experience is not complete until vault encryption, provider-read access, graph rendering, and security tests are implemented and verified.
+The **Archivist can write a JSON archive to Drive** using its connected plugin. The **ContextWise website does not automatically consume that file**. v0.1.9 can explicitly read a combined snapshot only after Google sign-in, an additional read-only Drive permission and the user's **Load archived projects** click; owner-authenticated real-file E2E is still unverified. Logging into ContextWise and selecting Drive is not equivalent to encrypted storage or persistent browser OAuth. The end-to-end experience is not complete until vault encryption, provider-read access, graph rendering, and security tests are implemented and verified.
 
-For normative requirements see docs/STANDARDS.md. For actual status see docs/CURRENT_STATE.md and the active deployment branch, not this feature inventory alone.
+For normative requirements see docs/STANDARDS.md; for verified current status and open release gates see docs/CURRENT_STATE.md and docs/AUDIT_2026-11-03.md.
