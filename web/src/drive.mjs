@@ -1,7 +1,7 @@
 // Browser-only Google Drive connector.
 // Google Drive access tokens stay in memory; no Firebase JSON archive upload.
 import { GoogleAuthProvider, reauthenticateWithPopup } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-import { auth } from "./auth.mjs?v=0.1.9";
+import { auth } from "./auth.mjs?v=0.1.10";
 import { normalizeWorkspace, MAX_IMPORT_BYTES } from "./validate.mjs";
 import { parseDriveApiError, driveApiGuidance } from "./drive-error.mjs";
 
@@ -77,6 +77,7 @@ function recordError(error) {
       : "Unable to complete the Google Drive operation.";
 }
 connect.addEventListener("click",async()=>{
+  window.contextwiseRecordAccess?.("drive","attempt");
   connect.disabled=true;
   apiHelp.hidden=true;
   Object.assign(diagnostics,{lastHttpStatus:null,lastApiReason:null,lastApiStatus:null,lastErrorCode:null});
@@ -95,9 +96,11 @@ connect.addEventListener("click",async()=>{
       if(!folderId)throw new Error("No Drive folder ID");
     }
     diagnostics.lastOperation="connected";
+    window.contextwiseRecordAccess?.("drive","success");
     driveStatus.textContent="Connected to Google Drive. ContextWise folder ready. No archives uploaded by this browser.";
   }catch(error){
     token=null;folderId=null;
+    window.contextwiseRecordAccess?.("drive","failed",String(error?.reason||error?.code||"unknown"));
     driveStatus.textContent=`Drive connection failed: ${recordError(error)}`;
     apiHelp.hidden=diagnostics.lastHttpStatus!==403;
   }finally{connect.disabled=!auth.currentUser;emitDiagnostics();}
@@ -125,6 +128,7 @@ async function latestArchive(accessToken, archiveFolder) {
 }
 loadButton.addEventListener("click",async()=>{
   if(!auth.currentUser)return;
+  window.contextwiseRecordAccess?.("archive","attempt");
   loadButton.disabled=true;
   diagnostics.archiveLoad="authorizing";
   diagnostics.archiveProjectCount=0;
@@ -145,11 +149,13 @@ loadButton.addEventListener("click",async()=>{
     const n=workspace.projects.reduce((sum,p)=>sum+p.events.length,0);
     window.dispatchEvent(new CustomEvent("contextwise:workspace-loaded",{detail:{workspace}}));
     diagnostics.archiveLoad="loaded";
+    window.contextwiseRecordAccess?.("archive","success");
     diagnostics.archiveProjectCount=workspace.projects.length;
     diagnostics.archiveRelationCount=workspace.relations.length;
     loadStatus.textContent=`Loaded ${workspace.projects.length} projects, ${n} events and ${workspace.relations.length} relationships from your private Drive archive. Nothing was uploaded to Firebase.`;
   }catch(error){
     diagnostics.archiveLoad="error";
+    window.contextwiseRecordAccess?.("archive","failed",String(error?.reason||error?.code||error?.name||"unknown"));
     // Do not expose arbitrary Google error text or private filenames in diagnostics.
     loadStatus.textContent=error?.httpStatus
       ?`Could not load Drive archive: ${recordError(error)}`

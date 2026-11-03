@@ -1,10 +1,11 @@
-// ContextWise diagnostics v0.1.8. No tokens, email addresses, user IDs or archive contents.
-const VERSION = "0.1.9";
-const build = "2026-11-03.6";
+// ContextWise diagnostics v0.1.10. No tokens, email addresses, user IDs or archive contents.
+const VERSION = "0.1.10";
+const build = "2026-11-03.7";
 const version = document.getElementById("app-version");
 const output = document.getElementById("diagnostics-output");
 const copy = document.getElementById("diagnostics-copy");
 const refresh = document.getElementById("diagnostics-refresh");
+const accessStatus = document.getElementById("access-status");
 version.textContent = `v${VERSION} · ${build}`;
 const errors = [];
 function safeCode(value) {
@@ -31,16 +32,27 @@ function snapshot() {
     authDiagnostics: window.contextwiseAuthDiagnostics ? { ...window.contextwiseAuthDiagnostics } : { moduleLoaded: false },
     driveDiagnostics: window.contextwiseDriveDiagnostics ? { ...window.contextwiseDriveDiagnostics } : { moduleLoaded: false },
     bootDiagnostics: window.contextwiseBoot ? { ...window.contextwiseBoot, moduleErrors: [...window.contextwiseBoot.moduleErrors] } : { initialized: false },
+    accessDiagnostics: window.contextwiseAccessDiagnostics
+      ? { ...window.contextwiseAccessDiagnostics, events: [...window.contextwiseAccessDiagnostics.events] }
+      : { initialized: false },
     errors: [...errors]
   };
 }
-function update() { output.textContent = JSON.stringify(snapshot(), null, 2); }
+function update() {
+  const current = snapshot();
+  output.textContent = JSON.stringify(current, null, 2);
+  const access = current.accessDiagnostics;
+  if (accessStatus) accessStatus.textContent = access.initialized
+    ? `This browser session: ${access.authAttempts} sign-in action(s), ${access.authFailures} failure(s), ${access.authCanceled} cancellation(s), ${access.resourceFailures} resource error(s). Not sent to a server.`
+    : "Browser access diagnostics could not initialize.";
+}
 refresh.addEventListener("click", update);
 copy.addEventListener("click", async () => {
   update();
   try { await navigator.clipboard.writeText(output.textContent); copy.textContent = "Copied"; }
   catch { copy.textContent = "Select text below to copy"; }
 });
+window.addEventListener("contextwise:access-diagnostics", update);
 window.addEventListener("contextwise:auth", update);
 window.addEventListener("contextwise:storage-diagnostics", update);
 window.addEventListener("contextwise:drive-diagnostics", update);

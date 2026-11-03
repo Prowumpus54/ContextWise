@@ -18,6 +18,7 @@ onAuthStateChanged(auth, user => {
   window.contextwiseAuthDiagnostics.callbackCount += 1;
   window.contextwiseAuthDiagnostics.lastAuthState = user ? "signed-in" : "signed-out";
   currentUser = user;
+  window.contextwiseRecordAccess?.("auth", user ? "session-restored" : "session-ended");
   button.textContent = user ? "Sign out" : "Sign in with Google";
   label.textContent = user ? `Signed in as ${user.email || "Google user"}` : "Not signed in";
   window.contextwiseCurrentUid = user?.uid || null;
@@ -26,21 +27,26 @@ onAuthStateChanged(auth, user => {
 }, error => {
   window.contextwiseAuthDiagnostics.lastAuthState = "error";
   window.contextwiseAuthDiagnostics.lastErrorCode = String(error?.code || "unknown").slice(0, 80);
+  window.contextwiseRecordAccess?.("auth", "failed", String(error?.code || "unknown"));
   label.textContent = "Authentication unavailable";
 });
 
 button.addEventListener("click", async () => {
   button.disabled = true;
+  window.contextwiseRecordAccess?.("auth", "attempt");
   try {
     if (currentUser) {
       await signOut(auth);
+      window.contextwiseRecordAccess?.("auth", "signed-out");
     } else {
       const provider = new GoogleAuthProvider();
       provider.setCustomParameters({ prompt: "select_account" });
       await signInWithPopup(auth, provider);
+      window.contextwiseRecordAccess?.("auth", "success");
     }
   } catch (error) {
     const code = error?.code || "unknown";
+    window.contextwiseRecordAccess?.("auth", code === "auth/popup-closed-by-user" || code === "auth/cancelled-popup-request" ? "canceled" : "failed", String(code));
     label.textContent = code === "auth/operation-not-allowed"
       ? "Enable Google in Firebase Authentication > Sign-in method."
       : code === "auth/popup-closed-by-user"

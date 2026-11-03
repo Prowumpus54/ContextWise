@@ -2,8 +2,8 @@
 
 ## Canonical source and deployment
 - Source of truth: `main` after the 2026-11-03 integration of the Firebase/BuildWise feature branch and existing standards docs.
-- Live preview: https://contextwise-4a846.web.app (Firebase project `contextwise-4a846`), **v0.1.9**. Merging Git branches does not itself redeploy Firebase Hosting.
-- Verified before merge: Firebase Hosting deployment of v0.1.9; clean headless Edge startup, version and startup diagnostics.
+- Live preview: https://contextwise-4a846.web.app (Firebase project `contextwise-4a846`), **v0.1.10**. Merging Git branches does not itself redeploy Firebase Hosting.
+- Baseline before this release: Firebase Hosting deployment of v0.1.9. v0.1.10 adds session-only access diagnostics and was verified by fresh local Edge browser smoke and 24 automated tests.
 - Automated tests: `npm run verify` is the acceptance command. See `TEST_MATRIX.md` and `AUDIT_2026-11-03.md` for latest observed execution.
 
 ## Implemented
@@ -14,6 +14,8 @@
 - Optional schema v1 `relations` for cross-project event relationships; Connected Ideas graph, list and keyboard-operable linked navigation.
 - ChatGPT connector-driven Archivist process and validated Google Drive writing, independent of the website. Verified combined snapshot: 5 projects, 93 events, 14 recorded relationships. Archive files and their IDs remain outside Git.
 - Diagnostic sections for auth/storage/Drive/module loading; versioned JavaScript URLs and no-cache hosting headers.
+- v0.1.10 local-only visitor access trace: page load, browser resource errors, auth sign-in attempts/cancellations/failures, Drive and archive-load outcomes, with bounded, sanitized events in the copyable diagnostics report.
+- Owner-wide Firebase Hosting request logging is **optional and not activated by this release**. A project administrator can link Cloud Logging through Firebase Integrations; see `ACCESS_MONITORING.md`.
 - Synthetic demo records on initial load. No real archive is published with Firebase static hosting.
 
 ## Boundaries and unverified cases

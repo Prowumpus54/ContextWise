@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -6,13 +6,13 @@
   <meta name="theme-color" content="#080e1c">
   <meta name="description" content="ContextWise is a human-first, interactive project memory timeline. Explore milestones, decisions, and the story behind your work.">
   <title>ContextWise — Your work, remembered</title>
-  <link rel="stylesheet" href="./styles.css?v=0.1.9">
-  <script src="./src/boot.js?v=0.1.9"></script>
-  <script type="module" data-module="app" src="./src/app.mjs?v=0.1.9"></script>
-  <script type="module" data-module="auth" src="./src/auth.mjs?v=0.1.9"></script>
-  <script type="module" data-module="storage" src="./src/storage.mjs?v=0.1.9"></script>
-  <script type="module" data-module="drive" src="./src/drive.mjs?v=0.1.9"></script>
-  <script type="module" data-module="diagnostics" src="./src/diagnostics.mjs?v=0.1.9"></script>
+  <link rel="stylesheet" href="./styles.css?v=0.1.10">
+  <script src="./src/boot.js?v=0.1.10"></script>
+  <script type="module" data-module="app" src="./src/app.mjs?v=0.1.10"></script>
+  <script type="module" data-module="auth" src="./src/auth.mjs?v=0.1.10"></script>
+  <script type="module" data-module="storage" src="./src/storage.mjs?v=0.1.10"></script>
+  <script type="module" data-module="drive" src="./src/drive.mjs?v=0.1.10"></script>
+  <script type="module" data-module="diagnostics" src="./src/diagnostics.mjs?v=0.1.10"></script>
 </head>
 <body>
   <div class="app-shell">
@@ -107,8 +107,8 @@
         <div class="idea-map-shell"><svg id="idea-map" viewBox="0 0 920 430" role="group" aria-label="Interactive map of linked projects and ideas"></svg></div>
         <div id="idea-links" class="connection-list" aria-label="Relationship details"></div>
       </section>
-      <details id="diagnostics-panel" style="margin:18px 0;padding:16px;border:1px solid #31445a;border-radius:12px"><summary>Diagnostics · <strong id="app-version">loading</strong></summary><p>Safe troubleshooting report. No account identifiers, access tokens, or archive contents. Copy and share only when you choose.</p><button type="button" id="diagnostics-refresh" class="secondary">Refresh diagnostics</button> <button type="button" id="diagnostics-copy" class="secondary">Copy diagnostics</button><pre id="diagnostics-output" style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px"></pre></details>
-      <footer><span>✧ CONTEXTWISE</span><span>BUILT FOR CONTINUITY. <strong>PREVIEW <span id="footer-version">v0.1.9</span></strong></span></footer>
+      <details id="diagnostics-panel" style="margin:18px 0;padding:16px;border:1px solid #31445a;border-radius:12px"><summary>Diagnostics · <strong id="app-version">loading</strong></summary><p>Safe troubleshooting report: page startup, sign-in attempts, resource failures, Drive access and archive loading. No account identifiers, access tokens, or archive contents. Browser event traces stay in this tab; use Copy diagnostics only when you choose.</p><p id="access-status" role="status">Browser access trace initializing.</p><button type="button" id="diagnostics-refresh" class="secondary">Refresh diagnostics</button> <button type="button" id="diagnostics-copy" class="secondary">Copy diagnostics</button><pre id="diagnostics-output" style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px"></pre></details>
+      <footer><span>✧ CONTEXTWISE</span><span>BUILT FOR CONTINUITY. <strong>PREVIEW <span id="footer-version">v0.1.10</span></strong></span></footer>
     </main>
   </div>
 </body>
