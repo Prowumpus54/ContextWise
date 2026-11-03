@@ -17,6 +17,7 @@ onAuthStateChanged(auth, user => {
   currentUser = user;
   button.textContent = user ? "Sign out" : "Sign in with Google";
   label.textContent = user ? `Signed in as ${user.email || "Google user"}` : "Not signed in";
+  window.dispatchEvent(new CustomEvent("contextwise:auth", { detail: { uid: user?.uid || null } }));
   // Identity is intentionally not used to persist or upload timeline data.
 }, () => { label.textContent = "Authentication unavailable"; });
 

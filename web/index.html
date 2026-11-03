@@ -8,6 +8,7 @@
   <title>ContextWise — Your work, remembered</title>
   <link rel="stylesheet" href="./styles.css">
   <script type="module" src="./src/app.mjs"></script>
+  <script type="module" src="./src/storage.mjs"></script>
   <script type="module" src="./src/auth.mjs"></script>
 </head>
 <body>
@@ -46,6 +47,16 @@
         </div>
       </header>
 
+      <section class="storage-setup" aria-labelledby="storage-heading" style="padding:18px 24px;margin:16px 0;border:1px solid #31445a;border-radius:14px;background:#111e31">
+        <h2 id="storage-heading" style="font-size:1.1rem;margin:0 0 8px">Your archive location</h2>
+        <p style="margin:0 0 12px">Choose where your private archive will live. This step saves a preference on this browser only; provider connections are not implemented yet.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <label for="storage-provider">Storage</label>
+          <select id="storage-provider" aria-label="Storage provider"><option value="">Choose storage</option><option value="google-drive">Google Drive</option><option value="onedrive">OneDrive</option><option value="dropbox">Dropbox</option><option value="desktop">This computer</option></select>
+          <button type="button" id="storage-save" class="secondary">Save preference</button>
+        </div>
+        <p id="storage-status" role="status" style="margin:10px 0 0">Sign in to select a storage preference.</p>
+      </section>
       <section class="hero" aria-label="Project and timeline controls">
         <div class="hero-glow" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><span>✧</span></div>
         <div class="hero-info">
