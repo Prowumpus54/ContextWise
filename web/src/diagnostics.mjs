@@ -1,6 +1,6 @@
 // ContextWise diagnostics v0.1.8. No tokens, email addresses, user IDs or archive contents.
-const VERSION = "0.1.8";
-const build = "2026-11-03.5";
+const VERSION = "0.1.9";
+const build = "2026-11-03.6";
 const version = document.getElementById("app-version");
 const output = document.getElementById("diagnostics-output");
 const copy = document.getElementById("diagnostics-copy");

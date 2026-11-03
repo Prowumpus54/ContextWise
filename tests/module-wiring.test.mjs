@@ -26,8 +26,14 @@ test("dependent modules import the exact same versioned auth module", () => {
 });
 
 test("boot monitor starts before app modules and no-store headers prevent stale JS", () => {
-  assert.ok(html.indexOf("window.contextwiseBoot =") < html.indexOf('data-module="app"'));
+  const bootScript = `src="./src/boot.js?v=${pkg.version}"`;
+  assert.ok(html.indexOf(bootScript) >= 0 && html.indexOf(bootScript) < html.indexOf('data-module="app"'));
+  assert.ok(read("web/src/boot.js").includes("window.contextwiseBoot ="));
   assert.ok(html.includes('data-module="storage"'));
+  const server = read("scripts/dev.mjs");
+  for (const asset of ["boot.js","auth.mjs","storage.mjs","drive.mjs","drive-error.mjs","graph.mjs","diagnostics.mjs"]) {
+    assert.ok(server.includes(`["/src/${asset}"`), `Local server must serve ${asset}`);
+  }
   const js = firebase.hosting.headers.find(h => h.source === "**/*.mjs");
   assert.ok(js.headers.some(h => h.key === "Cache-Control" && h.value.includes("no-store")));
 });

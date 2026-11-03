@@ -41,5 +41,29 @@ export function normalizeWorkspace(raw) {
     });
     return {id,title,description,events};
   });
-  return {schemaVersion:1,projects};
+  // Optional cross-project connections preserve backward compatibility with schemaVersion 1.
+  const relationsInput = raw.relations ?? [];
+  if (!Array.isArray(relationsInput) || relationsInput.length > 2000) throw new Error("Invalid relationship count");
+  const projectEvents = new Map(projects.map(p => [p.id, new Set(p.events.map(event => event.id))]));
+  const relationIds = new Set();
+  const kinds = new Set(["depends_on","informs","implemented_by","coordinates","evolved_into","related_to"]);
+  const relations = relationsInput.map(relation => {
+    const id = text(relation?.id, "relationship id", 64);
+    if (!safeId.test(id) || relationIds.has(id)) throw new Error("Duplicate or invalid relationship ID");
+    relationIds.add(id);
+    function validRef(ref) {
+      const projectId = text(ref?.projectId, "related project id", 64);
+      const eventId = text(ref?.eventId, "related event id", 64);
+      if (!projectEvents.get(projectId)?.has(eventId)) throw new Error("Relationship targets an unknown event");
+      return {projectId, eventId};
+    }
+    const fromRef = validRef(relation.fromRef);
+    const toRef = validRef(relation.toRef);
+    if (fromRef.projectId === toRef.projectId && fromRef.eventId === toRef.eventId) throw new Error("Self-linked relationship");
+    if (!kinds.has(relation.kind)) throw new Error("Unsupported relationship type");
+    if (!Array.isArray(relation.sourceRefs) || relation.sourceRefs.length > 12 ||
+        relation.sourceRefs.some(ref => typeof ref !== "string" || ref.length > 400)) throw new Error("Invalid relationship sources");
+    return {id,fromRef,toRef,kind:relation.kind,label:text(relation.label,"relationship label",300),sourceRefs:[...relation.sourceRefs]};
+  });
+  return {schemaVersion:1,projects,relations};
 }

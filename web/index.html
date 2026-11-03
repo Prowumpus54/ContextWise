@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -6,29 +6,13 @@
   <meta name="theme-color" content="#080e1c">
   <meta name="description" content="ContextWise is a human-first, interactive project memory timeline. Explore milestones, decisions, and the story behind your work.">
   <title>ContextWise — Your work, remembered</title>
-  <link rel="stylesheet" href="./styles.css">
-  <script>
-    // Capture startup failures before ES modules begin loading. No personal data is logged.
-    window.contextwiseBoot = { initialized: true, moduleErrors: [], runtimeErrors: 0, promiseRejections: 0 };
-    window.addEventListener("error", event => {
-      const state = window.contextwiseBoot;
-      if (event.target && event.target.tagName === "SCRIPT") {
-        state.moduleErrors.push({ module: event.target.dataset.module || "unknown", reason: "script-load-error" });
-      } else {
-        state.runtimeErrors += 1;
-        const message = String(event.message || "");
-        if (message.includes("does not provide an export")) state.moduleErrors.push({ reason: "missing-module-export" });
-        else if (message.includes("Failed to fetch")) state.moduleErrors.push({ reason: "module-fetch-failed" });
-      }
-      state.moduleErrors = state.moduleErrors.slice(-10);
-    }, true);
-    window.addEventListener("unhandledrejection", () => { window.contextwiseBoot.promiseRejections += 1; });
-  </script>
-  <script type="module" data-module="app" src="./src/app.mjs?v=0.1.8"></script>
-  <script type="module" data-module="auth" src="./src/auth.mjs?v=0.1.8"></script>
-  <script type="module" data-module="storage" src="./src/storage.mjs?v=0.1.8"></script>
-  <script type="module" data-module="drive" src="./src/drive.mjs?v=0.1.8"></script>
-  <script type="module" data-module="diagnostics" src="./src/diagnostics.mjs?v=0.1.8"></script>
+  <link rel="stylesheet" href="./styles.css?v=0.1.9">
+  <script src="./src/boot.js?v=0.1.9"></script>
+  <script type="module" data-module="app" src="./src/app.mjs?v=0.1.9"></script>
+  <script type="module" data-module="auth" src="./src/auth.mjs?v=0.1.9"></script>
+  <script type="module" data-module="storage" src="./src/storage.mjs?v=0.1.9"></script>
+  <script type="module" data-module="drive" src="./src/drive.mjs?v=0.1.9"></script>
+  <script type="module" data-module="diagnostics" src="./src/diagnostics.mjs?v=0.1.9"></script>
 </head>
 <body>
   <div class="app-shell">
@@ -75,7 +59,7 @@
           <button type="button" id="storage-save" class="secondary">Save preference</button>
         </div>
         <p id="storage-status" role="status" style="margin:10px 0 0">Sign in to select a storage preference.</p>
-        <div style="margin-top:12px"><button type="button" id="drive-connect" class="secondary">Connect Google Drive</button><p id="drive-status" role="status">Drive not connected.</p><p><a id="drive-api-help" href="https://console.cloud.google.com/apis/library/drive.googleapis.com?project=contextwise-4a846" target="_blank" rel="noopener noreferrer" hidden>Open Google Cloud: Enable Drive API for ContextWise</a></p></div>
+        <div style="margin-top:12px"><button type="button" id="drive-connect" class="secondary">Connect Google Drive</button><p id="drive-status" role="status">Drive not connected.</p><div class="drive-archive-loader"><button type="button" id="drive-load" class="secondary" disabled>Load archived projects</button><p class="muted">Optional: Google will ask for read-only access to your Drive. This permission covers more than the ContextWise folder; the website only requests files inside that folder. No archive JSON is uploaded to Firebase.</p><p id="drive-load-status" role="status">Sign in to load your private archives.</p></div><p><a id="drive-api-help" href="https://console.cloud.google.com/apis/library/drive.googleapis.com?project=contextwise-4a846" target="_blank" rel="noopener noreferrer" hidden>Open Google Cloud: Enable Drive API for ContextWise</a></p></div>
       </section>
       <section class="hero" aria-label="Project and timeline controls">
         <div class="hero-glow" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><span>✧</span></div>
@@ -100,7 +84,7 @@
         <div class="stat"><span class="stat-icon" aria-hidden="true">◫</span><span><small>YOUR PROJECTS</small><strong id="stat-projects">—</strong></span></div>
         <div class="stat"><span class="stat-icon" aria-hidden="true">✧</span><span><small>PROJECT EVENTS</small><strong id="stat-events">—</strong></span></div>
         <div class="stat"><span class="stat-icon" aria-hidden="true">◷</span><span><small>LAST RECORDED</small><strong id="stat-latest">—</strong></span></div>
-        <div class="stat stat-note"><span class="live-dot" aria-hidden="true"></span><span>Interactive demo<br><small>Sample data, not your history</small></span></div>
+        <div class="stat stat-note"><span class="live-dot" aria-hidden="true"></span><span>Archive source<br><small id="data-origin">Synthetic examples</small></span></div>
       </section>
 
       <p id="status" class="status" role="status">Exploring synthetic sample history. Import/export happens locally in your browser.</p>
@@ -117,8 +101,14 @@
           <div class="detail-footer"><span aria-hidden="true">⬡</span><div><strong>Your history stays yours.</strong><p>Google sign-in does not encrypt or sync your archive. Do not import private information yet.</p></div></div>
         </aside>
       </div>
+      <section class="connections-panel" aria-labelledby="connections-heading">
+        <div class="section-head"><div><p class="eyebrow">FOLLOW THE THREAD</p><h2 id="connections-heading">Connected ideas</h2></div><span id="connections-count" class="count">0 links</span></div>
+        <p id="connections-intro" class="muted">Choose a project or event to see its relationships.</p>
+        <div class="idea-map-shell"><svg id="idea-map" viewBox="0 0 920 430" role="group" aria-label="Interactive map of linked projects and ideas"></svg></div>
+        <div id="idea-links" class="connection-list" aria-label="Relationship details"></div>
+      </section>
       <details id="diagnostics-panel" style="margin:18px 0;padding:16px;border:1px solid #31445a;border-radius:12px"><summary>Diagnostics · <strong id="app-version">loading</strong></summary><p>Safe troubleshooting report. No account identifiers, access tokens, or archive contents. Copy and share only when you choose.</p><button type="button" id="diagnostics-refresh" class="secondary">Refresh diagnostics</button> <button type="button" id="diagnostics-copy" class="secondary">Copy diagnostics</button><pre id="diagnostics-output" style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px"></pre></details>
-      <footer><span>✧ CONTEXTWISE</span><span>BUILT FOR CONTINUITY. <strong>PREVIEW <span id="footer-version">v0.1.8</span></strong></span></footer>
+      <footer><span>✧ CONTEXTWISE</span><span>BUILT FOR CONTINUITY. <strong>PREVIEW <span id="footer-version">v0.1.9</span></strong></span></footer>
     </main>
   </div>
 </body>

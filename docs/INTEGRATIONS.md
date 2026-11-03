@@ -16,7 +16,7 @@ Firebase Hosting: https://contextwise-4a846.web.app, project `contextwise-4a846`
 - `Connect Google Drive` has been confirmed working; it creates or locates a dedicated folder with the `drive.file` scope.
 - Its Google access token is **in memory only**. It is not durable after the browser session. Firebase sign-in persistence is not the same as permanent Drive API access.
 - The browser's Drive permission is **not** the plugin's connection. The browser may **not** be permitted to read a JSON file written by the plugin under the restricted `drive.file` scope, even when both refer to the same folder.
-- The live timeline still uses synthetic demo data and explicit local JSON imports; it does **not** automatically load uploaded archivist files. Never claim the upload updated the website.
+- Since v0.1.9 the website has an explicit **Load archived projects** action using separately approved `drive.readonly` permission. It can read the latest combined archive from the owner's ContextWise Drive folder into the browser session. This is not automatic synchronization. See [Connected Ideas](CONNECTED_IDEAS.md).
 
 ## Later: BuildWise backend (deferred by owner 2026-11-03)
 - Design a BuildWise-managed, owner-approved gateway for ContextWise: OAuth offline consent, encrypted token custody (VaultWise or equivalent), short-lived agent grants, per-user isolation, idempotent `archive.upsert` calls, provenance, version history, audit, revocation and restore, and safe read API.

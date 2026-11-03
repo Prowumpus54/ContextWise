@@ -11,7 +11,7 @@
 
 ## Boundaries
 - ChatGPT plugin connection and website's browser OAuth are **independent**. The browser token is session-only; connecting the plugin does not make browser Drive authorization permanent.
-- The website **does not auto-load** JSON uploaded by the archivist. Files written through the plugin may not be visible under the website's `drive.file` access scope.
+- The website **does not auto-load** JSON. Version 0.1.9 offers an explicit **Load archived projects** button that requests the broader Google Drive `drive.readonly` permission to read the latest combined snapshot into the signed-in browser session. User-consent and private-archive read are not yet browser-verified.
 - The repo skill is **source-controlled agent guidance**, not an installed always-on ChatGPT skill or a background task.
 - No encrypted personal vault, brokered writer, cross-chat continuous ingestion, agent MCP service, or BuildWise gateway.
 - Do not import private archives into the website without a security review.
