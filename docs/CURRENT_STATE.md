@@ -2,8 +2,8 @@
 
 ## Canonical source and deployment
 - Source of truth: `main` after the 2026-11-03 integration of the Firebase/BuildWise feature branch and existing standards docs.
-- Live preview: https://contextwise-4a846.web.app (Firebase project `contextwise-4a846`), **v0.1.10**. Merging Git branches does not itself redeploy Firebase Hosting.
-- Baseline before this release: Firebase Hosting deployment of v0.1.9. v0.1.10 adds session-only access diagnostics and was verified by fresh local Edge browser smoke and 24 automated tests.
+- Live preview: https://contextwise-4a846.web.app (Firebase project `contextwise-4a846`), **v0.1.11**. Merging Git branches does not itself redeploy Firebase Hosting.
+- Baseline before this release: Firebase Hosting deployment of v0.1.9. v0.1.11 adds the local project conversation preview and was verified by fresh local Edge browser smoke and 31 automated tests. The earlier v0.1.10 access diagnostics remain.
 - Automated tests: `npm run verify` is the acceptance command. See `TEST_MATRIX.md` and `AUDIT_2026-11-03.md` for latest observed execution.
 
 ## Implemented
@@ -15,6 +15,7 @@
 - ChatGPT connector-driven Archivist process and validated Google Drive writing, independent of the website. Verified combined snapshot: 5 projects, 93 events, 14 recorded relationships. Archive files and their IDs remain outside Git.
 - Diagnostic sections for auth/storage/Drive/module loading; versioned JavaScript URLs and no-cache hosting headers.
 - v0.1.10 local-only visitor access trace: page load, browser resource errors, auth sign-in attempts/cancellations/failures, Drive and archive-load outcomes, with bounded, sanitized events in the copyable diagnostics report.
+- v0.1.11 local **Project conversations** preview: two open ContextWise tabs in the same browser profile for the same signed-in Firebase account can exchange ephemeral posts in the selected project room, reply to one another, attach decisions and linked context-tree events, and copy a source-grounded agent handoff packet.
 - Owner-wide Firebase Hosting request logging is **optional and not activated by this release**. A project administrator can link Cloud Logging through Firebase Integrations; see `ACCESS_MONITORING.md`.
 - Synthetic demo records on initial load. No real archive is published with Firebase static hosting.
 
@@ -22,7 +23,7 @@
 - **The browser's signed-in, real-account read of the plugin-written combined archive has not been confirmed by user testing.** Loading requires the separate `drive.readonly` consent; that permission covers more than the ContextWise folder.
 - **No encrypted vault, archive unlock, secure recovery or automatic cross-device synchronization.** Plaintext files in Google Drive rely on Drive account security. User-selected provider does not imply a fully connected provider.
 - OAuth Drive tokens are session-only; the independent ChatGPT connector may persist its own authorization.
-- No persistent BuildWise backend, privileged agent broker, unattended Archivist scheduler, MCP server or cross-platform AI connector was implemented.
+- No persistent BuildWise backend, privileged agent broker, unattended Archivist scheduler, MCP server or cross-platform AI connector was implemented. Project conversations use same-account open-browser-tab BroadcastChannel only. Separate ChatGPT sessions and BuildWise agents cannot post/receive automatically; message delivery is not durable, authenticated or audited.
 - Demo is a public website. Private-history use is not production security-accepted until the controls and testing in `STANDARDS.md` pass.
 - Relationships do not yet label inferred-versus-confirmed confidence; a line shows archival linkage, not proven causation.
 

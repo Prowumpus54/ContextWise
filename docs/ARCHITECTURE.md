@@ -14,5 +14,8 @@
 ## Boundaries
 Signing into Firebase is not permission to access a Drive folder; signing into Drive is not vault unlock. Files written by the ChatGPT plugin are not necessarily readable using the site's `drive.file` scope. The separate `drive.readonly` reader requires deliberate consent and has not yet passed a signed-in owner E2E smoke test.
 
+## Local conversation preview (v0.1.11)
+The Project conversations panel runs entirely in-browser; same-origin BroadcastChannel provides open-tab-only ephemeral message fanout within a signed-in Firebase account. Message validation references actual in-memory project events and graph links. Copy agent handoff creates a source-bounded context JSON object for manual sharing. No server-side agent relay, persistent chat store or actual ChatGPT-session delivery is implemented. See CHAT_RELAY_DESIGN.md.
+
 ## Future — not implemented
 Portable encrypted user-owned vault, provenance/relationship confidence schema v2, idempotent ingestion and merge review, provider adapters for OneDrive/Dropbox/desktop, optional BuildWise token broker, MCP read API, per-client grants and audit. Never treat design sketches as deployed functionality.

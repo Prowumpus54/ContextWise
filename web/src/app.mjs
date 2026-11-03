@@ -3,6 +3,7 @@ import { normalizeWorkspace, MAX_IMPORT_BYTES } from "./validate.mjs";
 import { visibleEvents } from "./model.mjs";
 import { buildContextBundle } from "./context.mjs";
 import { ideaMap, linksForEvent } from "./graph.mjs";
+import { initConversationRoom } from "./conversation-ui.mjs";
 
 const $ = id => document.getElementById(id);
 const state = {
@@ -10,6 +11,7 @@ const state = {
   projectId: "aurora", zoom: "overview", query: "", eventId: null, source: "sample"
 };
 const project = () => state.workspace.projects.find(item => item.id === state.projectId);
+let conversationRoom = null;
 const make = (tag, name, value) => {
   const el = document.createElement(tag);
   if (name) el.className = name;
@@ -33,6 +35,10 @@ function showDetail(event) {
   target.append(make("p","label","SOURCE REFERENCES"));
   if (!event.sourceRefs.length) target.append(make("p","muted","None supplied; treat this event as unverified."));
   for (const ref of event.sourceRefs) target.append(make("div","source",ref));
+  const discuss = make("button","secondary related-item","Discuss this decision / event");
+  discuss.type = "button";
+  discuss.addEventListener("click",()=>conversationRoom?.focusDecision(state.projectId,event.id));
+  target.append(discuss);
   const linked = linksForEvent(state.workspace,{projectId:state.projectId,eventId:event.id});
   if (linked.length) target.append(make("p","label",`LINKED IDEAS (${linked.length})`));
   for (const {relation,neighbor} of linked) {
@@ -164,6 +170,7 @@ function render() {
   const active=selected.events.find(item=>item.id===state.eventId)||null;
   showDetail(active);
   renderIdeaMap();
+  conversationRoom?.refresh();
 }
 function importWorkspace(raw,source) {
   const workspace=normalizeWorkspace(raw);
@@ -210,5 +217,9 @@ $("export-button").addEventListener("click",()=>{
   link.remove();
   setTimeout(()=>URL.revokeObjectURL(url),1200);
   setStatus("Context exported to a local text file. Review it before sharing with any AI provider.");
+});
+conversationRoom = initConversationRoom({
+  getViewState: () => state,
+  navigate: navigateTo
 });
 render();
