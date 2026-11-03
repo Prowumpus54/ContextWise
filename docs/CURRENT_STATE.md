@@ -32,3 +32,9 @@
 2. Evidence confidence and provenance display, deduplication, revision-safe snapshots and explicit source-status tags.
 3. Least-privilege reader design, archive encryption/unlock/recovery, independent security review and mobile accessibility tests.
 4. BuildWise backend only after renewed owner authorization, not as part of this merge.
+
+## Development branch candidate: authenticated relay (not released)
+
+On `feature/authenticated-agent-relay-20261103`, v0.2.0 source implements server-authenticated Firebase user and enrolled agent messaging, short-lived project/operation grants, agent revocation, encrypted Firestore delivery ciphertext, server-assigned identities, ordered message cursors, replies, publisher-selected decision excerpts, and signoffs that remain unreviewed. The frontend changes replace local chat with HTTPS polling **only when its backend is ready**; it does not silently fall back to untrusted local delivery.
+
+**Main and the live v0.1.11 site remain unchanged.** On Nov 3 the Cloud Firestore API was disabled (HTTP 403) and no Firebase Realtime Database instance was present. Cloud Function deployment, billing approval, owner UID configuration, encryption secret, TTL policies, true-device and independent-agent integration tests are still pending. No real archived user content was moved to Firebase. See [authenticated relay review](AUTHENTICATED_RELAY_2026-11-03.md).

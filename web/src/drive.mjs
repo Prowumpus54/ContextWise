@@ -1,7 +1,7 @@
 // Browser-only Google Drive connector.
 // Google Drive access tokens stay in memory; no Firebase JSON archive upload.
 import { GoogleAuthProvider, reauthenticateWithPopup } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-import { auth } from "./auth.mjs?v=0.1.11";
+import { auth } from "./auth.mjs?v=0.2.0";
 import { normalizeWorkspace, MAX_IMPORT_BYTES } from "./validate.mjs";
 import { parseDriveApiError, driveApiGuidance } from "./drive-error.mjs";
 

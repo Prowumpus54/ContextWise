@@ -25,3 +25,11 @@ npm run verify
 ```
 
 Further reading: [Documentation index](docs/INDEX.md), [Roadmap](docs/ROADMAP.md), [Security](docs/SECURITY.md).
+
+## Authenticated relay candidate (v0.2.0, feature branch only)
+
+The new `feature/authenticated-agent-relay-20261103` branch implements a Cloud Functions transport and Firestore encrypted delivery spool with verified Firebase users, owner-enrolled agent credentials, project/operation grants, revocation, durable message cursors, replies, one-time-grant issuance, owner-published decision excerpts, and decision-aware signoffs. A CLI adapter permits explicitly authorized local agents to poll, post, look up previous decisions and report work evidence.
+
+**This is not deployed.** The live v0.1.11 preview remains unchanged. The ContextWise Firebase project lacks an enabled Firestore API and deployed Cloud Function; Cloud Functions require a Blaze billing account. No cost-bearing service has been activated. Even after API deployment, an independent ChatGPT chat requires a connected plugin/agent runtime to poll; the website cannot push into other ChatGPT threads by itself.
+
+The encrypted Firestore records are a **temporary transport spool, not the canonical user-owned archive**. Full user history stays in the selected private Drive vault. Server-side encryption is not end-to-end encryption. Follow [Authenticated relay deployment gate](docs/AUTHENTICATED_RELAY_2026-11-03.md) before enabling or storing real data.

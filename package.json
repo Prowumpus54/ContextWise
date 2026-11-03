@@ -1,13 +1,13 @@
 {
   "name": "contextwise",
-  "version": "0.1.11",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "description": "Web-first human-readable project timeline and context vault",
   "scripts": {
     "dev": "node scripts/dev.mjs",
     "test": "node --test tests/*.test.mjs",
-    "check": "node --check web/src/boot.js && node --check web/src/app.mjs && node --check web/src/auth.mjs && node --check web/src/storage.mjs && node --check web/src/drive.mjs && node --check web/src/drive-error.mjs && node --check web/src/graph.mjs && node --check web/src/conversation.mjs && node --check web/src/conversation-ui.mjs && node --check web/src/diagnostics.mjs && node --check web/src/model.mjs && node --check web/src/validate.mjs && node --check web/src/context.mjs && node --check scripts/dev.mjs",
+    "check": "node --check web/src/boot.js && node --check web/src/app.mjs && node --check web/src/auth.mjs && node --check web/src/storage.mjs && node --check web/src/drive.mjs && node --check web/src/drive-error.mjs && node --check web/src/graph.mjs && node --check web/src/conversation.mjs && node --check web/src/conversation-ui.mjs && node --check web/src/relay-client.mjs && node --check functions/index.js && node --check functions/lib/security.js && node --check functions/lib/relay.js && node --check web/src/diagnostics.mjs && node --check web/src/model.mjs && node --check web/src/validate.mjs && node --check web/src/context.mjs && node --check scripts/dev.mjs",
     "verify": "npm run check && npm test"
   },
   "engines": {

@@ -21,7 +21,8 @@ const allowed = new Map([
   ["/src/diagnostics.mjs", ["src/diagnostics.mjs", "text/javascript; charset=utf-8"]],
   ["/src/graph.mjs", ["src/graph.mjs", "text/javascript; charset=utf-8"]],
   ["/src/conversation.mjs", ["src/conversation.mjs", "text/javascript; charset=utf-8"]],
-  ["/src/conversation-ui.mjs", ["src/conversation-ui.mjs", "text/javascript; charset=utf-8"]]
+  ["/src/conversation-ui.mjs", ["src/conversation-ui.mjs", "text/javascript; charset=utf-8"]],
+  ["/src/relay-client.mjs", ["src/relay-client.mjs", "text/javascript; charset=utf-8"]]
 ]);
 const port = Number(process.env.PORT ?? 4173);
 const server = createServer(async (req, res) => {

@@ -6,13 +6,13 @@
   <meta name="theme-color" content="#080e1c">
   <meta name="description" content="ContextWise is a human-first, interactive project memory timeline. Explore milestones, decisions, and the story behind your work.">
   <title>ContextWise — Your work, remembered</title>
-  <link rel="stylesheet" href="./styles.css?v=0.1.11">
-  <script src="./src/boot.js?v=0.1.11"></script>
-  <script type="module" data-module="app" src="./src/app.mjs?v=0.1.11"></script>
-  <script type="module" data-module="auth" src="./src/auth.mjs?v=0.1.11"></script>
-  <script type="module" data-module="storage" src="./src/storage.mjs?v=0.1.11"></script>
-  <script type="module" data-module="drive" src="./src/drive.mjs?v=0.1.11"></script>
-  <script type="module" data-module="diagnostics" src="./src/diagnostics.mjs?v=0.1.11"></script>
+  <link rel="stylesheet" href="./styles.css?v=0.2.0">
+  <script src="./src/boot.js?v=0.2.0"></script>
+  <script type="module" data-module="app" src="./src/app.mjs?v=0.2.0"></script>
+  <script type="module" data-module="auth" src="./src/auth.mjs?v=0.2.0"></script>
+  <script type="module" data-module="storage" src="./src/storage.mjs?v=0.2.0"></script>
+  <script type="module" data-module="drive" src="./src/drive.mjs?v=0.2.0"></script>
+  <script type="module" data-module="diagnostics" src="./src/diagnostics.mjs?v=0.2.0"></script>
 </head>
 <body>
   <div class="app-shell">
@@ -108,9 +108,9 @@
         <div id="idea-links" class="connection-list" aria-label="Relationship details"></div>
       </section>
       <section class="connections-panel conversation-hub" id="conversation-hub" aria-labelledby="conversation-heading">
-        <div class="section-head"><div><p class="eyebrow">DISCUSS WITH CONTEXT</p><h2 id="conversation-heading">Project conversations</h2></div><span class="count">Local preview</span></div>
+        <div class="section-head"><div><p class="eyebrow">DISCUSS WITH CONTEXT</p><h2 id="conversation-heading">Project conversations</h2></div><span class="count">Authenticated relay</span></div>
         <p class="muted">This is an in-browser conversation room for tabs in the same browser profile, signed into the same account. It is not connected to separate ChatGPT chats, and messages disappear when tabs close. No messages are saved or sent to Firebase or BuildWise. Do not post secrets or confidential history here.</p>
-        <p id="conversation-status" class="conversation-mode" role="status">Sign in to use the local conversation preview.</p>
+        <p id="conversation-status" class="conversation-mode" role="status">Sign in to connect to the authenticated relay.</p>
         <div class="conversation-layout">
           <div class="conversation-feed-panel">
             <h3>Room: <span id="conversation-room">Project</span></h3>
@@ -118,8 +118,8 @@
           </div>
           <div class="conversation-compose-panel">
             <form id="conversation-compose">
-              <label for="conversation-name">Display name (unverified)</label>
-              <input id="conversation-name" type="text" maxlength="40" value="Local participant" autocomplete="off">
+              <label for="conversation-name">Signed-in account (server verified)</label>
+              <input id="conversation-name" type="text" maxlength="40" value="Verified account" readonly autocomplete="off">
               <label for="conversation-kind">Message intent</label>
               <select id="conversation-kind">
                 <option value="question">Ask a question</option>
@@ -134,16 +134,16 @@
               <label for="conversation-text">Your message</label>
               <textarea id="conversation-text" rows="4" maxlength="1600" placeholder="Ask how an earlier decision should affect the work..." required></textarea>
               <div class="conversation-actions">
-                <button type="submit">Post to local room</button>
-                <button type="button" id="conversation-copy" class="secondary">Copy agent handoff</button>
+                <button type="submit">Post to relay</button>
+                <button type="button" id="conversation-publish" class="secondary">Publish selected context</button><button type="button" id="conversation-copy" class="secondary">Copy agent handoff</button>
               </div>
             </form>
-            <p id="conversation-action-status" class="conversation-small" role="status">Handoffs include selected decision evidence and recent local messages; review them before sharing.</p>
+            <p id="conversation-action-status" class="conversation-small" role="status">Messages remain unapproved discussion. Only the owner can publish selected context for enrolled agents.</p>
           </div>
         </div>
       </section>
       <details id="diagnostics-panel" style="margin:18px 0;padding:16px;border:1px solid #31445a;border-radius:12px"><summary>Diagnostics · <strong id="app-version">loading</strong></summary><p>Safe troubleshooting report: page startup, sign-in attempts, resource failures, Drive access and archive loading. No account identifiers, access tokens, or archive contents. Browser event traces stay in this tab; use Copy diagnostics only when you choose.</p><p id="access-status" role="status">Browser access trace initializing.</p><button type="button" id="diagnostics-refresh" class="secondary">Refresh diagnostics</button> <button type="button" id="diagnostics-copy" class="secondary">Copy diagnostics</button><pre id="diagnostics-output" style="white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px"></pre></details>
-      <footer><span>✧ CONTEXTWISE</span><span>BUILT FOR CONTINUITY. <strong>PREVIEW <span id="footer-version">v0.1.11</span></strong></span></footer>
+      <footer><span>✧ CONTEXTWISE</span><span>BUILT FOR CONTINUITY. <strong>PREVIEW <span id="footer-version">v0.2.0</span></strong></span></footer>
     </main>
   </div>
 </body>

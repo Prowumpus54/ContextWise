@@ -15,3 +15,7 @@ Product boundaries:
 - Any real persistence or remote access requires security review, tests, and explicit current-state documentation.
 
 Verification: `npm run verify`. Record what actually ran and update documentation alongside code changes.
+
+## Explicitly authorized relay-development work (2026-11-03)
+
+The owner subsequently requested building an authenticated chat-to-chat relay. This authorizes feature-branch code and tests for ContextWise's authenticated transport, **not** automatic BuildWise broker activation, billing upgrades, secret provisioning or a production deployment. Preserve the existing no-private-archive-in-Firestore rule: the candidate has encrypted temporary transport payloads only and needs explicit privacy acceptance before live use. Do not merge or deploy until the gates in docs/AUTHENTICATED_RELAY_2026-11-03.md pass.

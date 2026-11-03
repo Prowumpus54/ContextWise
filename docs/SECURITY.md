@@ -23,3 +23,9 @@ The Firebase web apiKey is a public client configuration value, not an administr
 Threat model; verified Google OAuth scopes and browser tests; encryption at rest with authenticated encryption and approved key recovery; authorization checks on reads/writes, deduplication/versions and rollback; XSS/security review; mobile, accessibility, consent-revocation and error-path tests. No unapproved native credential bypass or BuildWise broker is authorized.
 
 See [AUDIT_2026-11-03.md](AUDIT_2026-11-03.md) for dated findings and [STANDARDS.md](STANDARDS.md) for mandatory release criteria.
+
+## Branch-only relay review (v0.2.0; deployment blocked)
+
+The feature branch introduces a server-side AES-256-GCM encrypted **temporary delivery spool** for messages, owner-selected context excerpts and signoffs. Firestore stores ciphertext and necessary routing metadata, not raw message text or Drive archive files. Cloud Functions hold the managed encryption secret and can decrypt for authorized users; this is **not end-to-end encryption** or a finished portable vault. It is a scoped transport-data design exception requiring explicit privacy acceptance before enabling storage, under the existing standards prohibition on storing private archives in Firestore. The canonical archive remains in private user-chosen storage. No history synchronization occurs without user action.
+
+The tests exercise grant denial, user isolation, expiry/revocation, tamper/wrong key, replay, and message validation via a mock database. They do **not** establish live Google Auth, actual Firestore rule behavior, cloud billing suitability, device-to-device delivery, agent plugin connection, recovery/rotation, or encrypted retention enforcement. Keep all live backend routes disabled until the [deployment gate](AUTHENTICATED_RELAY_2026-11-03.md) is met. Do not call this a secure production vault.

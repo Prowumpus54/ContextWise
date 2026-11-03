@@ -17,3 +17,5 @@ Read order for continuing agents: [AI_CONTEXT](AI_CONTEXT.md) → [CURRENT_STATE
 - [SECURITY](SECURITY.md): threat model, nonclaims, and required design gates.
 - [REUSE_AUDIT](REUSE_AUDIT.md): evaluated Wise repos and safe reuse targets.
 - [INTEGRATIONS](INTEGRATIONS.md), [DIAGNOSTICS](DIAGNOSTICS.md), [TEST_MATRIX](TEST_MATRIX.md), [RELEASE_CHECKLIST](RELEASE_CHECKLIST.md), [KNOWN_ISSUES](KNOWN_ISSUES.md), [DECISIONS](DECISIONS.md), [CHANGELOG](CHANGELOG.md).
+
+- [AUTHENTICATED RELAY CANDIDATE 2026-11-03](AUTHENTICATED_RELAY_2026-11-03.md): v0.2.0 feature-branch encrypted delivery broker, agent CLI, permissions, API, tests and deployment prerequisites. Not live.

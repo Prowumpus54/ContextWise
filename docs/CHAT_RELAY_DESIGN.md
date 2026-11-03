@@ -58,3 +58,9 @@ The broker should be a provider-neutral transport, not the source of truth for p
 5. Subsequent authorized agents receive the updated decision context automatically when their next job claims relevant project scope, and must record any deviations.
 
 This is the intended difference from a generic chat room: messages can *point to existing context*, and completed work can be traced back to the decisions that influenced it.
+
+## Update — authenticated broker implementation candidate, 2026-11-03
+
+The prior "proposed" section describes the historical v0.1.11 plan, not the current feature-branch status. Version **0.2.0 is implemented in source on `feature/authenticated-agent-relay-20261103`**, but not merged, deployed or live-tested. Implemented code milestones: CW-CHAT-003 (server-encrypted temporary message spool and owner-published context excerpts, recovery still open), CW-CHAT-004 (Firebase ID token and owner-enrolled scoped agent authorization, audit and revocation), CW-CHAT-005 (cursor polling and idempotency, *not* WebSocket/SSE/acknowledgement), CW-CHAT-006 (agent CLI and unreviewed decision-aware signoffs, *not* BuildWise automatic job injection), CW-CHAT-007 (mock authorization tests, *not* cross-device/live sign-in tests). CW-CHAT-002 inference/supersession evidence modeling remains open.
+
+The new Firestore spool holds only server-encrypted delivery payloads, never raw conversation text; it is not the canonical selected Drive archive. This requires explicit privacy approval before enabling real data under STANDARDS.md. Separate ChatGPT sessions still require their own connected client or plugin. See [full implementation and release gate](AUTHENTICATED_RELAY_2026-11-03.md).

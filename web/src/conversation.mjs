@@ -84,7 +84,7 @@ export function handoffPacket(workspace, projectId, refs, messages=[]) {
   });
   const recentMessages=messages.filter(m=>m.projectId===projectId).slice(-8).map(m=>({
     messageId:m.id,at:m.createdAt,actor:m.actorLabel,
-    authorVerification:"unverified-browser-tab",intent:m.kind,
+    authorVerification:m.senderVerification||"unverified-browser-tab",intent:m.kind,
     text:m.body,decisionRefs:m.contextRefs
   }));
   return {

@@ -1,6 +1,6 @@
 // Preferences only. No cloud provider OAuth, tokens, or archive contents are stored.
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-import { auth } from "./auth.mjs?v=0.1.11";
+import { auth } from "./auth.mjs?v=0.2.0";
 const supported = ["google-drive", "onedrive", "dropbox", "desktop"];
 const labels = {"google-drive":"Google Drive","onedrive":"OneDrive","dropbox":"Dropbox","desktop":"This computer"};
 const select = document.getElementById("storage-provider");

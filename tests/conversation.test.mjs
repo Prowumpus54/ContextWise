@@ -55,10 +55,12 @@ test("handoff cites exact decisions and clarifies unverified chat authority",()=
   assert.match(packet.instructions,/Check the original decision/);
   assert.throws(()=>handoffPacket(workspace,"buildwise",[{projectId:"buildwise",eventId:"missing"}]));
 });
-test("UI uses only same-origin browser messaging, not an external chat backend",()=>{
+test("UI uses an authenticated backend instead of untrusted same-browser channels",()=>{
   const ui=readFileSync(new URL("../web/src/conversation-ui.mjs",import.meta.url),"utf8");
-  assert.ok(ui.includes("new BroadcastChannel("));
-  assert.equal(ui.includes("fetch("),false);
+  assert.equal(ui.includes("new BroadcastChannel("),false);
+  assert.ok(ui.includes("createRelayClient()"));
+  assert.ok(ui.includes("api.post("));
+  assert.ok(ui.includes("api.read("));
   assert.equal(ui.includes("XMLHttpRequest"),false);
   assert.equal(ui.includes("sendBeacon("),false);
   assert.equal(ui.includes("localStorage"),false);
@@ -71,10 +73,11 @@ test("decision inspector and web room are wired without a new top-level module",
   const dev=readFileSync(new URL("../scripts/dev.mjs",import.meta.url),"utf8");
   assert.ok(app.includes('import { initConversationRoom } from "./conversation-ui.mjs"'));
   assert.ok(app.includes("conversationRoom?.focusDecision("));
-  for(const id of ["conversation-compose","conversation-ref","conversation-messages","conversation-copy"])
+  for(const id of ["conversation-compose","conversation-ref","conversation-messages","conversation-copy","conversation-publish"])
     assert.ok(html.includes('id="'+id+'"'));
   assert.ok(dev.includes('"/src/conversation-ui.mjs"'));
   assert.ok(dev.includes('"/src/conversation.mjs"'));
+  assert.ok(dev.includes('"/src/relay-client.mjs"'));
 });
 test("handoff limits retained chat and only includes the active project",()=>{
   const local=validateRoomMessage(message(),workspace);
