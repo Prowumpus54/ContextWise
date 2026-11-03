@@ -1,13 +1,13 @@
 {
   "name": "contextwise",
-  "version": "0.1.0",
+  "version": "0.1.7",
   "private": true,
   "type": "module",
   "description": "Web-first human-readable project timeline and context vault",
   "scripts": {
     "dev": "node scripts/dev.mjs",
     "test": "node --test tests/*.test.mjs",
-    "check": "node --check web/src/app.mjs && node --check web/src/model.mjs && node --check web/src/validate.mjs && node --check web/src/context.mjs && node --check scripts/dev.mjs",
+    "check": "node --check web/src/app.mjs && node --check web/src/auth.mjs && node --check web/src/storage.mjs && node --check web/src/drive.mjs && node --check web/src/diagnostics.mjs && node --check web/src/model.mjs && node --check web/src/validate.mjs && node --check web/src/context.mjs && node --check scripts/dev.mjs",
     "verify": "npm run check && npm test"
   },
   "engines": {

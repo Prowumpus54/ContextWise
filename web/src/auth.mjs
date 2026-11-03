@@ -9,18 +9,25 @@ const config = {
   appId: "1:605877300235:web:98ae8cdb0f8491844e6b0e",
 };
 export const auth = getAuth(initializeApp(config));
+window.contextwiseAuthDiagnostics = { moduleLoaded: true, callbackCount: 0, lastAuthState: "pending", lastErrorCode: null };
 const button = document.getElementById("auth-button");
 const label = document.getElementById("auth-status");
 let currentUser = null;
 
 onAuthStateChanged(auth, user => {
+  window.contextwiseAuthDiagnostics.callbackCount += 1;
+  window.contextwiseAuthDiagnostics.lastAuthState = user ? "signed-in" : "signed-out";
   currentUser = user;
   button.textContent = user ? "Sign out" : "Sign in with Google";
   label.textContent = user ? `Signed in as ${user.email || "Google user"}` : "Not signed in";
   window.contextwiseCurrentUid = user?.uid || null;
   window.dispatchEvent(new CustomEvent("contextwise:auth", { detail: { uid: user?.uid || null } }));
   // Identity is intentionally not used to persist or upload timeline data.
-}, () => { label.textContent = "Authentication unavailable"; });
+}, error => {
+  window.contextwiseAuthDiagnostics.lastAuthState = "error";
+  window.contextwiseAuthDiagnostics.lastErrorCode = String(error?.code || "unknown").slice(0, 80);
+  label.textContent = "Authentication unavailable";
+});
 
 button.addEventListener("click", async () => {
   button.disabled = true;

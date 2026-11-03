@@ -1,6 +1,6 @@
-// ContextWise diagnostics v0.1.4. No tokens, email addresses, user IDs or archive contents.
-const VERSION = "0.1.6";
-const build = "2026-11-03.3";
+// ContextWise diagnostics v0.1.7. No tokens, email addresses, user IDs or archive contents.
+const VERSION = "0.1.7";
+const build = "2026-11-03.4";
 const version = document.getElementById("app-version");
 const output = document.getElementById("diagnostics-output");
 const copy = document.getElementById("diagnostics-copy");
@@ -28,6 +28,9 @@ function snapshot() {
       state: driveStatus?.textContent?.startsWith("Connected") ? "connected" : driveStatus?.textContent?.startsWith("Drive connection failed") ? "error" : "not-connected" },
     browser: { online: navigator.onLine, language: navigator.language },
     storageDiagnostics: window.contextwiseStorageDiagnostics ? { ...window.contextwiseStorageDiagnostics } : { moduleLoaded: false, suspectedIssue: "storage module failed before initialization" },
+    authDiagnostics: window.contextwiseAuthDiagnostics ? { ...window.contextwiseAuthDiagnostics } : { moduleLoaded: false },
+    driveDiagnostics: window.contextwiseDriveDiagnostics ? { ...window.contextwiseDriveDiagnostics } : { moduleLoaded: false },
+    bootDiagnostics: window.contextwiseBoot ? { ...window.contextwiseBoot, moduleErrors: [...window.contextwiseBoot.moduleErrors] } : { initialized: false },
     errors: [...errors]
   };
 }
