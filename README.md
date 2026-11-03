@@ -25,3 +25,10 @@ npm run verify
 ```
 
 Further reading: [Documentation index](docs/INDEX.md), [Roadmap](docs/ROADMAP.md), [Security](docs/SECURITY.md).
+
+## Atlas 3D viewer
+
+ContextWise embeds the recovered read-only BuildWise Atlas at `/atlas/`, with a full-screen link.
+The public view is a schematic; it does not show live operational telemetry or expose any BuildWise
+control endpoints. A local bridge opt-in is deliberately separate and not activated by the
+embedded view. See [Atlas integration and limitations](docs/ATLAS_INTEGRATION.md).

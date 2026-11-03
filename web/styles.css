@@ -56,3 +56,10 @@
 .conversation-actions button { flex:1; min-width:140px; font-size:12px; }
 @media(max-width:900px){.conversation-layout{grid-template-columns:1fr}.conversation-messages{max-height:360px}}
 @media(max-width:520px){.conversation-feed-panel,.conversation-compose-panel{padding:12px}.conversation-hub{padding:14px}.conversation-actions{flex-direction:column}.conversation-actions button{width:100%}}
+
+/* Embedded Atlas 3D viewer. Sandbox isolates it from ContextWise credentials. */
+.atlas-panel{margin:20px 0;padding:20px;border:1px solid #31445a;border-radius:16px;background:#0d1829}
+.atlas-panel .section-head{display:flex;align-items:center;gap:16px;justify-content:space-between;flex-wrap:wrap}
+.atlas-open{color:#8bdcff;text-decoration:underline;font-size:.9rem}
+.atlas-frame{display:block;width:100%;height:min(74vh,760px);min-height:530px;border:1px solid #35536c;border-radius:12px;background:#03070d}
+@media(max-width:700px){.atlas-panel{padding:12px}.atlas-frame{height:620px;min-height:620px}}

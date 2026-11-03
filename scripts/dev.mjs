@@ -6,6 +6,8 @@ import { dirname, join, resolve } from "node:path";
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../web");
 const allowed = new Map([
   ["/", ["index.html", "text/html; charset=utf-8"]],
+  ["/atlas/", ["atlas/index.html", "text/html; charset=utf-8"]],
+  ["/atlas/index.html", ["atlas/index.html", "text/html; charset=utf-8"]],
   ["/index.html", ["index.html", "text/html; charset=utf-8"]],
   ["/styles.css", ["styles.css", "text/css; charset=utf-8"]],
   ["/src/app.mjs", ["src/app.mjs", "text/javascript; charset=utf-8"]],
@@ -23,6 +25,7 @@ const allowed = new Map([
   ["/src/conversation.mjs", ["src/conversation.mjs", "text/javascript; charset=utf-8"]],
   ["/src/conversation-ui.mjs", ["src/conversation-ui.mjs", "text/javascript; charset=utf-8"]]
 ]);
+const atlasCsp = "default-src 'none'; script-src 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'unsafe-inline'; img-src 'self' data:; connect-src http://127.0.0.1:7335; frame-ancestors 'self'; object-src 'none'; base-uri 'none'; form-action 'none'";
 const port = Number(process.env.PORT ?? 4173);
 const server = createServer(async (req, res) => {
   const url = new URL(req.url ?? "/", "http://127.0.0.1");
@@ -36,7 +39,7 @@ const server = createServer(async (req, res) => {
     const bytes = await readFile(join(root, asset[0]));
     res.writeHead(200, {
       "Content-Type": asset[1],
-      "Content-Security-Policy": "default-src 'none'; script-src 'self' https://www.gstatic.com; style-src 'self'; img-src 'self' data: https:; connect-src 'self' https://*.googleapis.com https://*.firebaseapp.com https://*.identitytoolkit.googleapis.com https://*.firebaseio.com; frame-src https://*.firebaseapp.com https://accounts.google.com; object-src 'none'; base-uri 'none'; form-action 'self' https://accounts.google.com",
+      "Content-Security-Policy": url.pathname.startsWith("/atlas/") ? atlasCsp : "default-src 'none'; script-src 'self' https://www.gstatic.com; style-src 'self'; img-src 'self' data: https:; connect-src 'self' https://*.googleapis.com https://*.firebaseapp.com https://*.identitytoolkit.googleapis.com https://*.firebaseio.com; frame-src 'self' https://*.firebaseapp.com https://accounts.google.com; object-src 'none'; base-uri 'none'; form-action 'self' https://accounts.google.com",
       "X-Content-Type-Options": "nosniff",
       "Referrer-Policy": "no-referrer",
       "Cache-Control": "no-store"
