@@ -13,6 +13,7 @@ export async function fetchAvaIncrementals(accessToken, folderId) {
   if(listing.nextPageToken)throw new Error("More than 100 archives; refusing an incomplete import");
   const files=(listing.files||[]).filter(f=>/^ContextWise_Ava_Incremental_Archive_[0-9TZ]+$/.test(f.name||""));
   const documents=[];
+  let totalCharacters=0;
   for(const file of files) {
     const response=await fetch(
       `https://www.googleapis.com/drive/v3/files/${encodeURIComponent(file.id)}/export?mimeType=text%2Fplain`,
@@ -20,7 +21,8 @@ export async function fetchAvaIncrementals(accessToken, folderId) {
     );
     if(!response.ok)throw new Error("Could not read a private incremental archive");
     const content=await response.text();
-    if(content.length>MAX_IMPORT_BYTES)throw new Error("Incremental archive exceeds import size limit");
+    totalCharacters+=content.length;
+    if(totalCharacters>MAX_IMPORT_BYTES)throw new Error("Combined incremental archive exceeds 2 MB import limit");
     documents.push(content);
   }
   return documents;
