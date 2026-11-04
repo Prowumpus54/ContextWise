@@ -3,6 +3,7 @@
 import { GoogleAuthProvider, reauthenticateWithPopup } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 import { auth } from "./auth.mjs?v=0.1.11";
 import { normalizeWorkspace, MAX_IMPORT_BYTES } from "./validate.mjs";
+import { mergeAvaRecords } from "./ava-archive.mjs";
 import { parseDriveApiError, driveApiGuidance } from "./drive-error.mjs";
 
 const connect = document.getElementById("drive-connect");
