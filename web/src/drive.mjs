@@ -172,7 +172,7 @@ loadButton.addEventListener("click",async()=>{
     window.contextwiseRecordAccess?.("archive","success");
     diagnostics.archiveProjectCount=workspace.projects.length;
     diagnostics.archiveRelationCount=workspace.relations.length;
-    loadStatus.textContent=`Loaded ${workspace.projects.length} projects, ${n} events and ${workspace.relations.length} relationships from your private Drive archive. Nothing was uploaded to Firebase.`;
+    loadStatus.textContent=`Loaded ${workspace.projects.length} projects, ${n} events and ${workspace.relations.length} relationships. Added ${added} unique Ava bulletin events from private incremental archives. Nothing was uploaded to Firebase.`;
   }catch(error){
     diagnostics.archiveLoad="error";
     window.contextwiseRecordAccess?.("archive","failed",String(error?.reason||error?.code||error?.name||"unknown"));
