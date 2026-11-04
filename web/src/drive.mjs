@@ -138,8 +138,8 @@ async function latestArchive(accessToken, archiveFolder) {
   const list=await apiRequest(url,"list-private-archives",accessToken);
   const candidates=(list.files||[]).filter(file=>
     /^contextwise-workspace-[a-zA-Z0-9_-]+\.json$/.test(file.name||""));
-  if(!candidates.length)throw new Error("No combined ContextWise workspace JSON found in your Drive folder.");
-  return candidates[0];
+  if(list.nextPageToken)throw new Error("Too many combined archives to safely choose latest.");
+  return candidates[0] || null;
 }
 loadButton.addEventListener("click",async()=>{
   if(!auth.currentUser)return;
