@@ -65,6 +65,19 @@ async function apiRequest(url, operation, accessToken, options={}) {
   }
   return response.json();
 }
+async function apiText(url, operation, accessToken) {
+  diagnostics.lastOperation=operation;
+  const response=await fetch(url,{headers:{Authorization:`Bearer ${accessToken}`}});
+  if(!response.ok){
+    let body=null;
+    try{body=await response.json();}catch{}
+    const info=parseDriveApiError(response.status,body);
+    throw Object.assign(new Error(driveApiGuidance(info)),info);
+  }
+  const content=await response.text();
+  if(content.length>MAX_IMPORT_BYTES)throw new Error("Archive document exceeds 2 MB");
+  return content;
+}
 function recordError(error) {
   diagnostics.lastHttpStatus=Number.isInteger(error?.httpStatus)?error.httpStatus:null;
   diagnostics.lastApiReason=error?.reason||null;
