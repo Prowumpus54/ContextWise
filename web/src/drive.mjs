@@ -155,12 +155,17 @@ loadButton.addEventListener("click",async()=>{
     const readToken=await oauthToken(DRIVE_READ_SCOPE);
     const archiveFolder=await getFolderForRead(readToken);
     const file=await latestArchive(readToken,archiveFolder);
-    if(Number(file.size)>MAX_IMPORT_BYTES)throw new Error("Archive exceeds 2 MB import limit");
-    diagnostics.lastOperation="read-private-archive";
-    const raw=await apiRequest(
-      `https://www.googleapis.com/drive/v3/files/${encodeURIComponent(file.id)}?alt=media`,
-      "read-private-archive",readToken);
-    const workspace=normalizeWorkspace(raw);
+    const incrementalDocs=await fetchAvaIncrementals(readToken,archiveFolder);
+    if(!file && !incrementalDocs.length)throw new Error("No ContextWise archives found");
+    if(file && Number(file.size)>MAX_IMPORT_BYTES)throw new Error("Archive exceeds 2 MB import limit");
+    let raw=null;
+    if(file) {
+      diagnostics.lastOperation="read-private-archive";
+      raw=await apiRequest(
+        `https://www.googleapis.com/drive/v3/files/${encodeURIComponent(file.id)}?alt=media`,
+        "read-private-archive",readToken);
+    }
+    const {workspace,added}=mergeAvaRecords(raw,incrementalDocs);
     const n=workspace.projects.reduce((sum,p)=>sum+p.events.length,0);
     window.dispatchEvent(new CustomEvent("contextwise:workspace-loaded",{detail:{workspace}}));
     diagnostics.archiveLoad="loaded";
