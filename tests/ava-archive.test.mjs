@@ -58,8 +58,8 @@ test("preserves complete native sourceRecord and rejects mismatched source IDs",
 test("historical Ava archive shapes preserve source records and retry idempotently",()=>{
   const legacy={sourceMessageId:a,threadId:b,replyTo:null,at:"2026-11-04T19:50:41.452Z",author:"chat:fixture",kind:"note",classification:"reported",body:"Historical fixture",references:["fixture"]};
   const native={schema_version:1,message_id:b,thread_id:a,reply_to:null,created_at:"2026-11-04T21:36:04.089360Z",author:"chat:fixture",kind:"handoff",stage_id:null,action_id:null,body:"Native fixture",references:["fixture"]};
-  const legacyDoc="\\uFEFFCONTEXTWISE AVA INCREMENTAL ARCHIVE\\nSynthetic fixture\\n"+JSON.stringify(legacy);
-  const nativeDoc="\\uFEFFContextWise Ava incremental archive | 2026-11-04 operational day\\nSynthetic fixture\\n"+JSON.stringify(native);
+  const legacyDoc="\uFEFFCONTEXTWISE AVA INCREMENTAL ARCHIVE\nSynthetic fixture\n"+JSON.stringify(legacy);
+  const nativeDoc="\uFEFFContextWise Ava incremental archive | 2026-11-04 operational day\nSynthetic fixture\n"+JSON.stringify(native);
   const first=mergeAvaRecords(null,[legacyDoc,nativeDoc]);
   assert.equal(first.added,2);
   const events=first.workspace.projects[0].events;
