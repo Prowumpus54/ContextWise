@@ -19,7 +19,7 @@ function eventDate(at) {
 }
 export function parseAvaArchive(content) {
   if (typeof content !== "string" || content.length > 2_000_000) throw new Error("Archive document too large");
-  if (!/^\uFEFF?CONTEXTWISE AVA (?:INCREMENTAL |APPEND-ONLY )?ARCHIVE/m.test(content)) {
+  if (!/^\uFEFF?(?:CONTEXTWISE AVA (?:INCREMENTAL |APPEND-ONLY )?ARCHIVE|ContextWise Ava incremental archive\\s*\\|)/m.test(content)) {
     throw new Error("Not an Ava incremental archive");
   }
   const records = [];
@@ -29,22 +29,26 @@ export function parseAvaArchive(content) {
     if (++records.length > ARCHIVE_LINE_LIMIT) throw new Error("Too many incremental events");
     let record;
     try { record = JSON.parse(line); } catch { throw new Error("Invalid archival JSON record"); }
-    const source = record?.sourceRecord;
-    const id = record?.sourceMessageId;
+    const legacy = typeof record?.message_id === "string" && record.sourceMessageId === undefined;
+    const source = legacy ? record : record?.sourceRecord;
+    const id = legacy ? record.message_id : record?.sourceMessageId;
     if (source !== undefined && (!source || typeof source !== "object" || Array.isArray(source) || source.message_id?.toLowerCase() !== id?.toLowerCase())) throw new Error("Archive sourceRecord does not match source ID");
     if (!SOURCE_ID.test(id || "") || seen.has(id.toLowerCase())) {
       throw new Error("Missing or duplicate bulletin source ID");
     }
-    if (!allowedClassifications.has(record.classification) ||
-        typeof record.summary !== "string" || !record.summary.trim() || record.summary.length > 4000) {
+    const classification = legacy ? "reported" : record.classification;
+    const summary = legacy ? record.body : (record.summary ?? record.body);
+    if (!allowedClassifications.has(classification) ||
+        typeof summary !== "string" || !summary.trim() || summary.length > 4000) {
       throw new Error("Invalid archival evidence record");
     }
-    const date = eventDate(record.at);
+    const at = legacy ? record.created_at : record.at;
+    const date = eventDate(at);
     seen.add(id.toLowerCase());
     records[records.length - 1] = {
-      sourceMessageId: id.toLowerCase(), date, classification: record.classification,
-      summary: record.summary.trim(),
-      at: record.at,
+      sourceMessageId: id.toLowerCase(), date, classification,
+      summary: summary.trim(),
+      at,
       ...(source === undefined ? {} : {sourceRecord: structuredClone(source)})
     };
   }
@@ -83,7 +87,9 @@ export function mergeAvaRecords(base, archives) {
         title:"BuildWise bulletin · " + record.classification.replaceAll("_"," "),
         summary:record.summary,
         sourceRefs:["BuildWise bulletin message ID: " + record.sourceMessageId,
-                    "Evidence classification: " + record.classification]
+                    "Evidence classification: " + record.classification],
+        at:record.at,
+        ...(record.sourceRecord ? {sourceRecord:structuredClone(record.sourceRecord)} : {})
       });
       sourceIds.add(record.sourceMessageId);
       added++;
