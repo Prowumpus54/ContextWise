@@ -15,7 +15,8 @@ function validateSourceRecord(value) {
   if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error("Invalid sourceRecord");
   const serialized = JSON.stringify(value);
   if (!serialized || serialized.length > 12000) throw new Error("Invalid sourceRecord size");
-  if (typeof value.message_id !== "string" || !/^[0-9a-f-]{36}$/i.test(value.message_id)) throw new Error("Invalid sourceRecord ID");
+  const id = value.message_id ?? value.sourceMessageId;
+  if (typeof id !== "string" || !/^[0-9a-f-]{36}$/i.test(id)) throw new Error("Invalid sourceRecord ID");
   return JSON.parse(serialized);
 }
 export function normalizeWorkspace(raw) {
