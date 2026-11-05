@@ -40,7 +40,9 @@ export function parseAvaArchive(content) {
     if (!SOURCE_ID.test(id || "") || seen.has(id.toLowerCase())) {
       throw new Error("Missing or duplicate bulletin source ID");
     }
-    // Preserve historical evidence labels in sourceRecord; use the stable display category.\n    const classification = legacy ? "reported" :\n      record.classification === "reported_execution" ? "reported" : record.classification;
+    // Preserve historical evidence labels in sourceRecord; use the stable display category.
+    const classification = legacy ? "reported" :
+      record.classification === "reported_execution" ? "reported" : record.classification;
     const summary = legacy ? record.body : (record.summary ?? record.body);
     if (!allowedClassifications.has(classification) ||
         typeof summary !== "string" || !summary.trim() || summary.length > 4000) {
