@@ -100,3 +100,21 @@ test("historical reported_execution maps to reported while preserving exact sour
   assert.equal(event.sourceRecord.classification,"reported_execution");
   assert.equal(mergeAvaRecords(persisted,[archive]).added,0);
 });
+
+test("original flattened archive evidence labels remain literal in sourceRecord",()=>{
+  const labels=["verified_bulletin","reported_execution"];
+  for(const classification of labels){
+    const source={sourceMessageId:a,threadId:b,replyTo:null,at:"2026-11-04T19:50:41.452Z",
+      author:"chat:fixture",kind:"note",classification,body:"Synthetic record",references:["fixture"]};
+    const archive="\uFEFFCONTEXTWISE AVA INCREMENTAL ARCHIVE\nSynthetic fixture\n"+JSON.stringify(source);
+    const parsed=parseAvaArchive(archive);
+    assert.equal(parsed[0].classification,"reported");
+    assert.deepEqual(parsed[0].sourceRecord,source);
+    const once=mergeAvaRecords(null,[archive]);
+    const reloaded=JSON.parse(JSON.stringify(once.workspace));
+    assert.deepEqual(reloaded.projects[0].events[0].sourceRecord,source);
+    assert.equal(mergeAvaRecords(reloaded,[archive]).added,0);
+  }
+  const invalid={sourceMessageId:a,threadId:b,at:"2026-11-04T19:50:41.452Z",classification:"untrusted_privilege",body:"Synthetic"};
+  assert.throws(()=>parseAvaArchive("CONTEXTWISE AVA INCREMENTAL ARCHIVE\n"+JSON.stringify(invalid)),/Invalid archival evidence record/);
+});
