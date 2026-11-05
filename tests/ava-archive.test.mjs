@@ -41,3 +41,16 @@ test("incremental-only import creates BuildWise project and keeps provenance",()
   assert.match(workspace.projects[0].events[0].sourceRefs.join(" "),new RegExp(a));
   assert.equal(workspace.projects[0].events[0].type,"note");
 });
+
+test("preserves complete native sourceRecord and rejects mismatched source IDs",()=>{
+  const sourceRecord={schema_version:1,message_id:a,thread_id:a,reply_to:null,created_at:"2026-11-04T16:30:52.479491Z",author:"chat:fixture",kind:"evidence",stage_id:"S04",action_id:"S04-A06",body:"Sanitized fixture",references:["fixture"]};
+  const archived=JSON.stringify({sourceMessageId:a,at:sourceRecord.created_at,classification:"verified_bulletin",summary:"Sanitized fixture",sourceRecord});
+  const parsed=parseAvaArchive(doc(archived));
+  assert.deepEqual(parsed[0].sourceRecord,sourceRecord);
+  assert.equal(parsed[0].at,sourceRecord.created_at);
+  const mismatch=JSON.stringify({sourceMessageId:b,at:sourceRecord.created_at,classification:"verified_bulletin",summary:"Sanitized fixture",sourceRecord});
+  assert.throws(()=>parseAvaArchive(doc(mismatch)),/does not match/i);
+  const once=mergeAvaRecords(null,[doc(archived)]);
+  assert.equal(once.added,1);
+  assert.equal(mergeAvaRecords(once.workspace,[doc(archived)]).added,0);
+});
