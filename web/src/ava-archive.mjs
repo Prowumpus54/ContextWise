@@ -42,7 +42,8 @@ export function parseAvaArchive(content) {
     }
     // Preserve historical evidence labels in sourceRecord; use the stable display category.
     const historicalReported = flattened &&
-      (record.classification === "reported_execution" || record.classification === "verified_bulletin");
+      (record.classification === "reported_execution" || record.classification === "verified_bulletin" ||
+       record.classification === "verified_bulletin/reported_execution");
     const classification = legacy || historicalReported ? "reported" : record.classification;
     const summary = legacy ? record.body : (record.summary ?? record.body);
     if (!allowedClassifications.has(classification) ||
