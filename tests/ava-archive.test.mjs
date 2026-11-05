@@ -81,3 +81,22 @@ test("flattened historical records preserve original metadata across reload and 
   assert.equal(persisted.projects[0].events[0].at,source.at);
   assert.equal(mergeAvaRecords(persisted,[archive]).added,0);
 });
+
+
+test("historical reported_execution maps to reported while preserving exact source metadata",()=>{
+  const source={sourceMessageId:a,threadId:b,replyTo:null,at:"2026-11-04T19:50:41.452Z",
+    author:"chat:fixture",kind:"note",classification:"reported_execution",body:"Synthetic execution report",references:["fixture"]};
+  const archive="\uFEFFCONTEXTWISE AVA INCREMENTAL ARCHIVE\nSynthetic fixture\n"+JSON.stringify(source);
+  const parsed=parseAvaArchive(archive);
+  assert.equal(parsed.length,1);
+  assert.equal(parsed[0].classification,"reported");
+  assert.deepEqual(parsed[0].sourceRecord,source);
+  const once=mergeAvaRecords(null,[archive]);
+  assert.equal(once.added,1);
+  const persisted=JSON.parse(JSON.stringify(once.workspace));
+  const event=persisted.projects[0].events[0];
+  assert.equal(event.title,"BuildWise bulletin · reported");
+  assert.deepEqual(event.sourceRecord,source);
+  assert.equal(event.sourceRecord.classification,"reported_execution");
+  assert.equal(mergeAvaRecords(persisted,[archive]).added,0);
+});
