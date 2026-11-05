@@ -19,7 +19,7 @@ function eventDate(at) {
 }
 export function parseAvaArchive(content) {
   if (typeof content !== "string" || content.length > 2_000_000) throw new Error("Archive document too large");
-  if (!/^\uFEFF?(?:CONTEXTWISE AVA (?:INCREMENTAL |APPEND-ONLY )?ARCHIVE|ContextWise Ava incremental archive\\s*\\|)/.test(content)) {
+  if (!/^\\uFEFF?(?:CONTEXTWISE AVA (?:INCREMENTAL |APPEND-ONLY )?ARCHIVE|ContextWise Ava incremental archive\\s*\\|)/.test(content)) {
     throw new Error("Not an Ava incremental archive");
   }
   const records = [];
