@@ -30,17 +30,9 @@ export function parseAvaArchive(content) {
     let record;
     try { record = JSON.parse(line); } catch { throw new Error("Invalid archival JSON record"); }
     const legacy = typeof record?.message_id === "string" && record.sourceMessageId === undefined;
-    // Earlier flattened archives are the original evidence record; retain every field.
-    const flattened = !legacy && record?.sourceRecord === undefined &&
-      typeof record?.sourceMessageId === "string" && typeof record?.body === "string" &&
-      typeof record?.threadId === "string" && typeof record?.at === "string";
-    const source = legacy || flattened ? record : record?.sourceRecord;
+    const source = legacy ? record : record?.sourceRecord;
     const id = legacy ? record.message_id : record?.sourceMessageId;
-    const sourceId = source?.message_id ?? source?.sourceMessageId;
-    if (source !== undefined && (!source || typeof source !== "object" || Array.isArray(source) ||
-        sourceId?.toLowerCase() !== id?.toLowerCase())) {
-      throw new Error("Archive sourceRecord does not match source ID");
-    }
+    if (source !== undefined && (!source || typeof source !== "object" || Array.isArray(source) || source.message_id?.toLowerCase() !== id?.toLowerCase())) throw new Error("Archive sourceRecord does not match source ID");
     if (!SOURCE_ID.test(id || "") || seen.has(id.toLowerCase())) {
       throw new Error("Missing or duplicate bulletin source ID");
     }
@@ -51,9 +43,6 @@ export function parseAvaArchive(content) {
       throw new Error("Invalid archival evidence record");
     }
     const at = legacy ? record.created_at : record.at;
-    if (source && (source.created_at ?? source.at) !== at) {
-      throw new Error("Archive sourceRecord timestamp does not match archive timestamp");
-    }
     const date = eventDate(at);
     seen.add(id.toLowerCase());
     records[records.length - 1] = {
