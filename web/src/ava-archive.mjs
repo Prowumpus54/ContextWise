@@ -29,7 +29,9 @@ export function parseAvaArchive(content) {
     if (++records.length > ARCHIVE_LINE_LIMIT) throw new Error("Too many incremental events");
     let record;
     try { record = JSON.parse(line); } catch { throw new Error("Invalid archival JSON record"); }
+    const source = record?.sourceRecord;
     const id = record?.sourceMessageId;
+    if (source !== undefined && (!source || typeof source !== "object" || Array.isArray(source) || source.message_id?.toLowerCase() !== id?.toLowerCase())) throw new Error("Archive sourceRecord does not match source ID");
     if (!SOURCE_ID.test(id || "") || seen.has(id.toLowerCase())) {
       throw new Error("Missing or duplicate bulletin source ID");
     }
@@ -41,7 +43,9 @@ export function parseAvaArchive(content) {
     seen.add(id.toLowerCase());
     records[records.length - 1] = {
       sourceMessageId: id.toLowerCase(), date, classification: record.classification,
-      summary: record.summary.trim()
+      summary: record.summary.trim(),
+      at: record.at,
+      ...(source === undefined ? {} : {sourceRecord: structuredClone(source)})
     };
   }
   if (!records.length) throw new Error("Archive has no bulletin events");
