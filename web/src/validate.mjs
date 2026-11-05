@@ -11,6 +11,13 @@ function date(value) {
   if (Number.isNaN(d.getTime()) || d.toISOString().slice(0,10) !== value) throw new Error("Invalid event date");
   return value;
 }
+function validateSourceRecord(value) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) throw new Error("Invalid sourceRecord");
+  const serialized = JSON.stringify(value);
+  if (!serialized || serialized.length > 12000) throw new Error("Invalid sourceRecord size");
+  if (typeof value.message_id !== "string" || !/^[0-9a-f-]{36}$/i.test(value.message_id)) throw new Error("Invalid sourceRecord ID");
+  return JSON.parse(serialized);
+}
 export function normalizeWorkspace(raw) {
   if (!raw || raw.schemaVersion !== 1 || !Array.isArray(raw.projects) || raw.projects.length < 1 || raw.projects.length > 100) {
     throw new Error("Expected ContextWise JSON schemaVersion 1 with 1–100 projects");
@@ -36,7 +43,9 @@ export function normalizeWorkspace(raw) {
         id:eventId, date:date(event.date), type:event.type,
         title:text(event.title,"event title",160),
         summary:text(event.summary,"event summary",4000),
-        sourceRefs:[...event.sourceRefs]
+        sourceRefs:[...event.sourceRefs],
+        ...(event.at === undefined ? {} : {at: text(event.at,"event timestamp",64)}),
+        ...(event.sourceRecord === undefined ? {} : {sourceRecord: validateSourceRecord(event.sourceRecord)})
       };
     });
     return {id,title,description,events};
