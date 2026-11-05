@@ -68,3 +68,16 @@ test("historical Ava archive shapes preserve source records and retry idempotent
   assert.equal(events.find(e=>e.id==="bw-"+a).at,legacy.at);
   assert.equal(mergeAvaRecords(first.workspace,[legacyDoc,nativeDoc]).added,0);
 });
+
+
+test("flattened historical records preserve original metadata across reload and retry",()=>{
+  const source={sourceMessageId:a,threadId:b,replyTo:null,at:"2026-11-04T19:50:41.452Z",
+    author:"chat:fixture",kind:"note",classification:"reported",body:"Historical fixture",references:["fixture"]};
+  const archive="\uFEFFCONTEXTWISE AVA INCREMENTAL ARCHIVE\nSynthetic fixture\n"+JSON.stringify(source);
+  const first=mergeAvaRecords(null,[archive]);
+  assert.equal(first.added,1);
+  const persisted=JSON.parse(JSON.stringify(first.workspace));
+  assert.deepEqual(persisted.projects[0].events[0].sourceRecord,source);
+  assert.equal(persisted.projects[0].events[0].at,source.at);
+  assert.equal(mergeAvaRecords(persisted,[archive]).added,0);
+});
