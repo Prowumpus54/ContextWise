@@ -9,7 +9,8 @@ test("private Drive loader requires explicit user interaction and readonly scope
   assert.ok(html.includes("covers more than the ContextWise folder"));
   assert.ok(src.includes('loadButton.addEventListener("click"'));
   assert.ok(src.includes("https://www.googleapis.com/auth/drive.readonly"));
-  assert.ok(src.includes("normalizeWorkspace(raw)"));
+  assert.ok(src.includes("mergeAvaRecords(raw,incrementalDocs)"));
+  assert.ok(src.includes("fetchAvaIncrementals(readToken,archiveFolder)"));
   assert.ok(src.includes('contextwise:workspace-loaded'));
   assert.ok(!src.includes("localStorage"));
 });
