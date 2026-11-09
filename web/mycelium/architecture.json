@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "0.4",
-  "updated_at": "2026-11-09T21:17:00Z",
+  "revision": "0.5",
+  "updated_at": "2026-11-09T22:18:40Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Transactional vs nontransactional adapter failure-injection harness",
+  "next_experiment": "Read-only discovery plus fake R/T/I/U adapter crash-injection harness",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,13 +12,18 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
-    "How can Android/Windows adapters reconcile uncertain external side effects?",
-    "Which operations can guarantee idempotency at the destination?",
-    "Can lightweight gateway enforcement work across heterogeneous Wise APIs?",
-    "What measurable conditions justify multiple local cells?",
-    "How are grants revoked during network partitions?"
+    "What provider evidence is sufficient to promote an actual Wise mutation API from U to I or T?",
+    "How should Android background execution limits shape recovery latency targets?",
+    "Which operations can guarantee destination-side idempotency?",
+    "What measurable conditions justify multiple local cells?"
   ],
   "timeline": [
+    {
+      "date": "Nov 9, 2026",
+      "title": "Adapter classes and Android liveness contract proposed",
+      "detail": "Owen distinguishes transactional, provider-idempotent and uncertain external mutations. Workshop provisionally treats real Wise mutation APIs as uncertain until destination guarantees are verified; Android recovery must tolerate OS-delayed execution. No implementation.",
+      "state": "Under review"
+    },
     {
       "date": "Nov 9, 2026",
       "title": "Adapter gateway and uncertain effects proposed",
