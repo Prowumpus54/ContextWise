@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "revision": "0.1",
+  "updated_at": "2026-11-09T18:47:51Z",
+  "phase": "Architecture workshop",
+  "status": "Design only · No deployment",
+  "next_experiment": "Two-app discovery and reconnection prototype",
+  "principles": [
+    "Automatic discovery, explicit authorization",
+    "Deterministic recovery before AI escalation",
+    "No central coordinator as a single point of failure",
+    "Observable and reversible changes"
+  ],
+  "open_questions": [
+    "Central registry versus hybrid discovery?",
+    "How do nodes authenticate without manual reconfiguration?",
+    "Which failures may be repaired without owner approval?",
+    "How should local Gemma 2 reviewers participate?"
+  ],
+  "timeline": [
+    {
+      "date": "Nov 9, 2026",
+      "title": "Public architecture observatory",
+      "detail": "Shareable website and versioned public architecture feed initiated.",
+      "state": "Implemented in source"
+    },
+    {
+      "date": "Nov 9, 2026",
+      "title": "Hybrid architecture proposed",
+      "detail": "Lightweight discovery registry, node agents, event transport, bounded self-repair.",
+      "state": "Proposal"
+    },
+    {
+      "date": "Nov 9, 2026",
+      "title": "Owen workshop initiated",
+      "detail": "Independent review requested; model availability and Owen feedback not yet verified.",
+      "state": "Pending review"
+    }
+  ]
+}
