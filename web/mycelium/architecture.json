@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "0.2",
-  "updated_at": "2026-11-09T19:25:30Z",
+  "revision": "0.3",
+  "updated_at": "2026-11-09T20:23:04Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Simulated two-node reconnect and bounded retry test",
@@ -12,13 +12,20 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Can offline capability grants remain safe without an online authority?",
+    "How should epoch fencing work when coordinators disagree?",
     "Does a single-broker prototype sufficiently test decentralized resilience?",
     "What measurable conditions justify multiple local cells?",
     "How are grants revoked during network partitions?",
-    "Who owns the durable event relay and replay cursor?",
-    "Which enabled BuildWise profile, if any, routes to Gemma 2?"
+    "Who owns the durable event relay and replay cursor?"
   ],
   "timeline": [
+    {
+      "date": "Nov 9, 2026",
+      "title": "Partition-safe recovery policy proposed",
+      "detail": "Separate service discovery from authorization. During network partitions, permit local observation but require fresh authorization before state-changing replay. Owen review requested; no implementation.",
+      "state": "Under review"
+    },
     {
       "date": "Nov 9, 2026",
       "title": "Owen review received; staged architecture proposed",
