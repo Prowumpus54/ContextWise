@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "0.3",
-  "updated_at": "2026-11-09T20:23:04Z",
+  "revision": "0.4",
+  "updated_at": "2026-11-09T21:17:00Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Simulated two-node reconnect and bounded retry test",
+  "next_experiment": "Transactional vs nontransactional adapter failure-injection harness",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,14 +12,19 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
-    "Can offline capability grants remain safe without an online authority?",
-    "How should epoch fencing work when coordinators disagree?",
-    "Does a single-broker prototype sufficiently test decentralized resilience?",
+    "How can Android/Windows adapters reconcile uncertain external side effects?",
+    "Which operations can guarantee idempotency at the destination?",
+    "Can lightweight gateway enforcement work across heterogeneous Wise APIs?",
     "What measurable conditions justify multiple local cells?",
-    "How are grants revoked during network partitions?",
-    "Who owns the durable event relay and replay cursor?"
+    "How are grants revoked during network partitions?"
   ],
   "timeline": [
+    {
+      "date": "Nov 9, 2026",
+      "title": "Adapter gateway and uncertain effects proposed",
+      "detail": "Owen identified that node epochs alone cannot fence operations. Proposed destination-side command validation, durable deduplication, and explicit reconciliation for nontransactional APIs. Under independent review; no implementation.",
+      "state": "Under review"
+    },
     {
       "date": "Nov 9, 2026",
       "title": "Partition-safe recovery policy proposed",
