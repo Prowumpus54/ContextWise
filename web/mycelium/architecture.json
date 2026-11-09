@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "0.5",
-  "updated_at": "2026-11-09T22:18:40Z",
+  "revision": "0.6",
+  "updated_at": "2026-11-09T23:21:55Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Read-only discovery plus fake R/T/I/U adapter crash-injection harness",
+  "next_experiment": "Synthetic SQLite T and fake R/I/U crash-injection harness; no live API calls",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,12 +12,18 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
-    "What provider evidence is sufficient to promote an actual Wise mutation API from U to I or T?",
-    "How should Android background execution limits shape recovery latency targets?",
-    "Which operations can guarantee destination-side idempotency?",
-    "What measurable conditions justify multiple local cells?"
+    "What evidence proves Tasker task creation supports safe retries at its actual destination?",
+    "Can a synthetic SQLite transactional test be presented without implying external exactly-once guarantees?",
+    "How do Android suspension and rejoining affect measured recovery latency?",
+    "Which real Wise endpoint should be examined next without executing mutations?"
   ],
   "timeline": [
+    {
+      "date": "Nov 9, 2026",
+      "title": "Endpoint evidence dossier and synthetic T boundary proposed",
+      "detail": "Owen requires endpoint-specific proof before classifying retries as safe. Workshop nominates Tasker task creation for read-only contract examination, keeps it uncertain, and limits transactional prototype claims to synthetic SQLite tests. Android liveness targets remain provisional.",
+      "state": "Under review"
+    },
     {
       "date": "Nov 9, 2026",
       "title": "Adapter classes and Android liveness contract proposed",
