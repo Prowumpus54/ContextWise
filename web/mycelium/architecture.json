@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "0.8",
-  "updated_at": "2026-11-10T01:25:10Z",
+  "revision": "0.9",
+  "updated_at": "2026-11-10T02:16:25Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Synthetic delayed-visibility test: commit, lost acknowledgment, stale NOT_FOUND, later visible result",
+  "next_experiment": "Synthetic reconciliation proof test: delayed visibility, durable operation identity, restart, and no automatic replay",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,12 +12,18 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
-    "Can Owen confirm that negative reads are insufficient without a documented consistency guarantee?",
-    "What positive reconciliation evidence can close an uncertain mutation?",
-    "Which Tasker endpoint has a read-only operation-status or durable deduplication contract?",
-    "How long should uncertain outcomes remain quarantined?"
+    "Owen review pending: what positive evidence is sufficient to close an unknown-effect operation?",
+    "Can an endpoint prove absence using a linearizable operation-status lookup and retention guarantee?",
+    "Which Tasker endpoint exposes a durable operation key and outcome lookup?",
+    "How should unresolved outcomes be surfaced without triggering duplicate mutations?"
   ],
   "timeline": [
+    {
+      "date": "Nov 9, 2026",
+      "title": "Evidence-based reconciliation gate proposed",
+      "detail": "Proposed resolution contract: a pending external mutation can close as succeeded only with destination-authenticated positive evidence tied to the original operation ID; it can close as not-executed only with an explicit destination guarantee of authoritative absence covering the operation lifetime. Timeouts and ordinary NOT_FOUND remain unknown. Restart must preserve quarantine and forbid replay. Pending Owen review; no implementation.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 9, 2026",
       "title": "Negative-read safety rule proposed",
