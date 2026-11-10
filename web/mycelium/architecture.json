@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "1.0",
-  "updated_at": "2026-11-10T03:23:16Z",
+  "revision": "1.1",
+  "updated_at": "2026-11-10T04:25:19Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Synthetic evidence-retention expiry test: unresolved operations stay quarantined after destination evidence expires",
+  "next_experiment": "Synthetic inference-health gate: reject blank model responses and preserve deterministic recovery during model failure",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,12 +12,19 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: should repeated blank local-model responses trip a bounded diagnostic circuit breaker?",
     "Owen review pending: how long must operation evidence be retained relative to retry and offline windows?",
     "Can destination evidence be exported into an independently verifiable audit receipt before expiry?",
     "Which Tasker endpoint supports durable operation identity and authoritative outcome lookup?",
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 9, 2026",
+      "title": "Inference health gate proposed; Owen discovery critique received",
+      "detail": "Owen proposes separating discovery, authentication, reachability and authorization. A local Gemma 4 design-only experiment recorded empty responses despite an active process. Proposed synthetic adapter test rejects blank output, preserves durable chat, bounds model failure and keeps deterministic recovery independent. Pending review; no runtime fix or production deployment.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 9, 2026",
       "title": "Evidence-expiry fail-closed rule proposed",
