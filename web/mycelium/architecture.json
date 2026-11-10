@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "2.5",
-  "updated_at": "2026-11-10T18:24:42Z",
+  "revision": "2.6",
+  "updated_at": "2026-11-10T19:23:30Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Synthetic per-service recovery budget, jitter and quarantine under repeated discovery flaps",
+  "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: what measurable failure of existing APIs, service discovery or standard messaging would justify a custom Mycelium runtime?",
     "Owen review pending: should recovery budgets be enforced per service and per failure class, with a quarantine state that preserves observability but blocks automated mutation?",
     "Owen review pending: does a read-only Mycelium transport adapter guarantee BuildWise remains the sole writer of job state, even during partition, reconnect and duplicate message delivery?",
     "Owen review pending: should a phone approval bind immutable job ID, action digest, actor, expiry and single-use nonce, with BuildWise rechecking authority at execution time?",
@@ -33,6 +34,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 10, 2026",
+      "title": "Reuse-first Mycelium architecture proposed",
+      "detail": "Owner challenged whether Mycelium duplicates routers and existing integration tools. Proposed reuse-first decision: retain BuildWise job authority and ContextWise memory; use standard networking, authenticated APIs and existing message transport rather than inventing a router, broker or orchestration engine. Build only capability contracts and adapters when an end-to-end three-node experiment demonstrates an unmet need. Pending Owen review; no prototype run or deployment.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 10, 2026",
       "title": "Per-service bounded recovery budget proposed",
