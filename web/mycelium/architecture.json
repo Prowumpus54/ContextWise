@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "1.5",
-  "updated_at": "2026-11-10T08:20:57Z",
+  "revision": "1.6",
+  "updated_at": "2026-11-10T09:24:18Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Synthetic reboot-epoch and executor identity verification with stale PID reuse and delayed inference responses",
+  "next_experiment": "Synthetic causal-trace test across discovery, authorization, connectivity, recovery and inference outcomes",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: which minimal causal event fields are necessary to distinguish missing telemetry from negative evidence without leaking sensitive infrastructure details?",
     "Owen review pending: can boot generation and launch identity be attested without trusting a stale coordinator heartbeat?",
     "Owen ADR-014 review pending: what evidence proves executor exit and resource release across PID reuse and host reboot?",
     "Owen ADR-012 review pending: can atomic lease generation fencing prevent late model results from voting after coordinator failover while respecting global inference concurrency?",
@@ -23,6 +24,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 10, 2026",
+      "title": "Causal observability contract proposed",
+      "detail": "Propose a bounded, privacy-safe causal event envelope with correlation ID, component role, stage, outcome class, monotonic sequence and evidence reference. Discovery, authorization, reachability, recovery and inference must remain separate states. Simulate reordered, missing and duplicate events plus coordinator restart; require deterministic reconstruction without logging credentials or mistaking missing telemetry for permission to retry. Gemma 4 local workshop completed with empty final responses, so no model consensus is claimed. Proposal pending Owen review; no tests executed.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 10, 2026",
       "title": "Reboot-safe executor identity test proposed",
