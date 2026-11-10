@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "2.4",
-  "updated_at": "2026-11-10T17:22:05Z",
+  "revision": "2.5",
+  "updated_at": "2026-11-10T18:24:42Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Synthetic discovery churn and capability revocation test across partitions",
+  "next_experiment": "Synthetic per-service recovery budget, jitter and quarantine under repeated discovery flaps",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: should recovery budgets be enforced per service and per failure class, with a quarantine state that preserves observability but blocks automated mutation?",
     "Owen review pending: does a read-only Mycelium transport adapter guarantee BuildWise remains the sole writer of job state, even during partition, reconnect and duplicate message delivery?",
     "Owen review pending: should a phone approval bind immutable job ID, action digest, actor, expiry and single-use nonce, with BuildWise rechecking authority at execution time?",
     "Owen review pending: can the direct Android-to-BuildWise adapter preserve one authoritative job ID, approval boundaries and offline reconciliation without creating a second task ledger?",
@@ -32,6 +33,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 10, 2026",
+      "title": "Per-service bounded recovery budget proposed",
+      "detail": "Design-only proposal: discovery and transport retries use per-service exponential backoff with jitter, a rolling attempt budget, and a quarantine state after exhaustion. Authentication or revoked-capability failures are never treated as transient transport errors and cannot trigger automatic reauthorization. Quarantined services remain visible for diagnostics; read-only health probes are rate-limited, and recovery requires fresh authenticated evidence before writes resume. Synthetic test injects flapping endpoints, partition healing, revoked grants and simultaneous node restarts; pass requires bounded retries, no unauthorized effects and no synchronized retry storm. Owen review pending; no test executed.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 10, 2026",
       "title": "Single-writer BuildWise adapter contract proposed",
