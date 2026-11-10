@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "2.0",
-  "updated_at": "2026-11-10T13:24:15Z",
+  "revision": "2.1",
+  "updated_at": "2026-11-10T14:24:31Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Synthetic crash-window test of destination admission receipts and durable idempotency lookup",
+  "next_experiment": "Synthetic discovery churn and capability revocation test across partitions",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: can a discovered service remain visible for diagnostics while stale capability grants are denied after revocation or partition?",
     "Owen review pending: can destination-issued admission receipts and durable idempotency lookup survive an acknowledgment loss without allowing a second effect?",
     "Owen review pending: can the destination attest a closed admission interval and durable command identity, rather than merely the absence of an execution event?",
     "Owen review pending: can a signed source-generation watermark establish complete negative evidence when retention, compaction or failover changes the covered history?",
@@ -28,6 +29,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 10, 2026",
+      "title": "Discovery-versus-capability lifecycle separation proposed",
+      "detail": "Design-only proposal: maintain separate discovered, authenticated, reachable and authorized states per Wise service. Discovery advertisements are untrusted hints, never grants; capability decisions require independently verified, audience-scoped, expiring authority and revocation freshness. On partition or stale revocation evidence, preserve read-only visibility but deny new mutations. Synthetic test injects spoofed discovery, identity rotation, revoked grants, stale caches and partition healing; pass only with zero unauthorized effects and deterministic recovery without service disappearance. Pending Owen review; no test executed.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 10, 2026",
       "title": "Admission receipt and crash-window matrix proposed",
