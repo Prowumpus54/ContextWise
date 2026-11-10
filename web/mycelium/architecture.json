@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "2.7",
-  "updated_at": "2026-11-10T21:18:34Z",
+  "revision": "2.8",
+  "updated_at": "2026-11-10T22:16:00Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: are the proposed three-node reuse-first acceptance gates sufficient to reject a custom broker unless direct APIs demonstrably fail?",
     "Owen review pending: should a discovered capability be considered incompatible until its declared schema version, safety semantics and operation class are negotiated, with unknown versions restricted to read-only diagnostics?",
     "Owen review pending: what measurable failure of existing APIs, service discovery or standard messaging would justify a custom Mycelium runtime?",
     "Owen review pending: should recovery budgets be enforced per service and per failure class, with a quarantine state that preserves observability but blocks automated mutation?",
@@ -35,6 +36,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 10, 2026",
+      "title": "Three-node reuse-first experiment acceptance gates proposed",
+      "detail": "Design-only experiment: compare direct authenticated APIs with a thin optional adapter across BuildWise, ContextWise and a simulated Android endpoint. Inject 30-second disconnect, duplicate delivery, stale capability manifest, revoked authority and 10-minute Android suspension. Require zero unauthorized or duplicate mutations, BuildWise jobs still operable without Mycelium, recovery attempts bounded to five per service per 10 minutes, and explicit unknown outcomes rather than automatic replay. Capture only aggregate latency, retry counts and outcome classes. This is a proposed gate, not a completed test; Owen review pending.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 10, 2026",
       "title": "Capability-contract compatibility gate proposed",
