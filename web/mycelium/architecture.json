@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "2.6",
-  "updated_at": "2026-11-10T19:23:30Z",
+  "revision": "2.7",
+  "updated_at": "2026-11-10T21:18:34Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: should a discovered capability be considered incompatible until its declared schema version, safety semantics and operation class are negotiated, with unknown versions restricted to read-only diagnostics?",
     "Owen review pending: what measurable failure of existing APIs, service discovery or standard messaging would justify a custom Mycelium runtime?",
     "Owen review pending: should recovery budgets be enforced per service and per failure class, with a quarantine state that preserves observability but blocks automated mutation?",
     "Owen review pending: does a read-only Mycelium transport adapter guarantee BuildWise remains the sole writer of job state, even during partition, reconnect and duplicate message delivery?",
@@ -34,6 +35,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 10, 2026",
+      "title": "Capability-contract compatibility gate proposed",
+      "detail": "Design-only proposal: discovery provides a capability manifest with protocol version, operation class (read-only versus mutation), and contract digest. The requester must verify a mutually supported contract before invoking an operation; unknown versions or digest mismatches remain visible for diagnostics but cannot execute mutations. Synthetic test mixes old/new Android, BuildWise and ContextWise adapters, forged capability advertisements, rolling upgrades and rollback; pass requires zero incompatible mutations, explicit downgrade refusal and no loss of read-only observability. Pending Owen review; no test executed.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 10, 2026",
       "title": "Reuse-first Mycelium architecture proposed",
