@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "2.8",
-  "updated_at": "2026-11-10T22:16:00Z",
+  "revision": "2.9",
+  "updated_at": "2026-11-10T23:23:35Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: should every Mycelium adapter have a bounded dependency graph and forbid recovery actions that recursively restart its own authority or observability dependencies?",
     "Owen review pending: are the proposed three-node reuse-first acceptance gates sufficient to reject a custom broker unless direct APIs demonstrably fail?",
     "Owen review pending: should a discovered capability be considered incompatible until its declared schema version, safety semantics and operation class are negotiated, with unknown versions restricted to read-only diagnostics?",
     "Owen review pending: what measurable failure of existing APIs, service discovery or standard messaging would justify a custom Mycelium runtime?",
@@ -36,6 +37,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 10, 2026",
+      "title": "Recovery dependency-cycle containment proposed",
+      "detail": "Design-only proposal: model each service adapter's recovery prerequisites as a directed graph, reject cycles that include an automated restart or authorization dependency, and cap concurrent recovery actions per failure domain. When discovery, identity, or telemetry dependencies fail together, retain read-only degraded status and require external evidence before restoring mutation capability. Synthetic test injects a three-service dependency cycle, common network partition and simultaneous restart; pass requires zero recursive restart storms, no unauthorized writes, and independent BuildWise availability. Owen critique pending; no test executed.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 10, 2026",
       "title": "Three-node reuse-first experiment acceptance gates proposed",
