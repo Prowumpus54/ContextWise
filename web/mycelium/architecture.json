@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "2.1",
-  "updated_at": "2026-11-10T14:24:31Z",
+  "revision": "2.2",
+  "updated_at": "2026-11-10T15:21:23Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Synthetic discovery churn and capability revocation test across partitions",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: can the direct Android-to-BuildWise adapter preserve one authoritative job ID, approval boundaries and offline reconciliation without creating a second task ledger?",
     "Owen review pending: can a discovered service remain visible for diagnostics while stale capability grants are denied after revocation or partition?",
     "Owen review pending: can destination-issued admission receipts and durable idempotency lookup survive an acknowledgment loss without allowing a second effect?",
     "Owen review pending: can the destination attest a closed admission interval and durable command identity, rather than merely the absence of an execution event?",
@@ -29,6 +30,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 10, 2026",
+      "title": "BuildWise ownership boundary and Tasker retirement path proposed",
+      "detail": "Owner-directed design: BuildWise remains the authoritative development-task, agent, approval and execution engine; Mycelium provides discovery, authenticated transport and routing without duplicating job state. A direct Android-to-BuildWise inbox is proposed, with existing Tasker features inventoried and migrated selectively. Preserve independent BuildWise operation and use Mycelium as an optional transport. Design only; Riley controls implementation; Owen review pending; no deployment.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 10, 2026",
       "title": "Discovery-versus-capability lifecycle separation proposed",
