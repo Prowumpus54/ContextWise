@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "1.4",
-  "updated_at": "2026-11-10T07:23:12Z",
+  "revision": "1.5",
+  "updated_at": "2026-11-10T08:20:57Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Synthetic host-local executor resource-slot fencing and orphan reclamation under concurrent inference recovery",
+  "next_experiment": "Synthetic reboot-epoch and executor identity verification with stale PID reuse and delayed inference responses",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: can boot generation and launch identity be attested without trusting a stale coordinator heartbeat?",
     "Owen ADR-014 review pending: what evidence proves executor exit and resource release across PID reuse and host reboot?",
     "Owen ADR-012 review pending: can atomic lease generation fencing prevent late model results from voting after coordinator failover while respecting global inference concurrency?",
     "Owen review pending: distinguish successful transport with empty model output from model termination and malformed content; validate breaker threshold",
@@ -22,6 +23,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 10, 2026",
+      "title": "Reboot-safe executor identity test proposed",
+      "detail": "Propose a synthetic executor identity tuple combining host boot generation, unique launch nonce and process start identity; PID alone is insufficient. After reboot or lease expiry, require independently verified exit/resource release before reopening a capacity-one inference slot. Inject PID reuse, stale heartbeats and delayed results; acceptance requires zero overlapping accepted probes and zero stale design votes. Pending Owen review; no tests executed.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 10, 2026",
       "title": "Inference resource-slot fencing proposed after Owen ADR-013",
