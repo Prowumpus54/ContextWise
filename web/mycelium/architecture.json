@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "1.8",
-  "updated_at": "2026-11-10T11:22:00Z",
+  "revision": "1.9",
+  "updated_at": "2026-11-10T12:21:00Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Synthetic source-generation and retention-window watermark validation before authoritative-negative closure",
+  "next_experiment": "Synthetic admission-boundary proof: distinguish never-admitted commands from accepted commands with unknown outcomes",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: can the destination attest a closed admission interval and durable command identity, rather than merely the absence of an execution event?",
     "Owen review pending: can a signed source-generation watermark establish complete negative evidence when retention, compaction or failover changes the covered history?",
     "Owen review pending: can a source-owned completeness watermark prove that an event interval is closed without confusing missing observation with a negative result?",
     "Owen review pending: which minimal causal event fields are necessary to distinguish missing telemetry from negative evidence without leaking sensitive infrastructure details?",
@@ -26,6 +27,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 10, 2026",
+      "title": "Command-admission boundary proof proposed",
+      "detail": "A closure certificate or complete telemetry interval is not sufficient to prove non-execution after command admission. Propose explicit destination-owned admission identity and a three-stage synthetic state machine: rejected-before-admission, admitted-outcome-unknown, and terminal outcome. Only a destination-authenticated pre-admission rejection with closed intake evidence may establish non-execution; admitted but missing terminal evidence stays unknown and cannot be automatically replayed. Test lost admission acknowledgments, delayed commits, compaction and failover. Design-only, Owen review pending; no test executed.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 10, 2026",
       "title": "Watermark provenance and retention-bound closure test proposed",
