@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "2.2",
-  "updated_at": "2026-11-10T15:21:23Z",
+  "revision": "2.3",
+  "updated_at": "2026-11-10T16:23:10Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Synthetic discovery churn and capability revocation test across partitions",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: should a phone approval bind immutable job ID, action digest, actor, expiry and single-use nonce, with BuildWise rechecking authority at execution time?",
     "Owen review pending: can the direct Android-to-BuildWise adapter preserve one authoritative job ID, approval boundaries and offline reconciliation without creating a second task ledger?",
     "Owen review pending: can a discovered service remain visible for diagnostics while stale capability grants are denied after revocation or partition?",
     "Owen review pending: can destination-issued admission receipts and durable idempotency lookup survive an acknowledgment loss without allowing a second effect?",
@@ -30,6 +31,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 10, 2026",
+      "title": "Phone approval as intent, not reusable authority",
+      "detail": "Design-only proposal: a direct Android-to-BuildWise approval carries an immutable job reference, action digest, intended actor, expiry and single-use challenge. BuildWise remains the authoritative approval ledger and revalidates job version and authorization immediately before execution; offline, stale, altered or replayed approvals cannot authorize mutations. Synthetic test covers delayed delivery, duplicate tap, changed job parameters, expired challenge and revoked approval; pass requires zero unauthorized executions and one auditable decision per challenge. Owen review pending; no test executed.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 10, 2026",
       "title": "BuildWise ownership boundary and Tasker retirement path proposed",
