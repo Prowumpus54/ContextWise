@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "1.6",
-  "updated_at": "2026-11-10T09:24:18Z",
+  "revision": "1.7",
+  "updated_at": "2026-11-10T10:24:00Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Synthetic causal-trace test across discovery, authorization, connectivity, recovery and inference outcomes",
+  "next_experiment": "Synthetic event-gap reconciliation with three-valued evidence and bounded watermark tracking",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: can a source-owned completeness watermark prove that an event interval is closed without confusing missing observation with a negative result?",
     "Owen review pending: which minimal causal event fields are necessary to distinguish missing telemetry from negative evidence without leaking sensitive infrastructure details?",
     "Owen review pending: can boot generation and launch identity be attested without trusting a stale coordinator heartbeat?",
     "Owen ADR-014 review pending: what evidence proves executor exit and resource release across PID reuse and host reboot?",
@@ -24,6 +25,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 10, 2026",
+      "title": "Three-valued telemetry completeness proposal",
+      "detail": "Propose separate observed-positive, authoritative-negative, and unknown evidence states. A source-owned monotonic completeness watermark plus event sequence and generation may close a gap only with verified provenance; missing or out-of-order telemetry remains unknown. Synthetic two-node test injects sequence gaps, replay, lost acknowledgment, partition, restart, and watermark regression. Pass only if zero unknown mutations are replayed and zero false-success decisions are accepted. Design-only, pending Owen review; no tests executed.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 10, 2026",
       "title": "Causal observability contract proposed",
