@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "2.3",
-  "updated_at": "2026-11-10T16:23:10Z",
+  "revision": "2.4",
+  "updated_at": "2026-11-10T17:22:05Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Synthetic discovery churn and capability revocation test across partitions",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: does a read-only Mycelium transport adapter guarantee BuildWise remains the sole writer of job state, even during partition, reconnect and duplicate message delivery?",
     "Owen review pending: should a phone approval bind immutable job ID, action digest, actor, expiry and single-use nonce, with BuildWise rechecking authority at execution time?",
     "Owen review pending: can the direct Android-to-BuildWise adapter preserve one authoritative job ID, approval boundaries and offline reconciliation without creating a second task ledger?",
     "Owen review pending: can a discovered service remain visible for diagnostics while stale capability grants are denied after revocation or partition?",
@@ -31,6 +32,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 10, 2026",
+      "title": "Single-writer BuildWise adapter contract proposed",
+      "detail": "Design-only boundary: Mycelium routes opaque, correlation-tagged requests and status envelopes but stores no authoritative task or approval state. BuildWise alone assigns job IDs, validates approval and records terminal outcomes; Android holds only a disposable local outbox. Synthetic partition test injects duplicate delivery, reorder, offline reconnect and Mycelium restart; pass requires one BuildWise job per idempotency key, zero transport-authorized mutations, and direct BuildWise operation during Mycelium outage. Owen critique pending; no test executed.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 10, 2026",
       "title": "Phone approval as intent, not reusable authority",
