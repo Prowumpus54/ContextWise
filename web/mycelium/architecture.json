@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "1.9",
-  "updated_at": "2026-11-10T12:21:00Z",
+  "revision": "2.0",
+  "updated_at": "2026-11-10T13:24:15Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Synthetic admission-boundary proof: distinguish never-admitted commands from accepted commands with unknown outcomes",
+  "next_experiment": "Synthetic crash-window test of destination admission receipts and durable idempotency lookup",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: can destination-issued admission receipts and durable idempotency lookup survive an acknowledgment loss without allowing a second effect?",
     "Owen review pending: can the destination attest a closed admission interval and durable command identity, rather than merely the absence of an execution event?",
     "Owen review pending: can a signed source-generation watermark establish complete negative evidence when retention, compaction or failover changes the covered history?",
     "Owen review pending: can a source-owned completeness watermark prove that an event interval is closed without confusing missing observation with a negative result?",
@@ -27,6 +28,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 10, 2026",
+      "title": "Admission receipt and crash-window matrix proposed",
+      "detail": "Design-only proposal: distinguish pre-admission rejection, admitted-with-receipt, and admission-acknowledgment-lost states. Require a destination-issued stable operation identity and durable lookup before considering retry; unknown admission remains quarantined. Synthetic crash-window matrix tests before admission, after durable admission but before acknowledgment, after execution but before terminal acknowledgment, and during failover. Pass only with zero duplicate effects and zero unknown commands auto-replayed. Pending Owen review; no test executed.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 10, 2026",
       "title": "Command-admission boundary proof proposed",
