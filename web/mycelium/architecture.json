@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "1.1",
-  "updated_at": "2026-11-10T04:25:19Z",
+  "revision": "1.2",
+  "updated_at": "2026-11-10T05:18:09Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Synthetic inference-health gate: reject blank model responses and preserve deterministic recovery during model failure",
+  "next_experiment": "Synthetic inference attempt ledger: HTTP-success blank replies, circuit breaker and read-only recovery probe",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: distinguish successful transport with empty model output from model termination and malformed content; validate breaker threshold",
     "Owen review pending: should repeated blank local-model responses trip a bounded diagnostic circuit breaker?",
     "Owen review pending: how long must operation evidence be retained relative to retry and offline windows?",
     "Can destination evidence be exported into an independently verifiable audit receipt before expiry?",
@@ -19,6 +20,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 9, 2026",
+      "title": "Inference attempt ledger and read-only probe proposed",
+      "detail": "Following Owen's typed inference-envelope critique, propose a durable record of every model attempt and a separate read-only diagnostic lane. Empty model output never counts as design consensus. Synthetic test will inject two blank replies followed by a valid reply, checking one half-open probe, preserved state and zero automatic mutations. Pending Owen review; not implemented.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 9, 2026",
       "title": "Inference health gate proposed; Owen discovery critique received",
