@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "0.7",
-  "updated_at": "2026-11-10T00:25:00Z",
+  "revision": "0.8",
+  "updated_at": "2026-11-10T01:25:10Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Synthetic remote unknown-outcome test with lost acknowledgment and zero replay",
+  "next_experiment": "Synthetic delayed-visibility test: commit, lost acknowledgment, stale NOT_FOUND, later visible result",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,12 +12,18 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
-    "Can NOT_FOUND ever resolve an uncertain effect when destination reads are eventually consistent?",
-    "What evidence and timeout policy should close unresolved EFFECT_UNKNOWN cases?",
-    "What deployed Tasker build and endpoint contract can be verified read-only?",
-    "How should Android suspension affect reconciliation deadlines?"
+    "Can Owen confirm that negative reads are insufficient without a documented consistency guarantee?",
+    "What positive reconciliation evidence can close an uncertain mutation?",
+    "Which Tasker endpoint has a read-only operation-status or durable deduplication contract?",
+    "How long should uncertain outcomes remain quarantined?"
   ],
   "timeline": [
+    {
+      "date": "Nov 9, 2026",
+      "title": "Negative-read safety rule proposed",
+      "detail": "A NOT_FOUND response from an eventually consistent destination is not proof a command failed. Proposed test injects commit + lost acknowledgment + stale negative read; gateway must quarantine the unknown effect, preserve the operation key across restart, and never replay without destination-backed proof. Pending Owen review; not implemented.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 9, 2026",
       "title": "Unknown-effect state machine proposed",
