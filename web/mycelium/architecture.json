@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.19",
-  "updated_at": "2026-11-11T19:18:23.954Z",
+  "revision": "3.20",
+  "updated_at": "2026-11-11T20:25:45.102Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: should a passing direct-API fault trial explicitly terminate the adapter experiment unless a separately measured unmet requirement is registered beforehand?",
     "Owen review pending: should a failing direct-API baseline be mandatory evidence before introducing any Mycelium adapter, and which measurable failure justifies its complexity?",
     "Owen review pending: is the first fixture's oracle sufficiently independent if the destination exposes both committed-effect count and evidence-coverage watermark, and what is the minimum neutral test double needed?",
     "Owen review pending: is the specified lost-acknowledgment O1 fixture the smallest useful first executable baseline, and can the destination provide authoritative operation lookup without a new Mycelium ledger?",
@@ -57,6 +58,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 11, 2026",
+      "title": "Pre-registered stop rule for the direct-API baseline",
+      "detail": "Design-only proposal: before running the lost-acknowledgment fixture, pre-register the pass/fail oracle and a stop rule. If direct authenticated APIs achieve one committed effect, zero duplicates, explicit indeterminate handling when evidence is incomplete, and BuildWise independence, stop: no adapter is justified by this test. An adapter may be proposed only against a documented unmet requirement and must beat the same seeded baseline without gaining authority or introducing a required hop. Owen critique pending; no test executed.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 11, 2026",
       "title": "Baseline experiment gate: no adapter until direct API failure is demonstrated",
