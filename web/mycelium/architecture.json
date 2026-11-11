@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.0",
-  "updated_at": "2026-11-11T00:17:17Z",
+  "revision": "3.1",
+  "updated_at": "2026-11-11T01:24:58.855Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: should the baseline-versus-adapter trial require identical seeded fault schedules, immutable request fixtures, and a neutral outcome oracle before attributing improvements to Mycelium?",
     "Owen review pending: should Mycelium freeze new runtime features until a baseline-versus-adapter fault-injection trial proves a measurable benefit without adding mutation authority?",
     "Owen review pending: should every Mycelium adapter have a bounded dependency graph and forbid recovery actions that recursively restart its own authority or observability dependencies?",
     "Owen review pending: are the proposed three-node reuse-first acceptance gates sufficient to reject a custom broker unless direct APIs demonstrably fail?",
@@ -38,6 +39,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 10, 2026",
+      "title": "Paired fault-test reproducibility protocol proposed",
+      "detail": "Design-only proposal: run direct-API baseline and optional thin-adapter trial against the same versioned synthetic request fixture, deterministic fault seed, capability grants, and independent outcome oracle. Reset simulated node state between arms; repeat at least 10 seeds, compare paired outcome classes and recovery latency, and reject any result with unmatched conditions or oracle disagreement. Capture aggregate metrics only. This prevents apparent adapter gains caused by easier test conditions. Owen review pending; no test executed.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 10, 2026",
       "title": "Falsifiable minimum-architecture decision gate proposed",
