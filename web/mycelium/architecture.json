@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.22",
-  "updated_at": "2026-11-11T22:17:53Z",
+  "revision": "3.23",
+  "updated_at": "2026-11-11T23:24:54Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: should the independent oracle require a deliberately duplicated-effect positive control and clean negative control before any baseline safety result is admissible?",
     "Owen review pending: is an independently held effect counter sufficient to prevent the destination's own lookup implementation from grading itself in the first synthetic trial?",
     "Owen review pending: are four isolated seeded cases sufficient to validate the direct-API stop rule, or is an independent destination audit oracle required before the first run?",
     "Owen review pending: should a passing direct-API fault trial explicitly terminate the adapter experiment unless a separately measured unmet requirement is registered beforehand?",
@@ -60,6 +61,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 11, 2026",
+      "title": "Duplicate-delivery positive control validates the independent test oracle",
+      "detail": "Design-only addition to the lost-acknowledgment synthetic baseline: before scoring direct API or optional adapter, run a positive control that deliberately commits two effects under the same synthetic operation ID in an intentionally faulty destination test double. The private append-only effect oracle must detect two effects and fail the case even when client-visible lookup falsely reports committed once. Follow with a clean single-effect negative control that passes. If either control fails, the harness is invalid and neither architecture arm may be declared safe. No experiment executed; Owen critique pending.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 11, 2026",
       "title": "Independent oracle separation for direct-API baseline",
