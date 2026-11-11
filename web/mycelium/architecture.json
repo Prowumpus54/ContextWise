@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.15",
-  "updated_at": "2026-11-11T15:25:25.773Z",
+  "revision": "3.16",
+  "updated_at": "2026-11-11T16:20:08Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: should architecture proposals be consolidated into a dependency-ordered decision register with explicit evidence gates, and should further speculative controls pause until the baseline three-node trial is specified and reviewed?",
     "Owen review pending: should discovery expose generation-consistent snapshots, rejecting mixed-generation capability sets during partial refresh without ever granting mutation authority?",
     "Owen review pending: should service discovery require authenticated generation-scoped withdrawal/tombstone records so delayed advertisements cannot resurrect retired capabilities after a rollback or device replacement?",
     "Owen review pending: during conflicting authenticated ownership claims for one Wise service, should Mycelium preserve both as read-only observations and require destination-authoritative epoch fencing before any mutation routing?",
@@ -53,6 +54,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 11, 2026",
+      "title": "Architecture decision backlog: evidence-first review gate",
+      "detail": "Design-only proposal: consolidate overlapping pending safety controls into four review gates: (1) baseline direct-API three-node fault trial, (2) authoritative operation identity and revocation, (3) discovery generation and ownership consistency, (4) optional telemetry and advisory Gemma 2 roles. Require each gate to name an owner, falsifiable acceptance criterion, evidence artifact and prerequisite; do not mark any proposal accepted or add runtime features solely because it was documented. Owen should first challenge whether a thin adapter is needed at all. No experiment executed; review pending.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 11, 2026",
       "title": "Atomic discovery snapshots prevent mixed-generation capability views",
