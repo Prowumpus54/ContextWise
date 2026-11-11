@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.21",
-  "updated_at": "2026-11-11T21:21:47Z",
+  "revision": "3.22",
+  "updated_at": "2026-11-11T22:17:53Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: is an independently held effect counter sufficient to prevent the destination's own lookup implementation from grading itself in the first synthetic trial?",
     "Owen review pending: are four isolated seeded cases sufficient to validate the direct-API stop rule, or is an independent destination audit oracle required before the first run?",
     "Owen review pending: should a passing direct-API fault trial explicitly terminate the adapter experiment unless a separately measured unmet requirement is registered beforehand?",
     "Owen review pending: should a failing direct-API baseline be mandatory evidence before introducing any Mycelium adapter, and which measurable failure justifies its complexity?",
@@ -59,6 +60,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 11, 2026",
+      "title": "Independent oracle separation for direct-API baseline",
+      "detail": "Design-only refinement: in the four-case lost-acknowledgment fixture, use a synthetic destination's append-only effect counter as the independent truth oracle; expose operation-status lookup and evidence-coverage separately to the client under test. Fault injection may hide, delay or expire lookup evidence but must not alter the private effect counter. Score safety against the private counter, and score reconciliation honesty against the exposed coverage; a passing status lookup alone cannot certify exactly-once behavior. No fixture executed. Owen review pending.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 11, 2026",
       "title": "Four-case pre-registered direct-API fault fixture matrix",
