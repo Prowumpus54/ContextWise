@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.3",
-  "updated_at": "2026-11-11T03:25:00Z",
+  "revision": "3.4",
+  "updated_at": "2026-11-11T04:18:06Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: should Gemma 2 be restricted to advisory critique of sanitized architecture fixtures, with deterministic validators alone deciding experiment pass/fail and no model output treated as authority?",
     "Owen review pending: should discovery convergence be measured independently of authorization, with conflicting advertisements never granting mutation capability?",
     "Owen review pending: should the paired experiment include an adapter-only outage negative control to demonstrate BuildWise remains operational and that the adapter adds no new single point of failure?",
     "Owen review pending: should the baseline-versus-adapter trial require identical seeded fault schedules, immutable request fixtures, and a neutral outcome oracle before attributing improvements to Mycelium?",
@@ -41,6 +42,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 10, 2026",
+      "title": "Gemma 2 advisory-only experiment role proposed",
+      "detail": "Design-only proposal: local Gemma 2 reviewers may generate objections and test cases from sanitized synthetic fixtures but cannot authorize, route, recover, or grade service mutations. A deterministic independent oracle decides all pass/fail gates; blank, conflicting or unavailable model output is recorded as no review, not consensus. Synthetic test injects persuasive incorrect recommendations, blank replies and conflicting reviewer votes; require zero effect on operation authority or test outcomes. Owen review pending; no model job or test executed.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 10, 2026",
       "title": "Discovery convergence versus trust separation test proposed",
