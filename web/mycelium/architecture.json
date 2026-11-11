@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.10",
-  "updated_at": "2026-11-11T10:20:53Z",
+  "revision": "3.11",
+  "updated_at": "2026-11-11T11:17:36Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: should cross-service correlation use opaque per-operation IDs with explicit trace completeness flags, so missing spans never imply success and telemetry identifiers confer no authorization?",
     "Owen review pending: should Mycelium observability have a bounded, lossy telemetry queue isolated from authoritative commands, with explicit gap counters and no silent health claims after dropped events?",
     "Owen review pending: when capability revocation races with an in-flight mutation, must the destination enforce an atomic authorization check at commit, with no adapter-side cached grant accepted?",
     "Owen review pending: should a service require two consecutive fresh authenticated observations after reconnect before leaving unknown/degraded state, while only destination authority can restore mutation eligibility?",
@@ -48,6 +49,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 11, 2026",
+      "title": "Trace correlation must not imply authority or completeness",
+      "detail": "Design-only proposal: assign an opaque correlation ID to each synthetic request across direct API and optional adapter; keep it separate from destination-issued operation identity and capability grants. Observers record span counts, evidence age and explicit completeness (complete, partial, unknown), never treating missing spans as successful execution or as proof of non-execution. Test drops, reorders and duplicates 30% of optional telemetry while retaining destination audit evidence; independent oracle requires identical authoritative outcomes, zero privilege from correlation IDs, and visible trace incompleteness. Owen critique pending; no experiment executed.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 11, 2026",
       "title": "Telemetry backpressure must not become control-plane backpressure",
