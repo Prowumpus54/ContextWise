@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.13",
-  "updated_at": "2026-11-11T13:19:00Z",
+  "revision": "3.14",
+  "updated_at": "2026-11-11T14:21:00Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: should service discovery require authenticated generation-scoped withdrawal/tombstone records so delayed advertisements cannot resurrect retired capabilities after a rollback or device replacement?",
     "Owen review pending: during conflicting authenticated ownership claims for one Wise service, should Mycelium preserve both as read-only observations and require destination-authoritative epoch fencing before any mutation routing?",
     "Owen review pending: should operation reconciliation require destination-signed evidence coverage through the full offline/retry window, with expired or compacted evidence forcing indeterminate and human resolution rather than automatic replay?",
     "Owen review pending: should cross-service correlation use opaque per-operation IDs with explicit trace completeness flags, so missing spans never imply success and telemetry identifiers confer no authorization?",
@@ -51,6 +52,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 11, 2026",
+      "title": "Discovery tombstones prevent retired capabilities reappearing",
+      "detail": "Design-only proposal: when a Wise service retires an instance or capability, publish an authenticated generation-scoped withdrawal with bounded retention and monotonically increasing generation. Late advertisements from older generations remain visible as stale evidence but cannot re-enter the active capability view or authorize operations. Synthetic three-node test injects delayed adverts, Android reinstall, clock skew, rollback, and tombstone expiry; deterministic oracle requires zero retired-capability activations, explicit unknown state after incomplete evidence, and unaffected direct BuildWise operations. Owen critique pending; no experiment executed.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 11, 2026",
       "title": "Split-brain service ownership must not elect mutation authority",
