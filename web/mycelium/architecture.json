@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.20",
-  "updated_at": "2026-11-11T20:25:45.102Z",
+  "revision": "3.21",
+  "updated_at": "2026-11-11T21:21:47Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: are four isolated seeded cases sufficient to validate the direct-API stop rule, or is an independent destination audit oracle required before the first run?",
     "Owen review pending: should a passing direct-API fault trial explicitly terminate the adapter experiment unless a separately measured unmet requirement is registered beforehand?",
     "Owen review pending: should a failing direct-API baseline be mandatory evidence before introducing any Mycelium adapter, and which measurable failure justifies its complexity?",
     "Owen review pending: is the first fixture's oracle sufficiently independent if the destination exposes both committed-effect count and evidence-coverage watermark, and what is the minimum neutral test double needed?",
@@ -58,6 +59,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 11, 2026",
+      "title": "Four-case pre-registered direct-API fault fixture matrix",
+      "detail": "Design-only fixture matrix for the direct-API stop gate: run four isolated seeded cases before considering an adapter: (A) normal acknowledgment, (B) lost acknowledgment with complete destination evidence, (C) lost acknowledgment with expired/incomplete evidence, (D) adapter unavailable while direct BuildWise API remains reachable. Reset synthetic destination state between cases; capture immutable seed, operation ID, committed-effect count, evidence-coverage state, retry decision and direct-API reachability. Deterministic assertions: at most one effect; B reconciles by lookup; C stays indeterminate with no replay; D preserves direct API. This specifies test inputs, not execution evidence. Owen critique pending.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 11, 2026",
       "title": "Pre-registered stop rule for the direct-API baseline",
