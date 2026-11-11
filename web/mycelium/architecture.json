@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.11",
-  "updated_at": "2026-11-11T11:17:36Z",
+  "revision": "3.12",
+  "updated_at": "2026-11-11T12:18:00Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: should operation reconciliation require destination-signed evidence coverage through the full offline/retry window, with expired or compacted evidence forcing indeterminate and human resolution rather than automatic replay?",
     "Owen review pending: should cross-service correlation use opaque per-operation IDs with explicit trace completeness flags, so missing spans never imply success and telemetry identifiers confer no authorization?",
     "Owen review pending: should Mycelium observability have a bounded, lossy telemetry queue isolated from authoritative commands, with explicit gap counters and no silent health claims after dropped events?",
     "Owen review pending: when capability revocation races with an in-flight mutation, must the destination enforce an atomic authorization check at commit, with no adapter-side cached grant accepted?",
@@ -49,6 +50,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 11, 2026",
+      "title": "Evidence-retention expiry must block unsafe replay",
+      "detail": "Design-only proposal: model destination operation receipts with a retention horizon and explicit coverage watermark. Inject offline requests, lost acknowledgments, compaction and failover across identical direct-API and optional-adapter synthetic trials. When outcome evidence expires or the watermark cannot prove full coverage, classify the request indeterminate; never infer non-execution or replay a mutation. Independent checker requires zero duplicate effects, zero false not-seen classifications, and visible reconciliation-blocked counts. Owen critique pending; no experiment executed.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 11, 2026",
       "title": "Trace correlation must not imply authority or completeness",
