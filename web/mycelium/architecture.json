@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.5",
-  "updated_at": "2026-11-11T05:25:15Z",
+  "revision": "3.6",
+  "updated_at": "2026-11-11T06:24:30Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: should the three-node test oracle use a finite operation-state machine (not-seen, admitted, committed, rejected, indeterminate), with indeterminate outcomes forbidden from automatic replay?",
     "Owen review pending: should observability use explicit healthy, degraded, unreachable and unknown states, with stale telemetry never converted into healthy or failed status?",
     "Owen review pending: should Gemma 2 be restricted to advisory critique of sanitized architecture fixtures, with deterministic validators alone deciding experiment pass/fail and no model output treated as authority?",
     "Owen review pending: should discovery convergence be measured independently of authorization, with conflicting advertisements never granting mutation capability?",
@@ -43,6 +44,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 11, 2026",
+      "title": "Deterministic operation-outcome oracle specified",
+      "detail": "Design-only proposal: for each synthetic request, record a stable operation identity and classify its outcome as not-seen, admitted, committed, rejected or indeterminate using destination-side evidence. A missing acknowledgment never proves not-seen; indeterminate outcomes require read-only reconciliation, never blind retry. Compare direct API and optional adapter with identical fault seeds; independent oracle fails either arm on unauthorized effects, more than one committed effect per operation, or false terminal classification. Owen review pending; no experiment run.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 10, 2026",
       "title": "Four-state health evidence model proposed",
