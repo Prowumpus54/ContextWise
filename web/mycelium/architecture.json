@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.17",
-  "updated_at": "2026-11-11T17:22:37Z",
+  "revision": "3.18",
+  "updated_at": "2026-11-11T18:16:13Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: is the first fixture's oracle sufficiently independent if the destination exposes both committed-effect count and evidence-coverage watermark, and what is the minimum neutral test double needed?",
     "Owen review pending: is the specified lost-acknowledgment O1 fixture the smallest useful first executable baseline, and can the destination provide authoritative operation lookup without a new Mycelium ledger?",
     "Owen review pending: should architecture proposals be consolidated into a dependency-ordered decision register with explicit evidence gates, and should further speculative controls pause until the baseline three-node trial is specified and reviewed?",
     "Owen review pending: should discovery expose generation-consistent snapshots, rejecting mixed-generation capability sets during partial refresh without ever granting mutation authority?",
@@ -55,6 +56,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 11, 2026",
+      "title": "Minimal authoritative oracle for first fault-injection trial",
+      "detail": "Design-only test oracle for the first lost-acknowledgment fixture: pre-register a stable synthetic operation ID, record destination committed-effect count and authoritative lookup coverage separately, then compare direct-API and optional-adapter arms against the same fault schedule. A lookup timeout or missing coverage is indeterminate, not not-seen; retry remains blocked until destination evidence resolves the outcome. A trial passes only if committed effects equal one, duplicate commits equal zero, and BuildWise remains independently reachable when the adapter is stopped. This is a specification, not executed evidence; Owen review pending.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 11, 2026",
       "title": "First executable baseline fixture: lost acknowledgment without duplicate effect",
