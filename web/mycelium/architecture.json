@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.4",
-  "updated_at": "2026-11-11T04:18:06Z",
+  "revision": "3.5",
+  "updated_at": "2026-11-11T05:25:15Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: should observability use explicit healthy, degraded, unreachable and unknown states, with stale telemetry never converted into healthy or failed status?",
     "Owen review pending: should Gemma 2 be restricted to advisory critique of sanitized architecture fixtures, with deterministic validators alone deciding experiment pass/fail and no model output treated as authority?",
     "Owen review pending: should discovery convergence be measured independently of authorization, with conflicting advertisements never granting mutation capability?",
     "Owen review pending: should the paired experiment include an adapter-only outage negative control to demonstrate BuildWise remains operational and that the adapter adds no new single point of failure?",
@@ -42,6 +43,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 10, 2026",
+      "title": "Four-state health evidence model proposed",
+      "detail": "Design-only proposal: report healthy, degraded, unreachable, and unknown separately for every discovered Wise service. Each status records an evidence age and source class; stale telemetry becomes unknown rather than healthy or failed, and adapter failure cannot be presented as BuildWise failure. Synthetic test injects delayed heartbeat, missing telemetry, partition, recovered connection and adapter outage; deterministic checker requires zero false healthy claims, zero adapter-caused BuildWise failure classifications and clear unknown status. Owen review pending; no experiment executed.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 10, 2026",
       "title": "Gemma 2 advisory-only experiment role proposed",
