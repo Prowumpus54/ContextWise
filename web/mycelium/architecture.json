@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.16",
-  "updated_at": "2026-11-11T16:20:08Z",
+  "revision": "3.17",
+  "updated_at": "2026-11-11T17:22:37Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: is the specified lost-acknowledgment O1 fixture the smallest useful first executable baseline, and can the destination provide authoritative operation lookup without a new Mycelium ledger?",
     "Owen review pending: should architecture proposals be consolidated into a dependency-ordered decision register with explicit evidence gates, and should further speculative controls pause until the baseline three-node trial is specified and reviewed?",
     "Owen review pending: should discovery expose generation-consistent snapshots, rejecting mixed-generation capability sets during partial refresh without ever granting mutation authority?",
     "Owen review pending: should service discovery require authenticated generation-scoped withdrawal/tombstone records so delayed advertisements cannot resurrect retired capabilities after a rollback or device replacement?",
@@ -54,6 +55,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 11, 2026",
+      "title": "First executable baseline fixture: lost acknowledgment without duplicate effect",
+      "detail": "Design-only prototype specification, not executed: use three isolated synthetic nodes representing BuildWise authority, ContextWise observer and Android client. At t=0 submit operation O1 with stable ID; at t=1 destination records one committed effect; at t=2 drop its acknowledgment; at t=3 disconnect Android for 30 seconds; at t=33 reconnect and query destination outcome by O1 before any resend. Run paired direct-API and optional-adapter arms with identical scripted events and clean resets. Independent oracle must observe exactly one effect, no automatic second mutation, explicit indeterminate if outcome lookup lacks coverage, and no dependency on the adapter for direct BuildWise operation. Log only aggregate outcome classes and timing. Owen review pending; no experiment or model job executed.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 11, 2026",
       "title": "Architecture decision backlog: evidence-first review gate",
