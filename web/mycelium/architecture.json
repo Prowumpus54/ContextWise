@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.2",
-  "updated_at": "2026-11-11T02:18:49Z",
+  "revision": "3.3",
+  "updated_at": "2026-11-11T03:25:00Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: should discovery convergence be measured independently of authorization, with conflicting advertisements never granting mutation capability?",
     "Owen review pending: should the paired experiment include an adapter-only outage negative control to demonstrate BuildWise remains operational and that the adapter adds no new single point of failure?",
     "Owen review pending: should the baseline-versus-adapter trial require identical seeded fault schedules, immutable request fixtures, and a neutral outcome oracle before attributing improvements to Mycelium?",
     "Owen review pending: should Mycelium freeze new runtime features until a baseline-versus-adapter fault-injection trial proves a measurable benefit without adding mutation authority?",
@@ -40,6 +41,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 10, 2026",
+      "title": "Discovery convergence versus trust separation test proposed",
+      "detail": "Design-only synthetic test: three nodes publish conflicting and delayed capability advertisements during partition and reconnection. Compare direct authenticated API discovery to the optional adapter using identical fault seeds. Measure time to a consistent read-only service view separately from authenticated authorization; require zero mutations authorized by discovery alone, stale or forged advertisements flagged rather than silently trusted, and BuildWise operation independent of adapter availability. Owen critique pending; no experiment executed.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 10, 2026",
       "title": "Adapter-only outage negative control proposed",
