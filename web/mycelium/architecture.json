@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.8",
-  "updated_at": "2026-11-11T08:19:47Z",
+  "revision": "3.9",
+  "updated_at": "2026-11-11T09:16:09Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: when capability revocation races with an in-flight mutation, must the destination enforce an atomic authorization check at commit, with no adapter-side cached grant accepted?",
     "Owen review pending: should a service require two consecutive fresh authenticated observations after reconnect before leaving unknown/degraded state, while only destination authority can restore mutation eligibility?",
     "Owen review pending: should bounded recovery budgets be keyed to stable authenticated service identity and failure domain, rather than mutable discovery aliases, so reconnect or identity rotation cannot reset a retry storm?",
     "Owen review pending: should the three-node test oracle use a finite operation-state machine (not-seen, admitted, committed, rejected, indeterminate), with indeterminate outcomes forbidden from automatic replay?",
@@ -46,6 +47,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 11, 2026",
+      "title": "Capability revocation race test proposed",
+      "detail": "Design-only proposal: test a revocation arriving between request admission and destination commit. A discovered or cached grant cannot authorize a mutation; destination authority must atomically validate capability validity and operation identity at the commit boundary. Synthetic trial varies revocation ordering, delayed messages and duplicate requests across direct-API and optional-adapter arms. Independent checker requires zero post-revocation commits when revocation precedes the commit gate, at most one effect per operation, explicit indeterminate classification when ordering cannot be proven, and no adapter-dependent BuildWise outage. Owen critique pending; no experiment executed.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 11, 2026",
       "title": "Health-state hysteresis and recovery eligibility separated",
