@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.1",
-  "updated_at": "2026-11-11T01:24:58.855Z",
+  "revision": "3.2",
+  "updated_at": "2026-11-11T02:18:49Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: should the paired experiment include an adapter-only outage negative control to demonstrate BuildWise remains operational and that the adapter adds no new single point of failure?",
     "Owen review pending: should the baseline-versus-adapter trial require identical seeded fault schedules, immutable request fixtures, and a neutral outcome oracle before attributing improvements to Mycelium?",
     "Owen review pending: should Mycelium freeze new runtime features until a baseline-versus-adapter fault-injection trial proves a measurable benefit without adding mutation authority?",
     "Owen review pending: should every Mycelium adapter have a bounded dependency graph and forbid recovery actions that recursively restart its own authority or observability dependencies?",
@@ -39,6 +40,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 10, 2026",
+      "title": "Adapter-only outage negative control proposed",
+      "detail": "Design-only addition to the paired three-node trial: inject an outage of the optional Mycelium adapter while direct BuildWise APIs remain healthy. Existing authorized operations must continue directly; pending adapter requests must report unknown rather than replaying mutations, and observability must distinguish adapter outage from destination failure. Compare to direct-API baseline with identical request fixtures; reject the adapter if it creates a new single point of failure. Owen review pending; no experiment executed.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 10, 2026",
       "title": "Paired fault-test reproducibility protocol proposed",
