@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.12",
-  "updated_at": "2026-11-11T12:18:00Z",
+  "revision": "3.13",
+  "updated_at": "2026-11-11T13:19:00Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: during conflicting authenticated ownership claims for one Wise service, should Mycelium preserve both as read-only observations and require destination-authoritative epoch fencing before any mutation routing?",
     "Owen review pending: should operation reconciliation require destination-signed evidence coverage through the full offline/retry window, with expired or compacted evidence forcing indeterminate and human resolution rather than automatic replay?",
     "Owen review pending: should cross-service correlation use opaque per-operation IDs with explicit trace completeness flags, so missing spans never imply success and telemetry identifiers confer no authorization?",
     "Owen review pending: should Mycelium observability have a bounded, lossy telemetry queue isolated from authoritative commands, with explicit gap counters and no silent health claims after dropped events?",
@@ -50,6 +51,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 11, 2026",
+      "title": "Split-brain service ownership must not elect mutation authority",
+      "detail": "Design-only proposal: simulate two concurrently reachable instances advertising the same service capability after a partition or failover. Discovery records both authenticated claims without selecting a mutation leader; only the destination's authoritative monotonically fenced ownership epoch can establish which instance may accept writes. Stale or ambiguous epochs remain read-only/unknown. Compare direct authenticated API against optional adapter with identical split-brain fault seeds. Deterministic checker requires zero dual-writer commits, zero authority inferred from discovery, explicit ambiguity reporting, and continued independent BuildWise operation. Owen critique pending; no experiment executed.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 11, 2026",
       "title": "Evidence-retention expiry must block unsafe replay",
