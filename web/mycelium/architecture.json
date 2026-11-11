@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.9",
-  "updated_at": "2026-11-11T09:16:09Z",
+  "revision": "3.10",
+  "updated_at": "2026-11-11T10:20:53Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: should Mycelium observability have a bounded, lossy telemetry queue isolated from authoritative commands, with explicit gap counters and no silent health claims after dropped events?",
     "Owen review pending: when capability revocation races with an in-flight mutation, must the destination enforce an atomic authorization check at commit, with no adapter-side cached grant accepted?",
     "Owen review pending: should a service require two consecutive fresh authenticated observations after reconnect before leaving unknown/degraded state, while only destination authority can restore mutation eligibility?",
     "Owen review pending: should bounded recovery budgets be keyed to stable authenticated service identity and failure domain, rather than mutable discovery aliases, so reconnect or identity rotation cannot reset a retry storm?",
@@ -47,6 +48,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 11, 2026",
+      "title": "Telemetry backpressure must not become control-plane backpressure",
+      "detail": "Design-only proposal: isolate optional Mycelium telemetry from BuildWise command execution with a bounded queue, rate limits and aggregate drop counters. When observers lag or disconnect, shed noncritical metrics, report evidence gaps as unknown and preserve destination-side authoritative audit records. Synthetic three-node test saturates telemetry for 10 minutes while issuing authenticated direct-API commands; require unchanged command correctness, zero duplicate or unauthorized effects, bounded adapter memory, visible loss counters and BuildWise availability during adapter failure. Owen critique pending; no test executed.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 11, 2026",
       "title": "Capability revocation race test proposed",
