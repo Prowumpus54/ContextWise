@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.18",
-  "updated_at": "2026-11-11T18:16:13Z",
+  "revision": "3.19",
+  "updated_at": "2026-11-11T19:18:23.954Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: should a failing direct-API baseline be mandatory evidence before introducing any Mycelium adapter, and which measurable failure justifies its complexity?",
     "Owen review pending: is the first fixture's oracle sufficiently independent if the destination exposes both committed-effect count and evidence-coverage watermark, and what is the minimum neutral test double needed?",
     "Owen review pending: is the specified lost-acknowledgment O1 fixture the smallest useful first executable baseline, and can the destination provide authoritative operation lookup without a new Mycelium ledger?",
     "Owen review pending: should architecture proposals be consolidated into a dependency-ordered decision register with explicit evidence gates, and should further speculative controls pause until the baseline three-node trial is specified and reviewed?",
@@ -56,6 +57,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 11, 2026",
+      "title": "Baseline experiment gate: no adapter until direct API failure is demonstrated",
+      "detail": "Design-only decision proposal: first execute the isolated direct-API lost-acknowledgment fixture without Mycelium. Gate A requires stable operation identity, destination-authoritative lookup with explicit coverage, one committed effect, zero duplicate effects and a recorded indeterminate outcome whenever coverage is missing. Only if Gate A demonstrably fails a stated non-negotiable requirement should an optional adapter enter Gate B; compare with identical fault seeds and require no new authority or dependency for BuildWise. This avoids treating adapter complexity as a foregone conclusion. Owen review pending; no experiment executed.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 11, 2026",
       "title": "Minimal authoritative oracle for first fault-injection trial",
