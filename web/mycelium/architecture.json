@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.14",
-  "updated_at": "2026-11-11T14:21:00Z",
+  "revision": "3.15",
+  "updated_at": "2026-11-11T15:25:25.773Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: should discovery expose generation-consistent snapshots, rejecting mixed-generation capability sets during partial refresh without ever granting mutation authority?",
     "Owen review pending: should service discovery require authenticated generation-scoped withdrawal/tombstone records so delayed advertisements cannot resurrect retired capabilities after a rollback or device replacement?",
     "Owen review pending: during conflicting authenticated ownership claims for one Wise service, should Mycelium preserve both as read-only observations and require destination-authoritative epoch fencing before any mutation routing?",
     "Owen review pending: should operation reconciliation require destination-signed evidence coverage through the full offline/retry window, with expired or compacted evidence forcing indeterminate and human resolution rather than automatic replay?",
@@ -52,6 +53,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 11, 2026",
+      "title": "Atomic discovery snapshots prevent mixed-generation capability views",
+      "detail": "Design-only proposal: a discovery refresh must publish a complete, generation-consistent read-only capability snapshot, never a partial blend of old and new advertisements. Stage updates privately, validate generation and withdrawal coverage, then atomically expose the snapshot; on timeout or conflict retain the last known view marked stale/unknown, with no mutation eligibility inferred. Synthetic three-node test interrupts refresh between capability records and injects out-of-order withdrawal; independent oracle requires zero mixed-generation active views, zero unauthorized operations, visible stale-state indicators and unaffected direct BuildWise operations. Owen critique pending; no experiment executed.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 11, 2026",
       "title": "Discovery tombstones prevent retired capabilities reappearing",
