@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.6",
-  "updated_at": "2026-11-11T06:24:30Z",
+  "revision": "3.7",
+  "updated_at": "2026-11-11T07:21:47Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: should bounded recovery budgets be keyed to stable authenticated service identity and failure domain, rather than mutable discovery aliases, so reconnect or identity rotation cannot reset a retry storm?",
     "Owen review pending: should the three-node test oracle use a finite operation-state machine (not-seen, admitted, committed, rejected, indeterminate), with indeterminate outcomes forbidden from automatic replay?",
     "Owen review pending: should observability use explicit healthy, degraded, unreachable and unknown states, with stale telemetry never converted into healthy or failed status?",
     "Owen review pending: should Gemma 2 be restricted to advisory critique of sanitized architecture fixtures, with deterministic validators alone deciding experiment pass/fail and no model output treated as authority?",
@@ -44,6 +45,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 11, 2026",
+      "title": "Recovery budgets must survive rediscovery and service identity changes",
+      "detail": "Design-only proposal: a reconnecting service cannot evade its rolling recovery budget by changing advertised names, endpoints, or instance identifiers. Charge attempts to a verified service identity plus failure domain; when identity cannot be verified, remain read-only and do not perform automatic recovery mutations. Synthetic test rotates aliases during a partition and simulates concurrent observers; independent checker requires no more than five recovery attempts per service per ten minutes, zero unauthorized mutations, and continued independent BuildWise operation. Owen critique pending; no test executed.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 11, 2026",
       "title": "Deterministic operation-outcome oracle specified",
