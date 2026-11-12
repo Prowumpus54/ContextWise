@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.24",
-  "updated_at": "2026-11-12T00:22:20Z",
+  "revision": "3.25",
+  "updated_at": "2026-11-12T01:23:43Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: should identical authoritative command outcomes be mandatory when optional observer telemetry is reordered, duplicated, dropped or disconnected under a fixed direct-API fault seed?",
     "Owen review pending: is the frozen machine-readable fixture and independent evidence bundle sufficient to make the first direct-API trial reproducible, or must the oracle also be run by a separate process?",
     "Owen review pending: should the independent oracle require a deliberately duplicated-effect positive control and clean negative control before any baseline safety result is admissible?",
     "Owen review pending: is an independently held effect counter sufficient to prevent the destination's own lookup implementation from grading itself in the first synthetic trial?",
@@ -62,6 +63,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 11, 2026",
+      "title": "Metamorphic invariance check for optional observer behavior",
+      "detail": "Design-only metamorphic test proposal: replay the same seeded synthetic direct-API operation sequence five times, varying only optional ContextWise observer delivery (normal, reordered, duplicated, dropped and disconnected). Independently compare destination effect-log digests and authorization outcomes across all variants; they must be identical, while trace completeness explicitly degrades. Any difference proves accidental observer-to-authority coupling and blocks an adapter recommendation. No execution or Owen approval; pending review.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 11, 2026",
       "title": "Executable fixture contract and evidence bundle for the first direct-API trial",
