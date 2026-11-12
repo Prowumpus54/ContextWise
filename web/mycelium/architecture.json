@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.23",
-  "updated_at": "2026-11-11T23:24:54Z",
+  "revision": "3.24",
+  "updated_at": "2026-11-12T00:22:20Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: is the frozen machine-readable fixture and independent evidence bundle sufficient to make the first direct-API trial reproducible, or must the oracle also be run by a separate process?",
     "Owen review pending: should the independent oracle require a deliberately duplicated-effect positive control and clean negative control before any baseline safety result is admissible?",
     "Owen review pending: is an independently held effect counter sufficient to prevent the destination's own lookup implementation from grading itself in the first synthetic trial?",
     "Owen review pending: are four isolated seeded cases sufficient to validate the direct-API stop rule, or is an independent destination audit oracle required before the first run?",
@@ -61,6 +62,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 11, 2026",
+      "title": "Executable fixture contract and evidence bundle for the first direct-API trial",
+      "detail": "Design-only proposal: freeze the first direct-API trial as a machine-readable fixture with case ID, deterministic seed, stable synthetic operation ID, scripted fault events, destination effect-log digest, client-visible lookup coverage, retry decisions, direct-API reachability, and validator version. Produce one immutable per-case evidence bundle plus a summary whose pass/fail is derived only from independent assertions. Missing evidence invalidates the case, never counts as a pass. Execute clean and deliberate-duplicate oracle controls before scoring cases A–D. Owen review pending; no trial executed.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 11, 2026",
       "title": "Duplicate-delivery positive control validates the independent test oracle",
