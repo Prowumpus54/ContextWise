@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.25",
-  "updated_at": "2026-11-12T01:23:43Z",
+  "revision": "3.26",
+  "updated_at": "2026-11-13T02:15:49Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: must a recovery controller durably reserve retry budget before sending a reconnect attempt, and reconcile an uncertain post-crash attempt without issuing a second attempt?",
     "Owen review pending: should identical authoritative command outcomes be mandatory when optional observer telemetry is reordered, duplicated, dropped or disconnected under a fixed direct-API fault seed?",
     "Owen review pending: is the frozen machine-readable fixture and independent evidence bundle sufficient to make the first direct-API trial reproducible, or must the oracle also be run by a separate process?",
     "Owen review pending: should the independent oracle require a deliberately duplicated-effect positive control and clean negative control before any baseline safety result is admissible?",
@@ -63,6 +64,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 12, 2026",
+      "title": "Crash-consistent retry reservation for bounded recovery",
+      "detail": "Design-only pending proposal: in a synthetic reconnect test, persist a retry-budget reservation before dispatching an attempt; crash immediately after dispatch but before recording its outcome. After restart, treat the reserved attempt as consumed or uncertain, not available for replay. Verify at most the preconfigured attempt count across crashes, while diagnostics remain available and mutation authority is not inferred from reconnect. Compare against a deliberately unsafe post-send debit control. No experiment executed or Owen approval verified.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 11, 2026",
       "title": "Metamorphic invariance check for optional observer behavior",
