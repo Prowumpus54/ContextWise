@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.28",
-  "updated_at": "2026-11-14T15:22:00Z",
+  "revision": "3.29",
+  "updated_at": "2026-11-14T16:15:00Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -66,6 +66,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 14, 2026",
+      "title": "Whole-system audit: ContextWise communication boundary verified",
+      "detail": "Repository documentation confirms ContextWise project conversations are same-browser-tab, ephemeral preview only; cross-device and agent delivery, durable relay, and secure vault are not implemented. BuildWise catalog exposes worker-related reads but no bulletin thread or exact enabled model profile inspection through the available connector. Audit finding: reuse ContextWise's evidence-linked UI, but do not treat it as the Mycelium message bus. Proposed next step is to inventory BuildWise's existing transport before choosing a shared relay. Pending independent Owen review; no implementation.",
+      "state": "Audit finding · Proposal pending review"
+    },
     {
       "date": "Nov 14, 2026",
       "title": "Blinded Gemma 2 architecture critique calibration",
