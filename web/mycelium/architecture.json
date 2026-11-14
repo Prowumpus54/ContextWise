@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.31",
-  "updated_at": "2026-11-14T18:21:50.780Z",
+  "revision": "3.32",
+  "updated_at": "2026-11-14T19:23:25.524Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: should SurveyWise retain standalone offline capture and portable exports, with Mycelium integration limited initially to an optional post-survey import adapter and no runtime dependency?",
     "Owen review pending: should Gemma 2 advisory reviews be evaluated with blinded, paired safe/unsafe synthetic fixtures, scoring concrete counterexamples rather than model agreement, with deterministic validators retaining sole pass/fail authority?",
     "Owen review pending: should Wise capability delegation be non-transitive by default, with each destination independently verifying a narrowly scoped grant rather than trusting capabilities advertised by an intermediary?",
     "Owen review pending: must a recovery controller durably reserve retry budget before sending a reconnect attempt, and reconcile an uncertain post-crash attempt without issuing a second attempt?",
@@ -66,6 +67,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 14, 2026",
+      "title": "Whole-system audit: SurveyWise offline field capture boundary",
+      "detail": "SurveyWise repository documentation specifies standalone offline-first Android capture, manual plan pins, local persistence, and portable report/archive export, with no mandatory account or AI. Proposed Mycelium boundary: preserve autonomous field capture and use an optional explicit import/export adapter rather than a runtime dependency on central coordination. Implementation and device acceptance remain unverified; Owen critique pending.",
+      "state": "Verified documentation finding · Boundary proposal pending Owen review"
+    },
     {
       "date": "Nov 14, 2026",
       "title": "Whole-system audit: Tasker–ContextWise archive synchronization gap",
