@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.26",
-  "updated_at": "2026-11-13T02:15:49Z",
+  "revision": "3.27",
+  "updated_at": "2026-11-14T05:23:00Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: should Wise capability delegation be non-transitive by default, with each destination independently verifying a narrowly scoped grant rather than trusting capabilities advertised by an intermediary?",
     "Owen review pending: must a recovery controller durably reserve retry budget before sending a reconnect attempt, and reconcile an uncertain post-crash attempt without issuing a second attempt?",
     "Owen review pending: should identical authoritative command outcomes be mandatory when optional observer telemetry is reordered, duplicated, dropped or disconnected under a fixed direct-API fault seed?",
     "Owen review pending: is the frozen machine-readable fixture and independent evidence bundle sufficient to make the first direct-API trial reproducible, or must the oracle also be run by a separate process?",
@@ -64,6 +65,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 13, 2026",
+      "title": "Non-transitive capability delegation boundary",
+      "detail": "Design-only pending proposal: a discovered Wise intermediary may describe another service but must never confer that service's mutation authority. In a synthetic A-to-B-to-C chain, give A read-only discovery of B and B a narrow mutation grant to C; verify A cannot invoke C through B or inherit B's grant, including after reconnect and stale advertisement replay. C must independently authorize each mutation. Compare against an intentionally unsafe forwarding test double. No experiment executed or Owen approval verified.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 12, 2026",
       "title": "Crash-consistent retry reservation for bounded recovery",
