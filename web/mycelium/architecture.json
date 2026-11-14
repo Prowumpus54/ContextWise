@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.33",
-  "updated_at": "2026-11-14T20:25:57.749Z",
+  "revision": "3.34",
+  "updated_at": "2026-11-14T22:35:00Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: should Mycelium route typed document-intake references to domain applications while leaving finance data, permissions, and transaction state under domain-owned authority?",
     "Owen review pending: should SurveyWise reuse only demonstrably low-coupling BasketWise camera/scanner utilities after an explicit dependency and device acceptance audit, rather than share household/Firebase application layers?",
     "Owen review pending: should SurveyWise retain standalone offline capture and portable exports, with Mycelium integration limited initially to an optional post-survey import adapter and no runtime dependency?",
     "Owen review pending: should Gemma 2 advisory reviews be evaluated with blinded, paired safe/unsafe synthetic fixtures, scoring concrete counterexamples rather than model agreement, with deterministic validators retaining sole pass/fail authority?",
@@ -68,6 +69,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 14, 2026",
+      "title": "Whole-system audit: finance application intake boundary",
+      "detail": "Repository documentation for a Wise finance application assigns document intake to a separate task inbox while finance-specific structured records retain provenance links. Proposed boundary: preserve finance-domain ownership and evidence references; use an explicit typed intake contract rather than making Mycelium a financial ledger or granting its coordinator access to account data. Source-level integration and end-to-end verification remain pending; independent Owen review requested but not obtained.",
+      "state": "Verified repository documentation · Proposed boundary pending independent review"
+    },
     {
       "date": "Nov 14, 2026",
       "title": "Whole-system audit: BasketWise–SurveyWise capture reuse boundary",
