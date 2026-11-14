@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.27",
-  "updated_at": "2026-11-14T05:23:00Z",
+  "revision": "3.28",
+  "updated_at": "2026-11-14T15:22:00Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: should Gemma 2 advisory reviews be evaluated with blinded, paired safe/unsafe synthetic fixtures, scoring concrete counterexamples rather than model agreement, with deterministic validators retaining sole pass/fail authority?",
     "Owen review pending: should Wise capability delegation be non-transitive by default, with each destination independently verifying a narrowly scoped grant rather than trusting capabilities advertised by an intermediary?",
     "Owen review pending: must a recovery controller durably reserve retry budget before sending a reconnect attempt, and reconcile an uncertain post-crash attempt without issuing a second attempt?",
     "Owen review pending: should identical authoritative command outcomes be mandatory when optional observer telemetry is reordered, duplicated, dropped or disconnected under a fixed direct-API fault seed?",
@@ -65,6 +66,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 14, 2026",
+      "title": "Blinded Gemma 2 architecture critique calibration",
+      "detail": "Design-only pending proposal: supply local advisory reviewers with randomized, sanitized paired fixtures—one safe destination-authorized capability chain and one subtly unsafe transitive-delegation chain—without telling them which is defective. Score whether reviewers identify the exact unauthorized mutation path and propose a reproducible counterexample; compare against a deterministic independent oracle. Record abstentions and false positives, prohibit model consensus from authorizing operations or deciding experiment pass/fail. No model availability verified, no job run, Owen critique pending.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 13, 2026",
       "title": "Non-transitive capability delegation boundary",
