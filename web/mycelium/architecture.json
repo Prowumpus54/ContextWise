@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.32",
-  "updated_at": "2026-11-14T19:23:25.524Z",
+  "revision": "3.33",
+  "updated_at": "2026-11-14T20:25:57.749Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: should SurveyWise reuse only demonstrably low-coupling BasketWise camera/scanner utilities after an explicit dependency and device acceptance audit, rather than share household/Firebase application layers?",
     "Owen review pending: should SurveyWise retain standalone offline capture and portable exports, with Mycelium integration limited initially to an optional post-survey import adapter and no runtime dependency?",
     "Owen review pending: should Gemma 2 advisory reviews be evaluated with blinded, paired safe/unsafe synthetic fixtures, scoring concrete counterexamples rather than model agreement, with deterministic validators retaining sole pass/fail authority?",
     "Owen review pending: should Wise capability delegation be non-transitive by default, with each destination independently verifying a narrowly scoped grant rather than trusting capabilities advertised by an intermediary?",
@@ -67,6 +68,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 14, 2026",
+      "title": "Whole-system audit: BasketWise–SurveyWise capture reuse boundary",
+      "detail": "BasketWise README confirms an Android/Firebase offline-first household app with OCR/AI suggestions requiring user review, opt-in permissions, and distinct guest/household scopes; SurveyWise README explicitly calls for evaluating reusable capture components without importing the whole app. Proposed compatibility gate: compare camera lifecycle, image ownership, offline persistence, permission flows, and dependency footprint before extracting any standalone camera/scanner library. Code-level compatibility and device tests are unverified; Owen critique pending.",
+      "state": "Verified repository documentation · Reuse proposal pending Owen review"
+    },
     {
       "date": "Nov 14, 2026",
       "title": "Whole-system audit: SurveyWise offline field capture boundary",
