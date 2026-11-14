@@ -25,3 +25,13 @@ Firebase Hosting: https://contextwise-4a846.web.app, project `contextwise-4a846`
 
 ## Not yet implemented
 No server-side MCP, BuildWise archive gateway, continuous cross-chat ingestion, cross-provider storage selection, encryption-at-rest under a ContextWise-managed key, or automatic webpage sync.
+
+
+## Proposed Ava incremental-archive reader (feature branch, not deployed)
+Owner authorization: 2026-11-04 18:10:54 UTC; canonical BuildWise bulletin thread `20b982d7-bca6-4dcc-b4bf-f976e3d868a1`.
+
+This branch extends the existing **manually initiated** `Load archived projects` action. After the user's separate Google Drive read-only consent, it reads the latest `contextwise-workspace-*.json` (if present) and private Google Docs matching `ContextWise_Ava_Incremental_Archive_*` from the same ContextWise folder. Google Docs are exported via Drive `files.export` as text; each newline JSON record must contain an immutable bulletin source ID, timestamp, evidence classification, and summary. The import normalizes records into BuildWise timeline notes, preserves provenance, and deduplicates bulletin message IDs already represented in the workspace.
+
+Safety boundaries: source documents stay private and are read in browser memory; the importer sends no archive text to Firebase or GitHub. Google Drive `drive.readonly` consent covers more than the folder and is *not* an encrypted vault. The loader fails closed rather than silently truncating more than 100 archive Docs or more than 2 MB total incremental text. Browser OAuth still expires with the session; no unattended backend or automatic website synchronization is claimed.
+
+Verification: `npm run verify` passed 39/39 tests on an isolated read-only testing clone of the feature branch (2026-11-04). **Still required:** independent security/code review, signed-in owner import and wrong-account/denial/revocation tests, browser UI inspection, explicit deploy approval with rollback, and production evidence. Passing unit tests is not feature certification.
