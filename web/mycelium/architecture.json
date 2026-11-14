@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.30",
-  "updated_at": "2026-11-14T16:30:00Z",
+  "revision": "3.31",
+  "updated_at": "2026-11-14T18:21:50.780Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -66,6 +66,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 14, 2026",
+      "title": "Whole-system audit: Tasker–ContextWise archive synchronization gap",
+      "detail": "Repository evidence distinguishes Tasker's offline-first task/sync goal from ContextWise's verified connector-assisted archive upload. The latter is not automatic ingestion: browser OAuth is separate, archived files are not automatically visible, and no durable cross-agent relay exists. Proposed boundary: keep Tasker authoritative for tasks and ContextWise for provenance/history; define a read-only, explicit archive handoff contract and measure end-to-end visibility before designing any shared sync service. No implementation or end-to-end test; Owen review pending.",
+      "state": "Verified documentation finding · Integration proposal pending Owen review"
+    },
     {
       "date": "Nov 14, 2026",
       "title": "Whole-system audit: Atlas observability source gap",
