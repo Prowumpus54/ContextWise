@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.29",
-  "updated_at": "2026-11-14T16:15:00Z",
+  "revision": "3.30",
+  "updated_at": "2026-11-14T16:30:00Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -66,6 +66,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "Nov 14, 2026",
+      "title": "Whole-system audit: Atlas observability source gap",
+      "detail": "Public BuildWise System Atlas repository currently contains only an initialization README; its application source and live telemetry integration are not present. Treat Atlas as planned visualization, not verified operational monitoring. Existing BuildWise orchestrator reports an active control plane; its bulletin and model-profile inspection remain unavailable. Proposed next step: audit existing transport before designing a new relay.",
+      "state": "Verified inventory finding · architecture recommendation pending Owen review"
+    },
     {
       "date": "Nov 14, 2026",
       "title": "Whole-system audit: ContextWise communication boundary verified",
