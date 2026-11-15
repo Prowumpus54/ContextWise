@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.46",
-  "updated_at": "2026-11-15T21:16:55.000Z",
+  "revision": "3.47",
+  "updated_at": "2026-11-15T22:22:26.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: BasketWise and Tasker duplicate FactoryFeedbackBridge HTTP clients but use different local delivery-state representations. Should WiseCore standardize only payload/acknowledgment semantics and cross-app contract tests before considering a shared Android transport library?",
     "Owen independent challenge pending: ColorWise feedback queue uses local SharedPreferences, WorkManager retries and source IDs, but its 100-item pruning loop can discard unsent feedback. Should the queue preserve all pending records and require destination-side idempotency/acknowledgment evidence before Mycelium advertises reliable feedback delivery?",
     "Owen independent challenge pending: ColorWise and SurveyWise both capture photos, but have different persistence and portability needs. Should Mycelium inventory common camera/media capabilities without consolidating app storage, until real source and device tests prove a reusable adapter?",
     "Owen independent challenge pending: MoneyWise's current MoneyRepository provides mock finance figures while a separate Firebase household repository handles membership. Should Mycelium discover only capability and release metadata until finance records have verifiable provenance, household authorization tests and an explicit Tasker-to-MoneyWise intake contract?",
@@ -81,6 +82,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "2026-11-15",
+      "title": "BasketWise–Tasker feedback transport duplication verified",
+      "detail": "BasketWise and Tasker independently implement near-identical Java FactoryFeedbackBridge HTTP intake clients (same payload fields, endpoint shape, timeouts and callback contract), while their local delivery-state models differ: BasketWise tracks Firestore and factory attempts separately; Tasker FeedbackStore tracks factorySyncedAt. Source inspection alone does not prove server-side deduplication or durable delivery. Proposal: WiseCore define a small versioned feedback intake/delivery contract and cross-app contract tests; keep domain-owned queues and defer shared runtime library until device/server compatibility is measured. Owen to challenge whether shared contract tests suffice without code consolidation.",
+      "state": "Source-verified duplication · Contract proposal pending Owen review"
+    },
     {
       "date": "2026-11-15",
       "title": "ColorWise feedback queue has a pending-item retention risk",
