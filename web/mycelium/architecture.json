@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.45",
-  "updated_at": "2026-11-15T20:22:11.000Z",
+  "revision": "3.46",
+  "updated_at": "2026-11-15T21:16:55.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: ColorWise feedback queue uses local SharedPreferences, WorkManager retries and source IDs, but its 100-item pruning loop can discard unsent feedback. Should the queue preserve all pending records and require destination-side idempotency/acknowledgment evidence before Mycelium advertises reliable feedback delivery?",
     "Owen independent challenge pending: ColorWise and SurveyWise both capture photos, but have different persistence and portability needs. Should Mycelium inventory common camera/media capabilities without consolidating app storage, until real source and device tests prove a reusable adapter?",
     "Owen independent challenge pending: MoneyWise's current MoneyRepository provides mock finance figures while a separate Firebase household repository handles membership. Should Mycelium discover only capability and release metadata until finance records have verifiable provenance, household authorization tests and an explicit Tasker-to-MoneyWise intake contract?",
     "Owen independent challenge pending: WiseCore's documentation checker validates file presence, template tokens and selected metadata fields but does not execute full JSON Schema validation or seven release gates; BasketWise's metadata lacks standardVersion while ContextWise declares 1.0.0. Should Mycelium use a read-only conformance report with separate schema, documentation and runtime-gate statuses before treating WiseCore adoption as verified?",
@@ -80,6 +81,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "2026-11-15",
+      "title": "ColorWise feedback queue has a pending-item retention risk",
+      "detail": "Source inspection of ColorWiseStore, FeedbackStore and FeedbackSyncWorker confirms independent photo storage/review state, local feedback records and network-constrained WorkManager retries. FeedbackStore.prune retains pending records initially but then removes oldest entries whenever the queue exceeds 100, potentially discarding unsent feedback; destination-side idempotency and device outcomes remain unverified. Proposed read-only queue-health inventory and bounded lossless pending retention; Owen review pending.",
+      "state": "Source-verified risk · Proposed mitigation · Device delivery unverified"
+    },
     {
       "date": "2026-11-15",
       "title": "ColorWise added to Wise ecosystem inventory",
