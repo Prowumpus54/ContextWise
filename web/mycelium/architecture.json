@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.41",
-  "updated_at": "2026-11-15T13:16:00.000Z",
+  "revision": "3.42",
+  "updated_at": "2026-11-15T15:22:00.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: WiseCore already defines seven evidence-backed release gates and a shared project schema. Should Mycelium reuse WiseCore as the normative release contract and limit new work to a read-only conformance/evidence adapter, after checking which gates are actually executable?",
     "Owen review pending: SurveyWise's current Java vertical slice saves local observation JSON and URI references but lacks the promised portable DOCX/ZIP export; should Mycelium defer integration until save/reopen, URI longevity and complete portable archive acceptance pass on a physical device?",
     "Owen independent challenge pending: BasketWise's checked-in Android test script runs Gradle unit/lint/test-APK gates and installs onto a fixed emulator, but does not attest source commit, APK digest, signing identity or physical-device smoke outcome. Is a separate read-only evidence collector sufficient, leaving each app's build scripts and signing ownership untouched?",
     "Owen review pending: BasketWise has versioned Android release signing, instrumentation-test dependencies and historical checksum files, while Tasker and SurveyWise checked-in Gradle versions remain 0.1.0; should Mycelium adopt a common release-evidence manifest without sharing app signing or build ownership?",
@@ -76,6 +77,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "2026-11-15",
+      "title": "WiseCore release contract discovered",
+      "detail": "Source review confirmed an adopted seven-gate standard with commit-bound evidence, independent verification, runtime smoke testing and closure. The document explicitly states gates are requirements, not proof of implemented automation; avoid duplicating this contract in Mycelium.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "Nov 14, 2026",
       "title": "Whole-system audit: finance application intake boundary",
