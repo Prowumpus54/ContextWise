@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.44",
-  "updated_at": "2026-11-15T19:17:16.000Z",
+  "revision": "3.45",
+  "updated_at": "2026-11-15T20:22:11.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: ColorWise and SurveyWise both capture photos, but have different persistence and portability needs. Should Mycelium inventory common camera/media capabilities without consolidating app storage, until real source and device tests prove a reusable adapter?",
     "Owen independent challenge pending: MoneyWise's current MoneyRepository provides mock finance figures while a separate Firebase household repository handles membership. Should Mycelium discover only capability and release metadata until finance records have verifiable provenance, household authorization tests and an explicit Tasker-to-MoneyWise intake contract?",
     "Owen independent challenge pending: WiseCore's documentation checker validates file presence, template tokens and selected metadata fields but does not execute full JSON Schema validation or seven release gates; BasketWise's metadata lacks standardVersion while ContextWise declares 1.0.0. Should Mycelium use a read-only conformance report with separate schema, documentation and runtime-gate statuses before treating WiseCore adoption as verified?",
     "Owen independent challenge pending: WiseCore already defines seven evidence-backed release gates and a shared project schema. Should Mycelium reuse WiseCore as the normative release contract and limit new work to a read-only conformance/evidence adapter, after checking which gates are actually executable?",
@@ -79,6 +80,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "2026-11-15",
+      "title": "ColorWise added to Wise ecosystem inventory",
+      "detail": "Repository README and Android Gradle source confirm ColorWise is a separate Kotlin/Jetpack Compose photo-challenge app, package com.prowumpus.colorwise, checked-in version 0.2.1. CameraX dependencies and local photo capture are documented; remote feedback sync, household integration and collage generation remain roadmap items, not verified implementations. Keep ColorWise domain-owned; evaluate reuse of camera and photo metadata contracts with SurveyWise and BasketWise only after checking implementation and privacy boundaries. Owen independent critique pending.",
+      "state": "Repository source verified · Runtime untested · Integration proposal pending review"
+    },
     {
       "date": "2026-11-15",
       "title": "MoneyWise repository audit: finance screens use mock data",
