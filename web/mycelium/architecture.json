@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.43",
-  "updated_at": "2026-11-15T16:25:00.000Z",
+  "revision": "3.44",
+  "updated_at": "2026-11-15T19:17:16.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: MoneyWise's current MoneyRepository provides mock finance figures while a separate Firebase household repository handles membership. Should Mycelium discover only capability and release metadata until finance records have verifiable provenance, household authorization tests and an explicit Tasker-to-MoneyWise intake contract?",
     "Owen independent challenge pending: WiseCore's documentation checker validates file presence, template tokens and selected metadata fields but does not execute full JSON Schema validation or seven release gates; BasketWise's metadata lacks standardVersion while ContextWise declares 1.0.0. Should Mycelium use a read-only conformance report with separate schema, documentation and runtime-gate statuses before treating WiseCore adoption as verified?",
     "Owen independent challenge pending: WiseCore already defines seven evidence-backed release gates and a shared project schema. Should Mycelium reuse WiseCore as the normative release contract and limit new work to a read-only conformance/evidence adapter, after checking which gates are actually executable?",
     "Owen review pending: SurveyWise's current Java vertical slice saves local observation JSON and URI references but lacks the promised portable DOCX/ZIP export; should Mycelium defer integration until save/reopen, URI longevity and complete portable archive acceptance pass on a physical device?",
@@ -78,6 +79,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "2026-11-15",
+      "title": "MoneyWise repository audit: finance screens use mock data",
+      "detail": "Source review found an Android Kotlin/Compose finance repository with a mock repository supplying dashboard, bills, accounts and market quotes, alongside separate Firebase household-membership operations. Documentation assigns source-document intake to Tasker and finance records to MoneyWise. Treat displayed finance figures as fixtures, not verified linked-account data. Keep Mycelium read-only and finance-data-free; validate real data provenance, Firestore authorization and domain ownership before integration.",
+      "state": "Source verified · Integration decision pending Owen review"
+    },
     {
       "date": "2026-11-15",
       "title": "WiseCore release contract discovered",
