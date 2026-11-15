@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.39",
-  "updated_at": "2026-11-15T10:18:48Z",
+  "revision": "3.40",
+  "updated_at": "2026-11-15T11:20:56.612Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: BasketWise's checked-in Android test script runs Gradle unit/lint/test-APK gates and installs onto a fixed emulator, but does not attest source commit, APK digest, signing identity or physical-device smoke outcome. Is a separate read-only evidence collector sufficient, leaving each app's build scripts and signing ownership untouched?",
     "Owen review pending: BasketWise has versioned Android release signing, instrumentation-test dependencies and historical checksum files, while Tasker and SurveyWise checked-in Gradle versions remain 0.1.0; should Mycelium adopt a common release-evidence manifest without sharing app signing or build ownership?",
     "Owen review pending: Tasker's checked-in Android Gradle configuration declares version 0.1.0 (code 1) despite separately reported later installed builds; should the release inventory require commit-bound artifact identity, installed package version, and device smoke-test evidence before declaring any app deployed?",
     "Owen review pending: ContextWise browser Drive integration currently reads and normalizes archived v1 workspaces but does not write a canonical archive; should Mycelium first define an owner-controlled durable write/backup and lossless round-trip contract before treating ContextWise as the decision authority?",
@@ -499,6 +500,12 @@
       "title": "Android release capability comparison",
       "detail": "Repository source comparison: BasketWise Android Gradle declares 0.12.0/code 38, optional release signing, Android test dependencies, and historical APK checksum records. Tasker declares 0.1.0/code 1 with unit-test dependencies; SurveyWise declares 0.1.0-alpha/code 1. None of these source declarations verifies a currently installed package. Propose a common evidence manifest, not a shared build service; Owen review pending.",
       "state": "Source-verified comparison · Proposal pending independent review"
+    },
+    {
+      "date": "2026-11-15",
+      "title": "BasketWise executable release gate audited",
+      "detail": "Source inspection of build.ps1, test-android.ps1, check.ps1, RELEASE_CHECKLIST.md and TEST_MATRIX.md found real Gradle unit/lint/instrumentation build and emulator installation/test commands plus distinct backend/browser checks. The documented release policy requires commit-to-artifact and physical-device verification, but the inspected scripts do not automatically attest APK checksum, signing identity, source commit or physical-device launch. Proposed non-invasive evidence collector; no build or install was run. Owen independent critique pending.",
+      "state": "Source-verified scripts · Runtime results unknown · Proposal pending review"
     }
   ]
 }
