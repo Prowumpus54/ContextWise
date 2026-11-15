@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.36",
-  "updated_at": "2026-11-15T04:17:00Z",
+  "revision": "3.37",
+  "updated_at": "2026-11-15T07:16:32Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: ContextWise browser Drive integration currently reads and normalizes archived v1 workspaces but does not write a canonical archive; should Mycelium first define an owner-controlled durable write/backup and lossless round-trip contract before treating ContextWise as the decision authority?",
     "Owen review pending: ContextWise v1 import normalization drops unknown event fields and relations lack confidence/supersession; should Mycelium decision provenance use an explicitly versioned schema extension rather than embed unvalidated metadata in existing events?",
     "Owen review pending: should the public architecture feed replace its flat 55-question backlog with a bounded decision register linking each proposal to subsystem, owner, evidence, review status, and next validation step?",
     "Owen review pending: should Mycelium route typed document-intake references to domain applications while leaving finance data, permissions, and transaction state under domain-owned authority?",
@@ -478,6 +479,12 @@
       "title": "ContextWise decision-schema compatibility gap",
       "detail": "Source review: v1 events support decision type and source references, but normalized imports discard extra fields; relations lack confidence and supersession. A versioned extension requires review before adoption.",
       "state": "Proposal · Owen review pending"
+    },
+    {
+      "date": "2026-11-15",
+      "title": "ContextWise archive persistence boundary",
+      "detail": "Source audit of browser Drive connector and app: optional Drive loading reads the latest matching JSON archive into in-memory normalized workspace state; the browser code does not save canonical workspace changes back to Drive. Existing export is a bounded text handoff, not a lossless archive. Proposed gate: verify authoritative write/backup ownership and versioned round-trip before adopting ContextWise as Mycelium decision register. Owen critique pending.",
+      "state": "Source-verified boundary · Proposal pending independent review"
     }
   ]
 }
