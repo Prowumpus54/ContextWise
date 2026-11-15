@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.47",
-  "updated_at": "2026-11-15T22:22:26.000Z",
+  "revision": "3.48",
+  "updated_at": "2026-11-15T23:19:08.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: Factory app-feedback already returns duplicate acknowledgments, but its source-ID lookup depends on a capped 500-record intake list and is not project-scoped. What minimal durable idempotency evidence and retention horizon would make cross-app retry behavior safe without adding a second authoritative store?",
     "Owen independent challenge pending: BasketWise and Tasker duplicate FactoryFeedbackBridge HTTP clients but use different local delivery-state representations. Should WiseCore standardize only payload/acknowledgment semantics and cross-app contract tests before considering a shared Android transport library?",
     "Owen independent challenge pending: ColorWise feedback queue uses local SharedPreferences, WorkManager retries and source IDs, but its 100-item pruning loop can discard unsent feedback. Should the queue preserve all pending records and require destination-side idempotency/acknowledgment evidence before Mycelium advertises reliable feedback delivery?",
     "Owen independent challenge pending: ColorWise and SurveyWise both capture photos, but have different persistence and portability needs. Should Mycelium inventory common camera/media capabilities without consolidating app storage, until real source and device tests prove a reusable adapter?",
@@ -82,6 +83,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "2026-11-15",
+      "title": "Factory feedback intake deduplication is bounded by retained records",
+      "detail": "Source review of the existing Factory feedback intake found an implemented duplicate check keyed to a supplied source ID and a successful duplicate response. Its backing intake list is capped at 500 entries, so historical duplicate recognition is not guaranteed after retention pruning; source IDs are also not scoped by application in the inspected lookup. This is a source-level contract limitation, not a verified live delivery failure. Proposed design: retain application-owned queues, specify project-scoped idempotency keys and acknowledgment semantics, and test retries before and after retention rollover using an isolated fixture. Owen independent challenge requested; no operational changes authorized.",
+      "state": "Source-verified implementation and retention limitation · Proposal pending independent review"
+    },
     {
       "date": "2026-11-15",
       "title": "BasketWise–Tasker feedback transport duplication verified",
