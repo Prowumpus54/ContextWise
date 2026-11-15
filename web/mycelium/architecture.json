@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.40",
-  "updated_at": "2026-11-15T11:20:56.612Z",
+  "revision": "3.41",
+  "updated_at": "2026-11-15T13:16:00.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: SurveyWise's current Java vertical slice saves local observation JSON and URI references but lacks the promised portable DOCX/ZIP export; should Mycelium defer integration until save/reopen, URI longevity and complete portable archive acceptance pass on a physical device?",
     "Owen independent challenge pending: BasketWise's checked-in Android test script runs Gradle unit/lint/test-APK gates and installs onto a fixed emulator, but does not attest source commit, APK digest, signing identity or physical-device smoke outcome. Is a separate read-only evidence collector sufficient, leaving each app's build scripts and signing ownership untouched?",
     "Owen review pending: BasketWise has versioned Android release signing, instrumentation-test dependencies and historical checksum files, while Tasker and SurveyWise checked-in Gradle versions remain 0.1.0; should Mycelium adopt a common release-evidence manifest without sharing app signing or build ownership?",
     "Owen review pending: Tasker's checked-in Android Gradle configuration declares version 0.1.0 (code 1) despite separately reported later installed builds; should the release inventory require commit-bound artifact identity, installed package version, and device smoke-test evidence before declaring any app deployed?",
@@ -506,6 +507,12 @@
       "title": "BasketWise executable release gate audited",
       "detail": "Source inspection of build.ps1, test-android.ps1, check.ps1, RELEASE_CHECKLIST.md and TEST_MATRIX.md found real Gradle unit/lint/instrumentation build and emulator installation/test commands plus distinct backend/browser checks. The documented release policy requires commit-to-artifact and physical-device verification, but the inspected scripts do not automatically attest APK checksum, signing identity, source commit or physical-device launch. Proposed non-invasive evidence collector; no build or install was run. Owen independent critique pending.",
       "state": "Source-verified scripts · Runtime results unknown · Proposal pending review"
+    },
+    {
+      "date": "2026-11-15",
+      "title": "SurveyWise source-level vertical slice audit",
+      "detail": "Inspected SurveyWise's actual Java MainActivity, Android manifest and Gradle source. Existing vertical slice uses Android system PDF picker/renderer, camera and speech intents, numbered plan pins and local JSON state with temp-file sync/rename. DOCX/ZIP export, photo annotation and full-project archival are not implemented in the inspected activity; persistence failures log rather than notify users. Preserve independent offline capture; gate Mycelium integration on device-tested save/reopen and portable export, rather than treating roadmap features as shipped. Owen independent review pending.",
+      "state": "Source-verified implementation · Runtime untested · Integration proposal pending review"
     }
   ]
 }
