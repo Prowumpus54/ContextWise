@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.34",
-  "updated_at": "2026-11-14T22:35:00Z",
+  "revision": "3.35",
+  "updated_at": "2026-11-15T01:23:00Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: should the public architecture feed replace its flat 55-question backlog with a bounded decision register linking each proposal to subsystem, owner, evidence, review status, and next validation step?",
     "Owen review pending: should Mycelium route typed document-intake references to domain applications while leaving finance data, permissions, and transaction state under domain-owned authority?",
     "Owen review pending: should SurveyWise reuse only demonstrably low-coupling BasketWise camera/scanner utilities after an explicit dependency and device acceptance audit, rather than share household/Firebase application layers?",
     "Owen review pending: should SurveyWise retain standalone offline capture and portable exports, with Mycelium integration limited initially to an optional post-survey import adapter and no runtime dependency?",
@@ -464,6 +465,12 @@
       "title": "Owen workshop initiated",
       "detail": "Owen accepted the workshop and submitted an independent architecture critique.",
       "state": "Review received"
+    },
+    {
+      "date": "Nov 14, 2026",
+      "title": "Architecture decision backlog audit",
+      "detail": "Public feed contained 55 unstructured pending questions but no decision register or per-subsystem evidence/status map. Proposed a bounded decision register before further speculative controls; no implementation approved.",
+      "state": "Proposal · Owen review pending"
     }
   ]
 }
