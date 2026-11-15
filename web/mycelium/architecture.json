@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.38",
-  "updated_at": "2026-11-15T09:16:36Z",
+  "revision": "3.39",
+  "updated_at": "2026-11-15T10:18:48Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen review pending: BasketWise has versioned Android release signing, instrumentation-test dependencies and historical checksum files, while Tasker and SurveyWise checked-in Gradle versions remain 0.1.0; should Mycelium adopt a common release-evidence manifest without sharing app signing or build ownership?",
     "Owen review pending: Tasker's checked-in Android Gradle configuration declares version 0.1.0 (code 1) despite separately reported later installed builds; should the release inventory require commit-bound artifact identity, installed package version, and device smoke-test evidence before declaring any app deployed?",
     "Owen review pending: ContextWise browser Drive integration currently reads and normalizes archived v1 workspaces but does not write a canonical archive; should Mycelium first define an owner-controlled durable write/backup and lossless round-trip contract before treating ContextWise as the decision authority?",
     "Owen review pending: ContextWise v1 import normalization drops unknown event fields and relations lack confidence/supersession; should Mycelium decision provenance use an explicitly versioned schema extension rather than embed unvalidated metadata in existing events?",
@@ -492,6 +493,12 @@
       "title": "Tasker build-source and deployed-version evidence gap",
       "detail": "Repository source inspection found Android Gradle project under android/, using Android Gradle Plugin 8.13.2, Java 17, compile/target SDK 36, and checked-in app version 0.1.0 (code 1). Later installed versions described outside the repository are not established by this source. Propose a commit-to-APK-to-device evidence chain, reusing existing build tools rather than creating a Mycelium build service. Owen review pending.",
       "state": "Source-verified configuration · Release status unknown"
+    },
+    {
+      "date": "2026-11-15",
+      "title": "Android release capability comparison",
+      "detail": "Repository source comparison: BasketWise Android Gradle declares 0.12.0/code 38, optional release signing, Android test dependencies, and historical APK checksum records. Tasker declares 0.1.0/code 1 with unit-test dependencies; SurveyWise declares 0.1.0-alpha/code 1. None of these source declarations verifies a currently installed package. Propose a common evidence manifest, not a shared build service; Owen review pending.",
+      "state": "Source-verified comparison · Proposal pending independent review"
     }
   ]
 }
