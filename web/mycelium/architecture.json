@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.55",
-  "updated_at": "2026-11-16T06:16:00.000Z",
+  "revision": "3.56",
+  "updated_at": "2026-11-16T07:22:00.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: the public architecture feed has 76 unclassified open questions and 87 timeline records at revision 3.55, while its viewer renders every question as undifferentiated prose and has no machine-readable decision ownership or evidence status. Should the next design revision introduce a bounded, separately typed decision register and filtered subsystem inventory, retaining legacy feed compatibility, rather than adding more unstructured questions?",
     "Owen independent challenge pending: ContextWise v0.1.11 browser conversations are ephemeral same-profile BroadcastChannel messages, not authenticated durable inter-agent delivery. Should Mycelium reuse existing BuildWise inbox as the transport candidate and ContextWise as read-only decision context, subject to actual source and delivery evidence?",
     "Owen independent challenge pending: inspected local Memory MCP uses SQLite FTS5 with source/verification labels, but supersedes_id is stored without referential or lifecycle enforcement and search returns superseded notes. Should Mycelium treat this as an advisory note index, not authoritative decision memory, until supersession-aware queries, provenance checks, and cross-client persistence tests pass?",
     "Owen independent review pending: live read-only OpenCode configuration names one memory MCP server, while OpenHands, memory MCP and Langfuse containers are running but lack Docker healthchecks. Does an existing coding run actually emit correlated Langfuse traces and persist memory, or are these only co-installed services? Require a consented bounded trace test before claiming integration; do not introduce another supervisor.",
@@ -611,6 +612,12 @@
       "title": "Local Memory MCP source audit: evidence labels but no enforced supersession lifecycle",
       "detail": "Read-only source inspection of running local Memory MCP verified SQLite FTS5 note store, source and verification fields, per-project search, and HTTP/stdio MCP tool definitions. Agent writes are marked unverified. Supersedes references are stored but not validated, and search does not exclude superseded notes, risking outdated guidance in agent retrieval. Propose a read-only supersession and provenance contract test before treating memory as authoritative; retain ContextWise as candidate decision registry, with no new central store. OpenHands/OpenCode handshake and trace correlation remain unverified. Owen critique pending.",
       "state": "Source verified · Runtime integration unknown · Design proposal pending review"
+    },
+    {
+      "date": "2026-11-16",
+      "title": "Public architecture observatory information architecture audit",
+      "detail": "Read-only inspection of ContextWise public website and feed verified 76 open questions and 87 timeline records at revision 3.55; the viewer renders all questions without grouping, status, decision IDs or ownership. The feed tracks many subsystem findings but cannot distinguish accepted decisions from pending proposals in structured data. Propose backward-compatible typed decision and subsystem inventory schema, with verified/unknown/broken evidence labels and review state, before additional runtime development. Owen independent critique pending; no UI or application code changed.",
+      "state": "Source verified · Schema improvement proposed · Owen review pending"
     }
   ]
 }
