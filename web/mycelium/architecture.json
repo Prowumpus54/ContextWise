@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.52",
-  "updated_at": "2026-11-16T03:25:00.000Z",
+  "revision": "3.53",
+  "updated_at": "2026-11-16T04:25:00.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent review pending: live read-only OpenCode configuration names one memory MCP server, while OpenHands, memory MCP and Langfuse containers are running but lack Docker healthchecks. Does an existing coding run actually emit correlated Langfuse traces and persist memory, or are these only co-installed services? Require a consented bounded trace test before claiming integration; do not introduce another supervisor.",
     "Owen independent challenge pending: live desktop inspection found OpenCode, an OpenHands container, a local memory MCP container and an observability stack running. Which of these already owns agent state, memory, and traces, and can Mycelium use read-only adapters rather than duplicating these services? Running containers do not establish end-to-end functionality.",
     "Owen independent challenge pending: a read-only live desktop inventory confirms an existing Windows model host, Ollama model catalog, Docker tooling and WSL support, but not supervisor contracts or reliable worker scheduling. Should Mycelium reuse Ollama as a model-serving adapter and keep orchestration separate until actual agent-runner code and lifecycle tests are verified?",
     "Owen independent challenge pending: accessible GitHub inventory has no identifiable desktop Gemma/Qwen supervisor source and Atlas remains a demo-only reconstruction. What exact existing local supervisor, model lifecycle and worker contracts should Mycelium reuse, and what evidence would establish reliable scheduling without a competing framework?",
@@ -590,6 +591,12 @@
       "title": "Desktop AI host read-only hardware and runtime inventory",
       "detail": "Authorized read-only host inspection verified Windows desktop, approximately 64 GiB installed memory, NVIDIA GPU, local Ollama service and installed model catalog spanning Gemma, Qwen and other model families, plus Docker, WSL and coding tools. This closes the prior source-access gap for model-host presence but does not prove worker supervision, concurrent capacity, cancellation, performance, model execution or Gemma 2 enablement in authenticated BuildWise. Reuse existing model server as an adapter candidate; benchmark and inspect actual agent supervisor before adding orchestration. No inference jobs or host changes. Owen independent review pending.",
       "state": "Live host inventory verified · Execution and supervisor behavior unverified · Design proposal pending review"
+    },
+    {
+      "date": "2026-11-16",
+      "title": "Desktop coding-agent configuration and observability integration boundary",
+      "detail": "Read-only inspection verified OpenCode v2.3.0 configuration has one named memory MCP server and no explicit agent/provider/plugin entries; OpenHands, memory MCP and Langfuse service containers are running, but inspected application containers have no Docker healthcheck. This establishes installed components and a configured memory endpoint, not successful MCP handshake, OpenHands linkage, trace ingestion, durable memory, or end-to-end job lifecycle. Propose a bounded consented correlation test and explicit ownership map before adding Mycelium agent infrastructure. Owen independent critique pending.",
+      "state": "Live configuration verified · End-to-end integration unknown · Design-only proposal"
     }
   ]
 }
