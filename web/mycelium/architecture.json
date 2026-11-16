@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.57",
-  "updated_at": "2026-11-16T10:25:00.000Z",
+  "revision": "3.58",
+  "updated_at": "2026-11-16T15:33:54.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: SurveyWise's checked-in Android source persists one mutable survey.json, and selecting a different plan clears observations immediately; save errors are logged without user-visible failure. Should Mycelium keep survey/project data ownership entirely in SurveyWise and require explicit project identity, loss-prevention prompts and save/reopen tests before any cross-app import adapter?",
     "Owen independent challenge pending: ContextWise archivist's verified named JSON upload and browser's latest contextwise-workspace-*.json discovery use different documented conventions. Should a canonical manifest with explicit snapshot identity, schema version, provenance and writer/readback receipts replace filename-based latest selection, or can a smaller naming contract suffice?",
     "Owen independent challenge pending: the public architecture feed has 76 unclassified open questions and 87 timeline records at revision 3.55, while its viewer renders every question as undifferentiated prose and has no machine-readable decision ownership or evidence status. Should the next design revision introduce a bounded, separately typed decision register and filtered subsystem inventory, retaining legacy feed compatibility, rather than adding more unstructured questions?",
     "Owen independent challenge pending: ContextWise v0.1.11 browser conversations are ephemeral same-profile BroadcastChannel messages, not authenticated durable inter-agent delivery. Should Mycelium reuse existing BuildWise inbox as the transport candidate and ContextWise as read-only decision context, subject to actual source and delivery evidence?",
@@ -625,6 +626,12 @@
       "title": "Public architecture observatory information architecture audit",
       "detail": "Read-only inspection of ContextWise public website and feed verified 76 open questions and 87 timeline records at revision 3.55; the viewer renders all questions without grouping, status, decision IDs or ownership. The feed tracks many subsystem findings but cannot distinguish accepted decisions from pending proposals in structured data. Propose backward-compatible typed decision and subsystem inventory schema, with verified/unknown/broken evidence labels and review state, before additional runtime development. Owen independent critique pending; no UI or application code changed.",
       "state": "Source verified · Schema improvement proposed · Owen review pending"
+    },
+    {
+      "date": "2026-11-16",
+      "title": "SurveyWise project lifecycle and data ownership audit",
+      "detail": "Source inspection of SurveyWise MainActivity and Gradle confirms one local survey.json state file; selecting another PDF plan clears observation records before saving, and save failures only log errors. No per-project isolation or export contract is established in the inspected implementation. Proposal: retain SurveyWise as authoritative owner of field captures; gate Mycelium integration on explicit project identity, safe project switching, surfaced persistence errors, and device-tested save/reopen/export. Owen critique pending; design only.",
+      "state": "Source verified · Data-loss risk identified · Owen review pending"
     }
   ]
 }
