@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.53",
-  "updated_at": "2026-11-16T04:25:00.000Z",
+  "revision": "3.54",
+  "updated_at": "2026-11-16T05:26:00.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: inspected local Memory MCP uses SQLite FTS5 with source/verification labels, but supersedes_id is stored without referential or lifecycle enforcement and search returns superseded notes. Should Mycelium treat this as an advisory note index, not authoritative decision memory, until supersession-aware queries, provenance checks, and cross-client persistence tests pass?",
     "Owen independent review pending: live read-only OpenCode configuration names one memory MCP server, while OpenHands, memory MCP and Langfuse containers are running but lack Docker healthchecks. Does an existing coding run actually emit correlated Langfuse traces and persist memory, or are these only co-installed services? Require a consented bounded trace test before claiming integration; do not introduce another supervisor.",
     "Owen independent challenge pending: live desktop inspection found OpenCode, an OpenHands container, a local memory MCP container and an observability stack running. Which of these already owns agent state, memory, and traces, and can Mycelium use read-only adapters rather than duplicating these services? Running containers do not establish end-to-end functionality.",
     "Owen independent challenge pending: a read-only live desktop inventory confirms an existing Windows model host, Ollama model catalog, Docker tooling and WSL support, but not supervisor contracts or reliable worker scheduling. Should Mycelium reuse Ollama as a model-serving adapter and keep orchestration separate until actual agent-runner code and lifecycle tests are verified?",
@@ -597,6 +598,12 @@
       "title": "Desktop coding-agent configuration and observability integration boundary",
       "detail": "Read-only inspection verified OpenCode v2.3.0 configuration has one named memory MCP server and no explicit agent/provider/plugin entries; OpenHands, memory MCP and Langfuse service containers are running, but inspected application containers have no Docker healthcheck. This establishes installed components and a configured memory endpoint, not successful MCP handshake, OpenHands linkage, trace ingestion, durable memory, or end-to-end job lifecycle. Propose a bounded consented correlation test and explicit ownership map before adding Mycelium agent infrastructure. Owen independent critique pending.",
       "state": "Live configuration verified · End-to-end integration unknown · Design-only proposal"
+    },
+    {
+      "date": "2026-11-16",
+      "title": "Local Memory MCP source audit: evidence labels but no enforced supersession lifecycle",
+      "detail": "Read-only source inspection of running local Memory MCP verified SQLite FTS5 note store, source and verification fields, per-project search, and HTTP/stdio MCP tool definitions. Agent writes are marked unverified. Supersedes references are stored but not validated, and search does not exclude superseded notes, risking outdated guidance in agent retrieval. Propose a read-only supersession and provenance contract test before treating memory as authoritative; retain ContextWise as candidate decision registry, with no new central store. OpenHands/OpenCode handshake and trace correlation remain unverified. Owen critique pending.",
+      "state": "Source verified · Runtime integration unknown · Design proposal pending review"
     }
   ]
 }
