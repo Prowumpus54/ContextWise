@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.54",
-  "updated_at": "2026-11-16T05:26:00.000Z",
+  "revision": "3.55",
+  "updated_at": "2026-11-16T06:16:00.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: ContextWise v0.1.11 browser conversations are ephemeral same-profile BroadcastChannel messages, not authenticated durable inter-agent delivery. Should Mycelium reuse existing BuildWise inbox as the transport candidate and ContextWise as read-only decision context, subject to actual source and delivery evidence?",
     "Owen independent challenge pending: inspected local Memory MCP uses SQLite FTS5 with source/verification labels, but supersedes_id is stored without referential or lifecycle enforcement and search returns superseded notes. Should Mycelium treat this as an advisory note index, not authoritative decision memory, until supersession-aware queries, provenance checks, and cross-client persistence tests pass?",
     "Owen independent review pending: live read-only OpenCode configuration names one memory MCP server, while OpenHands, memory MCP and Langfuse containers are running but lack Docker healthchecks. Does an existing coding run actually emit correlated Langfuse traces and persist memory, or are these only co-installed services? Require a consented bounded trace test before claiming integration; do not introduce another supervisor.",
     "Owen independent challenge pending: live desktop inspection found OpenCode, an OpenHands container, a local memory MCP container and an observability stack running. Which of these already owns agent state, memory, and traces, and can Mycelium use read-only adapters rather than duplicating these services? Running containers do not establish end-to-end functionality.",
@@ -89,6 +90,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "2026-11-16",
+      "title": "ContextWise browser conversations are not an agent relay",
+      "detail": "Repository documentation confirms same-browser-tab, ephemeral BroadcastChannel conversations only; no durable cross-agent transport. Reuse the preview for human context handoff, not authoritative inter-agent delivery. Independent review pending.",
+      "state": "Evidence reviewed · proposal"
+    },
     {
       "date": "2026-11-16",
       "title": "Desktop agent-tooling inventory",
