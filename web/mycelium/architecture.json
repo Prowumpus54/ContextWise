@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.49",
-  "updated_at": "2026-11-16T00:20:17.000Z",
+  "revision": "3.50",
+  "updated_at": "2026-11-16T01:23:12.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: accessible GitHub inventory has no identifiable desktop Gemma/Qwen supervisor source and Atlas remains a demo-only reconstruction. What exact existing local supervisor, model lifecycle and worker contracts should Mycelium reuse, and what evidence would establish reliable scheduling without a competing framework?",
     "Owen independent challenge pending: Android AI Runtime's IPC timeout is post-hoc and cancel is a no-op despite a shared CPU engine and concurrency gate. Should Mycelium treat it only as a device-local inference adapter until approved-client, bounded cancellation and restart tests pass, while leaving multi-agent scheduling to an existing orchestration framework?",
     "Owen independent challenge pending: Factory app-feedback already returns duplicate acknowledgments, but its source-ID lookup depends on a capped 500-record intake list and is not project-scoped. What minimal durable idempotency evidence and retention horizon would make cross-app retry behavior safe without adding a second authoritative store?",
     "Owen independent challenge pending: BasketWise and Tasker duplicate FactoryFeedbackBridge HTTP clients but use different local delivery-state representations. Should WiseCore standardize only payload/acknowledgment semantics and cross-app contract tests before considering a shared Android transport library?",
@@ -84,6 +85,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "2026-11-16",
+      "title": "Desktop model supervisor source is not in the accessible GitHub inventory",
+      "detail": "Authenticated repository inventory lists 16 accessible Wise repositories, including Android AI Runtime, WiseCore and BuildWise System Atlas, but no identifiable desktop Gemma/Qwen supervisor or worker-framework source repository. Repository code searches for Ollama/Gemma returned no matches; absence from this accessible inventory is not proof the local implementation does not exist. Atlas README explicitly states the viewer source is not uploaded and its rebuild uses demo data. Proposal: inventory the actual local supervisor executable, source revision, model registry, resource controls, worker contracts and runtime evidence through authorized desktop access before selecting a Mycelium scheduler. Owen should challenge whether existing BuildWise or local model tooling already provides these functions; no direct notification verified.",
+      "state": "GitHub inventory and Atlas README verified · Desktop worker source unavailable · Proposal pending review"
+    },
     {
       "date": "2026-11-16",
       "title": "Android local AI runtime has a shared engine but no enforceable inference deadline",
