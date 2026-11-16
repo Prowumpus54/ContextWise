@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.51",
-  "updated_at": "2026-11-16T02:21:00.000Z",
+  "revision": "3.52",
+  "updated_at": "2026-11-16T03:25:00.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: live desktop inspection found OpenCode, an OpenHands container, a local memory MCP container and an observability stack running. Which of these already owns agent state, memory, and traces, and can Mycelium use read-only adapters rather than duplicating these services? Running containers do not establish end-to-end functionality.",
     "Owen independent challenge pending: a read-only live desktop inventory confirms an existing Windows model host, Ollama model catalog, Docker tooling and WSL support, but not supervisor contracts or reliable worker scheduling. Should Mycelium reuse Ollama as a model-serving adapter and keep orchestration separate until actual agent-runner code and lifecycle tests are verified?",
     "Owen independent challenge pending: accessible GitHub inventory has no identifiable desktop Gemma/Qwen supervisor source and Atlas remains a demo-only reconstruction. What exact existing local supervisor, model lifecycle and worker contracts should Mycelium reuse, and what evidence would establish reliable scheduling without a competing framework?",
     "Owen independent challenge pending: Android AI Runtime's IPC timeout is post-hoc and cancel is a no-op despite a shared CPU engine and concurrency gate. Should Mycelium treat it only as a device-local inference adapter until approved-client, bounded cancellation and restart tests pass, while leaving multi-agent scheduling to an existing orchestration framework?",
@@ -86,6 +87,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "2026-11-16",
+      "title": "Desktop agent-tooling inventory",
+      "detail": "Read-only desktop inspection confirmed installed OpenCode and running OpenHands, memory-adapter and observability containers. Integration, durable agent lifecycle and telemetry completeness remain unverified; avoid duplicate services pending contract tests.",
+      "state": "Evidence gathered · review pending"
+    },
     {
       "date": "2026-11-16",
       "title": "Desktop model supervisor source is not in the accessible GitHub inventory",
