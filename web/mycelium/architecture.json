@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.56",
-  "updated_at": "2026-11-16T07:22:00.000Z",
+  "revision": "3.57",
+  "updated_at": "2026-11-16T10:25:00.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: ContextWise archivist's verified named JSON upload and browser's latest contextwise-workspace-*.json discovery use different documented conventions. Should a canonical manifest with explicit snapshot identity, schema version, provenance and writer/readback receipts replace filename-based latest selection, or can a smaller naming contract suffice?",
     "Owen independent challenge pending: the public architecture feed has 76 unclassified open questions and 87 timeline records at revision 3.55, while its viewer renders every question as undifferentiated prose and has no machine-readable decision ownership or evidence status. Should the next design revision introduce a bounded, separately typed decision register and filtered subsystem inventory, retaining legacy feed compatibility, rather than adding more unstructured questions?",
     "Owen independent challenge pending: ContextWise v0.1.11 browser conversations are ephemeral same-profile BroadcastChannel messages, not authenticated durable inter-agent delivery. Should Mycelium reuse existing BuildWise inbox as the transport candidate and ContextWise as read-only decision context, subject to actual source and delivery evidence?",
     "Owen independent challenge pending: inspected local Memory MCP uses SQLite FTS5 with source/verification labels, but supersedes_id is stored without referential or lifecycle enforcement and search returns superseded notes. Should Mycelium treat this as an advisory note index, not authoritative decision memory, until supersession-aware queries, provenance checks, and cross-client persistence tests pass?",
@@ -91,6 +92,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "2026-11-16",
+      "title": "ContextWise archive writer and browser reader have different discovery contracts",
+      "detail": "Repository integration docs verify a connector-driven archivist can write a named JSON archive, while the browser reader selects the newest contextwise-workspace-*.json snapshot after separate Drive consent. A successful archive upload does not establish browser discoverability, ingestion or freshness; signed-in owner read remains unverified. Proposal: define a canonical snapshot naming/index contract and read-only writer-to-reader acceptance fixture before designating ContextWise authoritative memory. Owen independent challenge requested; not directly delivered.",
+      "state": "Documentation verified · end-to-end contract unverified · proposal pending independent review"
+    },
     {
       "date": "2026-11-16",
       "title": "ContextWise browser conversations are not an agent relay",
