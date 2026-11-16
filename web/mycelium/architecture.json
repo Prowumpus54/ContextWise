@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.50",
-  "updated_at": "2026-11-16T01:23:12.000Z",
+  "revision": "3.51",
+  "updated_at": "2026-11-16T02:21:00.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: a read-only live desktop inventory confirms an existing Windows model host, Ollama model catalog, Docker tooling and WSL support, but not supervisor contracts or reliable worker scheduling. Should Mycelium reuse Ollama as a model-serving adapter and keep orchestration separate until actual agent-runner code and lifecycle tests are verified?",
     "Owen independent challenge pending: accessible GitHub inventory has no identifiable desktop Gemma/Qwen supervisor source and Atlas remains a demo-only reconstruction. What exact existing local supervisor, model lifecycle and worker contracts should Mycelium reuse, and what evidence would establish reliable scheduling without a competing framework?",
     "Owen independent challenge pending: Android AI Runtime's IPC timeout is post-hoc and cancel is a no-op despite a shared CPU engine and concurrency gate. Should Mycelium treat it only as a device-local inference adapter until approved-client, bounded cancellation and restart tests pass, while leaving multi-agent scheduling to an existing orchestration framework?",
     "Owen independent challenge pending: Factory app-feedback already returns duplicate acknowledgments, but its source-ID lookup depends on a capped 500-record intake list and is not project-scoped. What minimal durable idempotency evidence and retention horizon would make cross-app retry behavior safe without adding a second authoritative store?",
@@ -576,6 +577,12 @@
       "title": "WiseCore conformance implementation and metadata adoption checked",
       "detail": "Source inspection confirms WiseCore's Test-WiseProjectDocs.ps1 checks required documentation files, unresolved template tokens, a subset of project metadata and optional TODO warnings, but does not invoke its JSON Schema or seven runtime release gates. ContextWise metadata declares standardVersion 1.0.0; BasketWise's checked-in metadata lacks standardVersion and uses a different verification field shape. Propose read-only conformance inventory separating schema validity, documentation readiness and verified release-gate evidence; no app execution or modifications. Owen independent review pending.",
       "state": "Source-verified divergence · Runtime gate enforcement unverified · Proposal pending review"
+    },
+    {
+      "date": "2026-11-16",
+      "title": "Desktop AI host read-only hardware and runtime inventory",
+      "detail": "Authorized read-only host inspection verified Windows desktop, approximately 64 GiB installed memory, NVIDIA GPU, local Ollama service and installed model catalog spanning Gemma, Qwen and other model families, plus Docker, WSL and coding tools. This closes the prior source-access gap for model-host presence but does not prove worker supervision, concurrent capacity, cancellation, performance, model execution or Gemma 2 enablement in authenticated BuildWise. Reuse existing model server as an adapter candidate; benchmark and inspect actual agent supervisor before adding orchestration. No inference jobs or host changes. Owen independent review pending.",
+      "state": "Live host inventory verified · Execution and supervisor behavior unverified · Design proposal pending review"
     }
   ]
 }
