@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.58",
-  "updated_at": "2026-11-16T15:33:54.000Z",
+  "revision": "3.59",
+  "updated_at": "2026-11-16T20:17:56.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: LoreWise documents authoritative Android game mechanics, bounded AI effects and multi-route Gemma narration, but README says 0.13.0 while CURRENT_STATE claims 0.14.0 built without physical-device installation. Should Mycelium standardize a read-only AI capability and release-evidence manifest, reusing LoreWise routing/transcript patterns without centralizing game state or treating documented builds as deployed?",
     "Owen independent challenge pending: SurveyWise's checked-in Android source persists one mutable survey.json, and selecting a different plan clears observations immediately; save errors are logged without user-visible failure. Should Mycelium keep survey/project data ownership entirely in SurveyWise and require explicit project identity, loss-prevention prompts and save/reopen tests before any cross-app import adapter?",
     "Owen independent challenge pending: ContextWise archivist's verified named JSON upload and browser's latest contextwise-workspace-*.json discovery use different documented conventions. Should a canonical manifest with explicit snapshot identity, schema version, provenance and writer/readback receipts replace filename-based latest selection, or can a smaller naming contract suffice?",
     "Owen independent challenge pending: the public architecture feed has 76 unclassified open questions and 87 timeline records at revision 3.55, while its viewer renders every question as undifferentiated prose and has no machine-readable decision ownership or evidence status. Should the next design revision introduce a bounded, separately typed decision register and filtered subsystem inventory, retaining legacy feed compatibility, rather than adding more unstructured questions?",
@@ -93,6 +94,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "2026-11-16",
+      "title": "LoreWise AI routing and release-evidence boundary",
+      "detail": "Authenticated source documentation shows Android-owned deterministic RPG mechanics, LiteRT-LM device inference, optional desktop/cloud routes, and transcript correlation. README reports 0.13.0 while CURRENT_STATE reports a 0.14.0 build with device installation still pending. Propose a read-only capability/release evidence manifest; do not centralize game state or infer installed status from builds. Owen critique pending; source and runtime not independently exercised.",
+      "state": "Repository documentation verified · Installed behavior unknown · Owen review pending"
+    },
     {
       "date": "2026-11-16",
       "title": "ContextWise archive writer and browser reader have different discovery contracts",
