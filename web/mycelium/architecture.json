@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.59",
-  "updated_at": "2026-11-16T20:17:56.000Z",
+  "revision": "3.60",
+  "updated_at": "2026-11-16T21:17:14.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: LoreWise ON_DEVICE_AI.md documents atomic file replacement that preserves old weights on interrupted copies, but says a fully copied incompatible model remains installed in ERROR. Should the application validate candidate initialization before replacing a previously working model, or retain a rollback slot, without centralizing model management in Mycelium? Source implementation and device behavior still require verification.",
     "Owen independent challenge pending: LoreWise documents authoritative Android game mechanics, bounded AI effects and multi-route Gemma narration, but README says 0.13.0 while CURRENT_STATE claims 0.14.0 built without physical-device installation. Should Mycelium standardize a read-only AI capability and release-evidence manifest, reusing LoreWise routing/transcript patterns without centralizing game state or treating documented builds as deployed?",
     "Owen independent challenge pending: SurveyWise's checked-in Android source persists one mutable survey.json, and selecting a different plan clears observations immediately; save errors are logged without user-visible failure. Should Mycelium keep survey/project data ownership entirely in SurveyWise and require explicit project identity, loss-prevention prompts and save/reopen tests before any cross-app import adapter?",
     "Owen independent challenge pending: ContextWise archivist's verified named JSON upload and browser's latest contextwise-workspace-*.json discovery use different documented conventions. Should a canonical manifest with explicit snapshot identity, schema version, provenance and writer/readback receipts replace filename-based latest selection, or can a smaller naming contract suffice?",
@@ -639,6 +640,12 @@
       "title": "SurveyWise project lifecycle and data ownership audit",
       "detail": "Source inspection of SurveyWise MainActivity and Gradle confirms one local survey.json state file; selecting another PDF plan clears observation records before saving, and save failures only log errors. No per-project isolation or export contract is established in the inspected implementation. Proposal: retain SurveyWise as authoritative owner of field captures; gate Mycelium integration on explicit project identity, safe project switching, surfaced persistence errors, and device-tested save/reopen/export. Owen critique pending; design only.",
       "state": "Source verified · Data-loss risk identified · Owen review pending"
+    },
+    {
+      "date": "2026-11-16",
+      "title": "LoreWise model replacement compatibility rollback",
+      "detail": "Read-only comparison of LoreWise README, AI_CONTEXT.md and ON_DEVICE_AI.md confirms app-owned deterministic game state and a documented model import/Auto routing contract. The import guide distinguishes interrupted copy protection from incompatible model handling: an incompatible fully copied model can remain installed in ERROR, so atomic file replacement alone is not compatibility rollback. Proposal: retain app-local model ownership and add candidate validation or last-known-good rollback acceptance tests before cross-app AI adapter reuse. No physical-device or source implementation verification claimed; Owen critique pending.",
+      "state": "Documentation verified · Compatibility risk proposed · Owen review pending"
     }
   ]
 }
