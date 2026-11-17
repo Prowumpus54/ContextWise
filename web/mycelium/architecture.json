@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.63",
-  "updated_at": "2026-11-17T06:25:07.000Z",
+  "revision": "3.64",
+  "updated_at": "2026-11-17T22:16:51.504Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: ContextWise's browser Drive archive reader selects only the first page of up to 100 files sorted by modifiedTime and filters matching workspace filenames locally, without following nextPageToken. Could a valid older archive be missed when newer unrelated JSON files occupy the first page? Prefer paginated, bounded candidate discovery with deterministic selection and fixture tests before treating Drive archive loading as reliable. Source-level gap; live Drive behavior unverified.",
     "Owen independent challenge pending: the standalone Android AI Runtime README describes an earlier service exposure state than the checked-in Android manifest. Should release documentation be generated or checked against packaged manifests and verified client IPC tests before Mycelium lists runtime interoperability as ready? Source declarations verified; installed artifact and end-to-end client behavior unknown.",
     "Owen independent challenge pending: BasketWise scripts/test-android.ps1 hardcodes emulator-5554 for APK installation and instrumentation. Should Wise apps share a configurable device-selection and release-evidence contract while keeping app-specific test suites? Verify on a physical device before claiming field readiness.",
     "Owen independent challenge pending: LoreWise DiagnosticsStore launches independent asynchronous persistence jobs for each event snapshot and clear, without serialized disk writes. Could older snapshots finish after newer ones or after clear, restoring stale events on restart? Compare a single ordered writer or coalesced persistence with current design; require bounded concurrent record/clear/restart tests. Source-level race risk, not reproduced failure.",
@@ -667,6 +668,12 @@
       "title": "Android AI Runtime contract/documentation drift",
       "detail": "Authenticated source read of the standalone Wise AI Runtime README and Android manifest found that service exposure described in the README no longer matches the manifest declarations. This is documentation drift, not proof of a working client connection. Proposed design: a read-only release conformance check comparing declared service capabilities with packaged artifact and bounded client interoperability evidence. Owen independent review pending.",
       "state": "Source verified · Documentation discrepancy · Runtime behavior unknown"
+    },
+    {
+      "date": "2026-11-17",
+      "title": "ContextWise Drive archive discovery pagination gap",
+      "detail": "Authenticated source inspection found that the browser archive reader queries up to 100 JSON files by modification time, then locally filters workspace filenames without traversing nextPageToken. A matching archive beyond the first page may be missed. Proposed bounded pagination and deterministic archive selection, with tests; source finding only, not reproduced live. Owen critique pending.",
+      "state": "Source verified · Reliability risk · Owen review pending"
     }
   ]
 }
