@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.60",
-  "updated_at": "2026-11-16T21:17:14.000Z",
+  "revision": "3.61",
+  "updated_at": "2026-11-17T00:24:34.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: LoreWise DiagnosticsStore launches independent asynchronous persistence jobs for each event snapshot and clear, without serialized disk writes. Could older snapshots finish after newer ones or after clear, restoring stale events on restart? Compare a single ordered writer or coalesced persistence with current design; require bounded concurrent record/clear/restart tests. Source-level race risk, not reproduced failure.",
     "Owen independent challenge pending: LoreWise ON_DEVICE_AI.md documents atomic file replacement that preserves old weights on interrupted copies, but says a fully copied incompatible model remains installed in ERROR. Should the application validate candidate initialization before replacing a previously working model, or retain a rollback slot, without centralizing model management in Mycelium? Source implementation and device behavior still require verification.",
     "Owen independent challenge pending: LoreWise documents authoritative Android game mechanics, bounded AI effects and multi-route Gemma narration, but README says 0.13.0 while CURRENT_STATE claims 0.14.0 built without physical-device installation. Should Mycelium standardize a read-only AI capability and release-evidence manifest, reusing LoreWise routing/transcript patterns without centralizing game state or treating documented builds as deployed?",
     "Owen independent challenge pending: SurveyWise's checked-in Android source persists one mutable survey.json, and selecting a different plan clears observations immediately; save errors are logged without user-visible failure. Should Mycelium keep survey/project data ownership entirely in SurveyWise and require explicit project identity, loss-prevention prompts and save/reopen tests before any cross-app import adapter?",
@@ -646,6 +647,12 @@
       "title": "LoreWise model replacement compatibility rollback",
       "detail": "Read-only comparison of LoreWise README, AI_CONTEXT.md and ON_DEVICE_AI.md confirms app-owned deterministic game state and a documented model import/Auto routing contract. The import guide distinguishes interrupted copy protection from incompatible model handling: an incompatible fully copied model can remain installed in ERROR, so atomic file replacement alone is not compatibility rollback. Proposal: retain app-local model ownership and add candidate validation or last-known-good rollback acceptance tests before cross-app AI adapter reuse. No physical-device or source implementation verification claimed; Owen critique pending.",
       "state": "Documentation verified · Compatibility risk proposed · Owen review pending"
+    },
+    {
+      "date": "2026-11-16",
+      "title": "LoreWise diagnostics persistence ordering risk",
+      "detail": "Source inspection of Diagnostics.kt verifies a synchronized in-memory 1,000-event ring but each record and clear schedules an independent asynchronous SharedPreferences write. Completion ordering is not explicitly serialized, so persisted diagnostics may lag or revert to an older snapshot under contention. AiTranscripts.kt and TranscriptRuntime.kt separately show correlated request IDs, append-only transcript journals and upload retries. Proposed reuse: read-only observability capability inventory; keep app ownership and test ordered diagnostic persistence before claiming durable evidence. Owen independent critique pending; no device test performed.",
+      "state": "Source verified · Concurrency risk proposed · Owen review pending"
     }
   ]
 }
