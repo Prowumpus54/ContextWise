@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.64",
-  "updated_at": "2026-11-17T22:16:51.504Z",
+  "revision": "3.65",
+  "updated_at": "2026-11-17T23:20:08.183Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: SurveyWise's Android camera flow stores pendingPhoto only in an Activity field, not saved instance state. If Android destroys the Activity while the external camera is open, the result handler cannot associate the returned photo with the observation and may leave an unlinked MediaStore image. Should SurveyWise persist pending capture identity and recover or clean up interrupted captures before field-device acceptance? Source-level lifecycle risk; not device-reproduced.",
     "Owen independent challenge pending: ContextWise's browser Drive archive reader selects only the first page of up to 100 files sorted by modifiedTime and filters matching workspace filenames locally, without following nextPageToken. Could a valid older archive be missed when newer unrelated JSON files occupy the first page? Prefer paginated, bounded candidate discovery with deterministic selection and fixture tests before treating Drive archive loading as reliable. Source-level gap; live Drive behavior unverified.",
     "Owen independent challenge pending: the standalone Android AI Runtime README describes an earlier service exposure state than the checked-in Android manifest. Should release documentation be generated or checked against packaged manifests and verified client IPC tests before Mycelium lists runtime interoperability as ready? Source declarations verified; installed artifact and end-to-end client behavior unknown.",
     "Owen independent challenge pending: BasketWise scripts/test-android.ps1 hardcodes emulator-5554 for APK installation and instrumentation. Should Wise apps share a configurable device-selection and release-evidence contract while keeping app-specific test suites? Verify on a physical device before claiming field readiness.",
@@ -99,6 +100,12 @@
     "How should human resolution be recorded without implying automatic replay permission?"
   ],
   "timeline": [
+    {
+      "date": "2026-11-17T23:20:08.180Z",
+      "title": "SurveyWise camera lifecycle risk identified",
+      "detail": "Read-only source inspection found in-memory-only pending capture state across external camera activity; propose lifecycle restoration and interrupted-capture tests. Owen review pending; no device reproduction.",
+      "state": "Proposal · unverified runtime"
+    },
     {
       "date": "2026-11-16",
       "title": "LoreWise AI routing and release-evidence boundary",
