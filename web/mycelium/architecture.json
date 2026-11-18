@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.67",
-  "updated_at": "2026-11-18T12:24:53.979Z",
+  "revision": "3.68",
+  "updated_at": "2026-11-18T23:25:05.381Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -99,7 +99,8 @@
     "Owen review pending: how long must operation evidence be retained relative to retry and offline windows?",
     "Can destination evidence be exported into an independently verifiable audit receipt before expiry?",
     "Which Tasker endpoint supports durable operation identity and authoritative outcome lookup?",
-    "How should human resolution be recorded without implying automatic replay permission?"
+    "How should human resolution be recorded without implying automatic replay permission?",
+    "Owen independent challenge pending: read-only local Ollama inventory confirms installed model tags including Gemma 2 and multiple coding/reviewer candidates, while OpenHands, local memory MCP and Langfuse services are running. Installed model presence is not an authenticated BuildWise enabled profile or proof of agent-run integration. Should Mycelium inventory model installation, BuildWise authorization, active routing and trace evidence as four separate states?"
   ],
   "timeline": [
     {
@@ -695,6 +696,12 @@
       "title": "BasketWise Firebase rule location and deployment mapping verified",
       "detail": "Source inspection located Firestore and Storage rules under tests/firebase, emulator rule fixtures, and an explicit firebase.rules.deploy.json mapping. This corrects the earlier root-path uncertainty. The default root firebase.json is empty, and deployed rule identity remains unverified; propose a read-only source-to-deployment attestation. Owen review pending.",
       "state": "Source verified · Inventory correction · Deployed state unknown"
+    },
+    {
+      "date": "2026-11-18",
+      "title": "Local AI inventory separates installed models from authorized worker profiles",
+      "detail": "Read-only desktop inspection confirmed Ollama model tags including Gemma 2 and coding/reviewer candidates, plus running OpenHands, memory and Langfuse services. These observations do not establish BuildWise profile enablement, successful inter-agent routing or correlated traces. Propose four distinct evidence states: installed, authorized, routed and observed. Owen critique pending.",
+      "state": "Live inventory verified · Integration unknown · Owen review pending"
     }
   ]
 }
