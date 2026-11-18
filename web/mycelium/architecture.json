@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.65",
-  "updated_at": "2026-11-17T23:20:08.183Z",
+  "revision": "3.66",
+  "updated_at": "2026-11-18T08:19:47.712Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: Tasker release branch comparison confirms main is an older 0.1.0 baseline while an integration branch declares versionCode 44 / 0.5.9 and includes the Wise AI Runtime binding permission. Should Mycelium track release provenance by exact commit, signed artifact digest, and installed version rather than default-branch manifests? Source-level evidence only; installed APK and end-to-end IPC unverified.",
     "Owen independent challenge pending: SurveyWise's Android camera flow stores pendingPhoto only in an Activity field, not saved instance state. If Android destroys the Activity while the external camera is open, the result handler cannot associate the returned photo with the observation and may leave an unlinked MediaStore image. Should SurveyWise persist pending capture identity and recover or clean up interrupted captures before field-device acceptance? Source-level lifecycle risk; not device-reproduced.",
     "Owen independent challenge pending: ContextWise's browser Drive archive reader selects only the first page of up to 100 files sorted by modifiedTime and filters matching workspace filenames locally, without following nextPageToken. Could a valid older archive be missed when newer unrelated JSON files occupy the first page? Prefer paginated, bounded candidate discovery with deterministic selection and fixture tests before treating Drive archive loading as reliable. Source-level gap; live Drive behavior unverified.",
     "Owen independent challenge pending: the standalone Android AI Runtime README describes an earlier service exposure state than the checked-in Android manifest. Should release documentation be generated or checked against packaged manifests and verified client IPC tests before Mycelium lists runtime interoperability as ready? Source declarations verified; installed artifact and end-to-end client behavior unknown.",
@@ -681,6 +682,12 @@
       "title": "ContextWise Drive archive discovery pagination gap",
       "detail": "Authenticated source inspection found that the browser archive reader queries up to 100 JSON files by modification time, then locally filters workspace filenames without traversing nextPageToken. A matching archive beyond the first page may be missed. Proposed bounded pagination and deterministic archive selection, with tests; source finding only, not reproduced live. Owen critique pending.",
       "state": "Source verified · Reliability risk · Owen review pending"
+    },
+    {
+      "date": "2026-11-18",
+      "title": "Tasker source-to-release branch provenance clarified",
+      "detail": "Authenticated source comparison found Tasker main at version 0.1.0 and a separate integration branch at versionCode 44 / 0.5.9 with Android AI Runtime client permission declared. This corrects the inference that Tasker lacks client integration everywhere. Recommend commit-to-artifact-to-device evidence before declaring a deployment or signing compatibility. Owen critique pending.",
+      "state": "Source verified · Inventory correction · Owen review pending"
     }
   ]
 }
