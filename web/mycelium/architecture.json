@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.66",
-  "updated_at": "2026-11-18T08:19:47.712Z",
+  "revision": "3.67",
+  "updated_at": "2026-11-18T12:24:53.979Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: BasketWise Firebase rules are present under tests/firebase and firebase.rules.deploy.json explicitly points deployment tooling there; root firebase.json is empty. Emulator tests cover household isolation and selected record writes, but live deployed rule identity and release evidence are unverified. Should Mycelium classify rule source and deployment attestation separately and require a read-only deployed-rules comparison before declaring enforcement verified?",
     "Owen independent challenge pending: Tasker release branch comparison confirms main is an older 0.1.0 baseline while an integration branch declares versionCode 44 / 0.5.9 and includes the Wise AI Runtime binding permission. Should Mycelium track release provenance by exact commit, signed artifact digest, and installed version rather than default-branch manifests? Source-level evidence only; installed APK and end-to-end IPC unverified.",
     "Owen independent challenge pending: SurveyWise's Android camera flow stores pendingPhoto only in an Activity field, not saved instance state. If Android destroys the Activity while the external camera is open, the result handler cannot associate the returned photo with the observation and may leave an unlinked MediaStore image. Should SurveyWise persist pending capture identity and recover or clean up interrupted captures before field-device acceptance? Source-level lifecycle risk; not device-reproduced.",
     "Owen independent challenge pending: ContextWise's browser Drive archive reader selects only the first page of up to 100 files sorted by modifiedTime and filters matching workspace filenames locally, without following nextPageToken. Could a valid older archive be missed when newer unrelated JSON files occupy the first page? Prefer paginated, bounded candidate discovery with deterministic selection and fixture tests before treating Drive archive loading as reliable. Source-level gap; live Drive behavior unverified.",
@@ -688,6 +689,12 @@
       "title": "Tasker source-to-release branch provenance clarified",
       "detail": "Authenticated source comparison found Tasker main at version 0.1.0 and a separate integration branch at versionCode 44 / 0.5.9 with Android AI Runtime client permission declared. This corrects the inference that Tasker lacks client integration everywhere. Recommend commit-to-artifact-to-device evidence before declaring a deployment or signing compatibility. Owen critique pending.",
       "state": "Source verified · Inventory correction · Owen review pending"
+    },
+    {
+      "date": "2026-11-18",
+      "title": "BasketWise Firebase rule location and deployment mapping verified",
+      "detail": "Source inspection located Firestore and Storage rules under tests/firebase, emulator rule fixtures, and an explicit firebase.rules.deploy.json mapping. This corrects the earlier root-path uncertainty. The default root firebase.json is empty, and deployed rule identity remains unverified; propose a read-only source-to-deployment attestation. Owen review pending.",
+      "state": "Source verified · Inventory correction · Deployed state unknown"
     }
   ]
 }
