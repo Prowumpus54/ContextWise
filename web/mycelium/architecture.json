@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.73",
-  "updated_at": "2026-11-19T07:23:13Z",
+  "revision": "3.74",
+  "updated_at": "2026-11-19T08:21:32Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: The public Mycelium observatory rebuilds all question and timeline DOM nodes every 60 seconds, with no pagination or incremental reconciliation; at revision 3.73 it renders 94 open questions and 105 timeline entries. Should the public viewer show a bounded recent timeline and categorized question summaries while retaining the full JSON as an archive? Source-level scalability/accessibility risk; no browser performance measurement.",
     "Owen independent challenge pending: MoneyWise household authorization uses two inconsistent membership sources: read/create/update on household collections trust household.memberIds, while owner-only operations check members/{uid}.active and role. A deactivated member who remains in memberIds may retain document access. Should one canonical active-membership predicate govern all household data operations, with emulator tests for deactivation, owner transfer, and membership-list drift? Source-level risk only; deployed rules and real user access unverified.",
     "Owen independent challenge pending: SurveyWise PlanView caches its rendered PDF bitmap solely by page index. Opening a replacement plan resets page to zero but does not invalidate cached bitmap; when the previous view is also on page zero, the old floor plan can remain displayed while observations have been cleared and new plan URI saved. Should plan identity be part of the render-cache key and should plan replacement explicitly dispose/reload the bitmap? Source-level UI defect; device reproduction pending.",
     "Owen independent challenge pending: SurveyWise checked-in Android observations persist page, coordinates, image URI and note, but no stable observation ID, capture timestamp or revision. Visible pin numbers derive from mutable list positions. Should SurveyWise add locally generated immutable observation IDs and timestamps before export/sync, preserving domain ownership and avoiding a Mycelium database? Source-level gap only; device behavior unverified.",
@@ -737,6 +738,12 @@
       "title": "MoneyWise household membership authorization drift",
       "detail": "Read-only checked-in Firestore rules show ordinary household access keyed to memberIds while owner access checks active member documents. Recommend a single active-membership contract and negative authorization tests before live financial ingestion; no production access or deployment verification.",
       "state": "Source verified · Proposed correction · Owen review pending"
+    },
+    {
+      "date": "2026-11-19",
+      "title": "Public architecture viewer has unbounded repeated rendering",
+      "detail": "Checked-in viewer re-renders every open question and timeline entry on each 60-second refresh; current feed contains 94 questions and 105 timeline entries before this finding. Propose bounded recent entries, categorized summaries and an accessible full archive; browser profiling and Owen independent review pending. ViewWise source remains undiscovered under the expected owner.",
+      "state": "Source verified · Design proposal · Owen review pending"
     }
   ]
 }
