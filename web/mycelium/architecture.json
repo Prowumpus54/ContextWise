@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.70",
-  "updated_at": "2026-11-19T04:21:23.058Z",
+  "revision": "3.71",
+  "updated_at": "2026-11-19T05:24:16.481Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: SurveyWise checked-in Android observations persist page, coordinates, image URI and note, but no stable observation ID, capture timestamp or revision. Visible pin numbers derive from mutable list positions. Should SurveyWise add locally generated immutable observation IDs and timestamps before export/sync, preserving domain ownership and avoiding a Mycelium database? Source-level gap only; device behavior unverified.",
     "Owen independent challenge pending: BasketWise checked-in Firestore rules permit any authenticated household member to delete records, without a tombstone or deletion metadata enforced by rules. Should Mycelium integrations require soft-delete or append-only deletion receipts for cross-app replay and audit, while preserving household-level user control? Source-level finding only; actual clients and deployed rules unverified.",
     "Owen independent challenge pending: BasketWise Firestore permits up to 300000-character string payloads for 14 record kinds, while rules check kind, author, size and household but delegate payload JSON/schema validation to the app. Should cross-client imports use shared versioned schema fixtures and fail-closed validation before write, without placing full application schemas into Firestore rules? Source verified; client validation and deployed rules not yet verified.",
     "Owen independent challenge pending: BasketWise Firebase rules are present under tests/firebase and firebase.rules.deploy.json explicitly points deployment tooling there; root firebase.json is empty. Emulator tests cover household isolation and selected record writes, but live deployed rule identity and release evidence are unverified. Should Mycelium classify rule source and deployment attestation separately and require a read-only deployed-rules comparison before declaring enforcement verified?",
@@ -715,6 +716,12 @@
       "date": "2026-11-19",
       "title": "BasketWise record deletion lacks an enforced provenance trail",
       "detail": "Checked-in BasketWise Firestore rules allow member-authorized hard deletion of records while create/update enforce author and server timestamp. A future Mycelium consumer cannot infer deleted record history from the remaining collection alone. Propose a bounded deletion-provenance contract, not a second database. No deployed-rules or client behavior verified; Owen critique pending.",
+      "state": "Source verified · Proposal · Owen review pending"
+    },
+    {
+      "date": "2026-11-19",
+      "title": "SurveyWise observations lack stable identity and capture provenance",
+      "detail": "Read-only Android source inspection confirms observation records lack persistent IDs, capture timestamps and revision lineage; displayed pin numbers use list order. Propose a backward-compatible local schema migration and save/reopen/reorder tests before field export or cross-app synchronization. Source verified, device behavior unverified; Owen critique pending.",
       "state": "Source verified · Proposal · Owen review pending"
     }
   ]
