@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.74",
-  "updated_at": "2026-11-19T08:21:32Z",
+  "revision": "3.75",
+  "updated_at": "2026-11-19T10:24:41Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: Tasker Android source persists feedback locally and retries unsent items with stable sourceId, but marks factorySyncedAt on any HTTP 2xx. Does BuildWise /api/intake durably commit and deduplicate by sourceId before acknowledging? Verify server contract and retry-after-timeout behavior before calling the capture-to-factory chain end-to-end reliable.",
     "Owen independent challenge pending: The public Mycelium observatory rebuilds all question and timeline DOM nodes every 60 seconds, with no pagination or incremental reconciliation; at revision 3.73 it renders 94 open questions and 105 timeline entries. Should the public viewer show a bounded recent timeline and categorized question summaries while retaining the full JSON as an archive? Source-level scalability/accessibility risk; no browser performance measurement.",
     "Owen independent challenge pending: MoneyWise household authorization uses two inconsistent membership sources: read/create/update on household collections trust household.memberIds, while owner-only operations check members/{uid}.active and role. A deactivated member who remains in memberIds may retain document access. Should one canonical active-membership predicate govern all household data operations, with emulator tests for deactivation, owner transfer, and membership-list drift? Source-level risk only; deployed rules and real user access unverified.",
     "Owen independent challenge pending: SurveyWise PlanView caches its rendered PDF bitmap solely by page index. Opening a replacement plan resets page to zero but does not invalidate cached bitmap; when the previous view is also on page zero, the old floor plan can remain displayed while observations have been cleared and new plan URI saved. Should plan identity be part of the render-cache key and should plan replacement explicitly dispose/reload the bitmap? Source-level UI defect; device reproduction pending.",
@@ -744,6 +745,12 @@
       "title": "Public architecture viewer has unbounded repeated rendering",
       "detail": "Checked-in viewer re-renders every open question and timeline entry on each 60-second refresh; current feed contains 94 questions and 105 timeline entries before this finding. Propose bounded recent entries, categorized summaries and an accessible full archive; browser profiling and Owen independent review pending. ViewWise source remains undiscovered under the expected owner.",
       "state": "Source verified · Design proposal · Owen review pending"
+    },
+    {
+      "date": "2026-11-19",
+      "title": "Tasker factory feedback acknowledgement is HTTP-level",
+      "detail": "Tasker source verifies local feedback persistence, manual retry, stable sourceId and HTTP 2xx-based sync marking. Durable server commit, duplicate suppression and downstream archival were not verified. Propose receipt-based acknowledgement contract and failure-injection test; independent review pending.",
+      "state": "Client source verified · Server unverified · Design proposal"
     }
   ]
 }
