@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.78",
-  "updated_at": "2026-11-19T20:23:01Z",
+  "revision": "3.79",
+  "updated_at": "2026-11-19T22:20:22Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent review requested: MeshWise's checked-in Android prototype is a nearby-phone BLE locator, not a Raspberry Pi sensor mesh or MQTT transport. Its legacy BLE advertisement combines a full 128-bit service UUID with 128-bit service-data UUID and a 12-byte identity payload, likely exceeding the 31-byte advertising limit. Should MeshWise remain a proximity feature while a separate standards-based device gateway handles home automation? Validate advertising on two physical phones and measure payload fit before reusing discovery.",
     "Owen independent review requested: SurveyWise's checked-in plan pins use normalized page x/y and a mutable zero-based PDF page index, with no stable sheet identity, page dimensions, coordinate reference system or transform in persisted observations. ViewWise is not identifiable in the authenticated repository inventory. Should a versioned spatial interchange manifest carry source-document identity, immutable sheet/page ID, normalized coordinates, optional calibrated transform and confidence, while preserving SurveyWise as source of truth? Source verified; ViewWise implementation and device/export tests unavailable.",
     "Owen independent review requested: WiseCore buildwise-project.schema.json requires standardVersion, project.slug, diagnostics.standard and verification.primaryCommand, but BasketWise's checked-in buildwise-project.json lacks these and uses older prototype fields; LoreWise metadata follows the newer shape. Should the shared project contract provide an explicit legacy schema/migration and validation fixture before enforcing cross-app registry ingestion? Source-verified compatibility gap; no live BuildWise parser behavior verified.",
     "Owen independent review requested: Should Wise AI Runtime become the shared on-device inference provider for LoreWise and Tasker only after independently signed client AIDL tests demonstrate authorization, bounded asynchronous inference, cancellation and desktop-fallback behavior? Distinguish October test reports from fresh device verification.",
@@ -772,6 +773,12 @@
       "title": "SurveyWise spatial interchange and ViewWise source-discovery gap",
       "detail": "Source inspection confirms SurveyWise persists PDF page index plus normalized pin coordinates, without stable sheet identity or map transform; the authenticated repository inventory does not identify ViewWise. Propose a minimal versioned interchange manifest with document/sheet identity and optional calibration, not a shared spatial database. Device behavior and ViewWise integration remain unverified; Owen challenge pending.",
       "state": "Source inspected · Design proposal · Independent review pending"
+    },
+    {
+      "date": "2026-11-19",
+      "title": "MeshWise BLE locator scope and advertisement-size risk",
+      "detail": "Read-only repository tree and Android code inspection found a BLE nearby-phone locator with local heading and RSSI, not a general sensor mesh. Legacy advertising data appears to exceed the payload limit; two-phone runtime validation is pending. Recommend keeping proximity discovery separate from standards-based home-automation transport. Owen review pending; no deployment.",
+      "state": "Source inspected · Implementation risk · Design proposal"
     }
   ]
 }
