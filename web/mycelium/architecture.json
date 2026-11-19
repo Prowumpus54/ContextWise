@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.71",
-  "updated_at": "2026-11-19T05:24:16.481Z",
+  "revision": "3.72",
+  "updated_at": "2026-11-19T06:21:47Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: SurveyWise PlanView caches its rendered PDF bitmap solely by page index. Opening a replacement plan resets page to zero but does not invalidate cached bitmap; when the previous view is also on page zero, the old floor plan can remain displayed while observations have been cleared and new plan URI saved. Should plan identity be part of the render-cache key and should plan replacement explicitly dispose/reload the bitmap? Source-level UI defect; device reproduction pending.",
     "Owen independent challenge pending: SurveyWise checked-in Android observations persist page, coordinates, image URI and note, but no stable observation ID, capture timestamp or revision. Visible pin numbers derive from mutable list positions. Should SurveyWise add locally generated immutable observation IDs and timestamps before export/sync, preserving domain ownership and avoiding a Mycelium database? Source-level gap only; device behavior unverified.",
     "Owen independent challenge pending: BasketWise checked-in Firestore rules permit any authenticated household member to delete records, without a tombstone or deletion metadata enforced by rules. Should Mycelium integrations require soft-delete or append-only deletion receipts for cross-app replay and audit, while preserving household-level user control? Source-level finding only; actual clients and deployed rules unverified.",
     "Owen independent challenge pending: BasketWise Firestore permits up to 300000-character string payloads for 14 record kinds, while rules check kind, author, size and household but delegate payload JSON/schema validation to the app. Should cross-client imports use shared versioned schema fixtures and fail-closed validation before write, without placing full application schemas into Firestore rules? Source verified; client validation and deployed rules not yet verified.",
@@ -723,6 +724,12 @@
       "title": "SurveyWise observations lack stable identity and capture provenance",
       "detail": "Read-only Android source inspection confirms observation records lack persistent IDs, capture timestamps and revision lineage; displayed pin numbers use list order. Propose a backward-compatible local schema migration and save/reopen/reorder tests before field export or cross-app synchronization. Source verified, device behavior unverified; Owen critique pending.",
       "state": "Source verified · Proposal · Owen review pending"
+    },
+    {
+      "date": "2026-11-19",
+      "title": "SurveyWise plan-render cache ignores plan replacement",
+      "detail": "Source inspection found the PDF bitmap cache keyed only by page number. Replacing a plan resets the page to zero and clears observations but does not invalidate the cached bitmap, risking a stale floor-plan display until page navigation. Recommend explicit cache invalidation on plan URI change and a two-plan replacement UI test; no device execution or production change.",
+      "state": "Source verified · Proposed correction · Owen review pending"
     }
   ]
 }
