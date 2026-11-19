@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.68",
-  "updated_at": "2026-11-18T23:25:05.381Z",
+  "revision": "3.69",
+  "updated_at": "2026-11-19T03:23:37.442Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: BasketWise Firestore permits up to 300000-character string payloads for 14 record kinds, while rules check kind, author, size and household but delegate payload JSON/schema validation to the app. Should cross-client imports use shared versioned schema fixtures and fail-closed validation before write, without placing full application schemas into Firestore rules? Source verified; client validation and deployed rules not yet verified.",
     "Owen independent challenge pending: BasketWise Firebase rules are present under tests/firebase and firebase.rules.deploy.json explicitly points deployment tooling there; root firebase.json is empty. Emulator tests cover household isolation and selected record writes, but live deployed rule identity and release evidence are unverified. Should Mycelium classify rule source and deployment attestation separately and require a read-only deployed-rules comparison before declaring enforcement verified?",
     "Owen independent challenge pending: Tasker release branch comparison confirms main is an older 0.1.0 baseline while an integration branch declares versionCode 44 / 0.5.9 and includes the Wise AI Runtime binding permission. Should Mycelium track release provenance by exact commit, signed artifact digest, and installed version rather than default-branch manifests? Source-level evidence only; installed APK and end-to-end IPC unverified.",
     "Owen independent challenge pending: SurveyWise's Android camera flow stores pendingPhoto only in an Activity field, not saved instance state. If Android destroys the Activity while the external camera is open, the result handler cannot associate the returned photo with the observation and may leave an unlinked MediaStore image. Should SurveyWise persist pending capture identity and recover or clean up interrupted captures before field-device acceptance? Source-level lifecycle risk; not device-reproduced.",
@@ -702,6 +703,12 @@
       "title": "Local AI inventory separates installed models from authorized worker profiles",
       "detail": "Read-only desktop inspection confirmed Ollama model tags including Gemma 2 and coding/reviewer candidates, plus running OpenHands, memory and Langfuse services. These observations do not establish BuildWise profile enablement, successful inter-agent routing or correlated traces. Propose four distinct evidence states: installed, authorized, routed and observed. Owen critique pending.",
       "state": "Live inventory verified · Integration unknown · Owen review pending"
+    },
+    {
+      "date": "2026-11-19",
+      "title": "BasketWise record-envelope validation boundary documented",
+      "detail": "Read-only Firestore rule inspection verified household isolation and record-kind, size, author and timestamp constraints, but payload remains an opaque string whose schema is validated by application code. Propose cross-client versioned contract fixtures before extending Mycelium ingestion. No runtime or deployed-rule claim; Owen review pending.",
+      "state": "Source verified · Proposal · Owen review pending"
     }
   ]
 }
