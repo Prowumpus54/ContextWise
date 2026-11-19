@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.76",
-  "updated_at": "2026-11-19T13:22:00Z",
+  "revision": "3.77",
+  "updated_at": "2026-11-19T15:24:43Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent review requested: WiseCore buildwise-project.schema.json requires standardVersion, project.slug, diagnostics.standard and verification.primaryCommand, but BasketWise's checked-in buildwise-project.json lacks these and uses older prototype fields; LoreWise metadata follows the newer shape. Should the shared project contract provide an explicit legacy schema/migration and validation fixture before enforcing cross-app registry ingestion? Source-verified compatibility gap; no live BuildWise parser behavior verified.",
     "Owen independent review requested: Should Wise AI Runtime become the shared on-device inference provider for LoreWise and Tasker only after independently signed client AIDL tests demonstrate authorization, bounded asynchronous inference, cancellation and desktop-fallback behavior? Distinguish October test reports from fresh device verification.",
     "Owen independent challenge pending: Tasker Android source persists feedback locally and retries unsent items with stable sourceId, but marks factorySyncedAt on any HTTP 2xx. Does BuildWise /api/intake durably commit and deduplicate by sourceId before acknowledging? Verify server contract and retry-after-timeout behavior before calling the capture-to-factory chain end-to-end reliable.",
     "Owen independent challenge pending: The public Mycelium observatory rebuilds all question and timeline DOM nodes every 60 seconds, with no pagination or incremental reconciliation; at revision 3.73 it renders 94 open questions and 105 timeline entries. Should the public viewer show a bounded recent timeline and categorized question summaries while retaining the full JSON as an archive? Source-level scalability/accessibility risk; no browser performance measurement.",
@@ -758,6 +759,12 @@
       "title": "Wise AI Runtime canonical repository and cross-app IPC evidence",
       "detail": "Authenticated repository inventory identified the standalone Android AI runtime. Checked-in October device-test reports document successful CPU inference on a Pixel and a shared-engine smoke test; external app-to-app AIDL inference, authorization UX, cancellation and production fallback remain unverified. Reuse the existing runtime rather than duplicate model engines; require an independent client integration test before adoption.",
       "state": "Repository and test reports inspected · Cross-app integration unverified"
+    },
+    {
+      "date": "2026-11-19",
+      "title": "WiseCore project metadata compatibility gap",
+      "detail": "Read-only comparison found WiseCore's current project schema requires fields absent from BasketWise's older prototype metadata, while LoreWise includes the newer fields. Recommend versioned legacy migration and cross-repository schema-validation fixtures before using the contract as a universal registry source. Owen review pending; live BuildWise parsing unverified.",
+      "state": "Source compared · Compatibility gap · Design proposal"
     }
   ]
 }
