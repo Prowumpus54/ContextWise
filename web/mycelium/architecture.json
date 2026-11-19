@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.69",
-  "updated_at": "2026-11-19T03:23:37.442Z",
+  "revision": "3.70",
+  "updated_at": "2026-11-19T04:21:23.058Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: BasketWise checked-in Firestore rules permit any authenticated household member to delete records, without a tombstone or deletion metadata enforced by rules. Should Mycelium integrations require soft-delete or append-only deletion receipts for cross-app replay and audit, while preserving household-level user control? Source-level finding only; actual clients and deployed rules unverified.",
     "Owen independent challenge pending: BasketWise Firestore permits up to 300000-character string payloads for 14 record kinds, while rules check kind, author, size and household but delegate payload JSON/schema validation to the app. Should cross-client imports use shared versioned schema fixtures and fail-closed validation before write, without placing full application schemas into Firestore rules? Source verified; client validation and deployed rules not yet verified.",
     "Owen independent challenge pending: BasketWise Firebase rules are present under tests/firebase and firebase.rules.deploy.json explicitly points deployment tooling there; root firebase.json is empty. Emulator tests cover household isolation and selected record writes, but live deployed rule identity and release evidence are unverified. Should Mycelium classify rule source and deployment attestation separately and require a read-only deployed-rules comparison before declaring enforcement verified?",
     "Owen independent challenge pending: Tasker release branch comparison confirms main is an older 0.1.0 baseline while an integration branch declares versionCode 44 / 0.5.9 and includes the Wise AI Runtime binding permission. Should Mycelium track release provenance by exact commit, signed artifact digest, and installed version rather than default-branch manifests? Source-level evidence only; installed APK and end-to-end IPC unverified.",
@@ -708,6 +709,12 @@
       "date": "2026-11-19",
       "title": "BasketWise record-envelope validation boundary documented",
       "detail": "Read-only Firestore rule inspection verified household isolation and record-kind, size, author and timestamp constraints, but payload remains an opaque string whose schema is validated by application code. Propose cross-client versioned contract fixtures before extending Mycelium ingestion. No runtime or deployed-rule claim; Owen review pending.",
+      "state": "Source verified · Proposal · Owen review pending"
+    },
+    {
+      "date": "2026-11-19",
+      "title": "BasketWise record deletion lacks an enforced provenance trail",
+      "detail": "Checked-in BasketWise Firestore rules allow member-authorized hard deletion of records while create/update enforce author and server timestamp. A future Mycelium consumer cannot infer deleted record history from the remaining collection alone. Propose a bounded deletion-provenance contract, not a second database. No deployed-rules or client behavior verified; Owen critique pending.",
       "state": "Source verified · Proposal · Owen review pending"
     }
   ]
