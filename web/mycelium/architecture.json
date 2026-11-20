@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "3.99",
-  "updated_at": "2026-11-20T22:18:16Z",
+  "revision": "4.00",
+  "updated_at": "2026-11-20T23:21:48Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
+  "next_experiment": "Read-only public feed contract test: verify timeline field compatibility and renderer output against current architecture.json before any UI changes",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: Public Mycelium observatory index.html renders timeline entries using t.date, t.detail and t.state, but architecture.json timeline entries use timestamp, summary and status. As a result, the date, description and status render blank even when feed fetch succeeds; title alone survives. This is a source-verified public observability contract defect, not a measured browser test. Should the viewer normalize both historical and canonical field names and validate feed schema at load time before introducing a formal v2 feed contract? Keep public page unchanged pending Riley implementation authority.",
     "Owen independent challenge pending: Source-verified Android manifest/Gradle comparison finds Tasker, MeshWise and BuildWise mobile each use a small Java/Android application with no declared WorkManager dependency. Tasker and MeshWise manifests declare only launcher activities (no persistent service or boot receiver); BuildWise declares widget and install-result receivers but no durable outbound worker. Thus WorkManager-based delivery is a new dependency and migration, not reuse of an existing shared worker. Should a versioned outbox protocol first be tested in Tasker, with battery/Doze, reboot, duplicate acknowledgment and user-consent constraints, before any cross-app Android library? Source verified; merged manifests, transitive dependencies, live device and server durable intake remain unverified.",
     "Owen independent challenge pending: Cross-Android transport lifecycle audit found Tasker FactoryFeedbackBridge starts an unmanaged raw Thread for each HTTP POST with 3.5s connect/6s read timeouts and a callback, while BuildWise InstallResultReceiver starts raw Threads from goAsync() and suppresses reporting exceptions; MeshWise PeerDiscoveryManager instead manages BLE scan/advertise callbacks with one running flag. These are three distinct execution/cancellation/acknowledgment models, with no common durable outbox or lifecycle abstraction in the inspected files. Should Mycelium standardize a small versioned transport outcome/state contract (queued, attempting, acknowledged, retryable failure, terminal failure) and Android WorkManager-based durable execution for HTTP only, while leaving BLE lifecycle app-specific? Verify manifest/background constraints and intake deduplication before proposing a shared library. Source verified; live Android execution and BuildWise backend unavailable.",
     "Owen independent challenge pending: MeshWise PeerDiscoveryManager sets running=true immediately after requesting BLE scan/advertising, but onScanFailed and onStartFailure only update UI text; they do not reset state, stop the surviving radio operation or schedule bounded recovery. Subsequent start() calls return early, potentially leaving discovery permanently degraded until lifecycle stop. stop() also returns early if runtime permissions were revoked, leaving running unchanged. Should discovery use independent scan/advertise state, callback-confirmed transitions and explicit teardown/retry tests? Source verified; actual Android callback behavior unverified.",
@@ -918,6 +919,12 @@
       "timestamp": "2026-11-20T22:18:16Z",
       "title": "Android manifest and background execution dependency audit",
       "summary": "Compared checked-in manifests and Gradle declarations for Tasker, MeshWise and BuildWise mobile. No declared WorkManager dependency or persistent HTTP worker; a durable outbox would require a new implementation. Recommend Tasker-only design prototype and explicit reboot/Doze/deduplication acceptance tests before shared library. Owen independent critique requested, delivery unverified.",
+      "status": "Source verified · design proposal"
+    },
+    {
+      "timestamp": "2026-11-20T23:21:48Z",
+      "title": "Public architecture feed/viewer schema mismatch",
+      "summary": "Compared the public HTML timeline renderer with the live JSON feed: renderer expects date/detail/state while feed emits timestamp/summary/status. Public timeline metadata is therefore blank. Propose a backward-compatible field adapter and schema fixture, with Owen independent critique; no website code or production changes.",
       "status": "Source verified · design proposal"
     }
   ]
