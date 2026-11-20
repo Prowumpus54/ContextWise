@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.82",
-  "updated_at": "2026-11-20T03:20:00Z",
+  "revision": "3.83",
+  "updated_at": "2026-11-20T04:22:54Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: Factory Dashboard job-dispatcher.js recover() unconditionally transitions persisted active jobs to FAILED on dispatcher startup and releases their worktree/resource ownership, without first verifying whether an original worker process remains alive. In contrast, its stale-job check probes process liveness and worktree activity. Could a surviving worker continue after restart while a new job acquires the released worktree? Review restart and cancellation authority against BuildWise, and design a read-only orphan-process/lease reconciliation test before changing code. Source verified; live behavior and BuildWise catalog unavailable.",
     "Owen independent challenge pending: Factory Dashboard's actual server/job-dispatcher.js and docs/JOB_DISPATCHER.md implement persistent dispatch jobs, profile/model selection, worktree locks, worker-backend registry, cancellation and restart reconciliation in factory-state.json. This is an implemented scheduler boundary, not merely a README aspiration. Before consolidating with BuildWise, compare authoritative store ownership and cancellation/restart semantics using a read-only job-ID trace; do not merge queues or retire Foreman without live evidence. Source verified; live BuildWise catalog unavailable.",
     "Owen independent challenge pending: Factory Dashboard README documents a Foreman dependency-aware worker queue, agent/service controls, Ollama health, API governor, artifact registry and explicit Android smoke tests, while BuildWise is designated the canonical job lifecycle and Atlas a read-only observer. Are Foreman and BuildWise still independent active schedulers or historical/adapter layers? Inventory live ownership, model/profile IDs, queue persistence and cancellation semantics before naming one authoritative local-model registry. README claims only; running service behavior and OpenHands/OpenCode linkage unverified.",
     "Owen independent challenge pending: BuildWise System Atlas defines a strict buildwise.atlas.snapshot.v1 validator, but telemetry-publisher.cjs builds an allowlisted payload and sends it without invoking validateTelemetry. The agent entries expose worker/state/phase/progress but no model/profile or job-run provenance, so Atlas snapshots alone cannot establish which Gemma/Qwen worker executed a job. Should the publisher validate the final payload before transport, and should a separately versioned, sanitized worker-run evidence contract capture model identity and run linkage? Source-level finding only; relay and live model catalog unavailable.",
@@ -800,6 +801,12 @@
       "title": "Factory dispatcher implementation confirms persistent job ownership boundary",
       "detail": "Source inspection found a persisted queue, worker registry, profile/model selection, worktree leases, cancellation and restart reconciliation. Compare against BuildWise authority before consolidating schedulers; live behavior unverified.",
       "state": "Source verified · review pending"
+    },
+    {
+      "date": "2026-11-20T04:22:54Z",
+      "title": "Factory dispatcher startup recovery may release ownership before verifying worker exit",
+      "detail": "Source inspection shows active persisted jobs marked FAILED and leases released on startup, unlike stale detection's process/activity probes. Propose orphan-process and lease reconciliation test before scheduler consolidation; no runtime incident established.",
+      "state": "Source verified · independent review pending"
     }
   ]
 }
