@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.87",
-  "updated_at": "2026-11-20T10:21:05Z",
+  "revision": "3.88",
+  "updated_at": "2026-11-20T11:16:36Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: BasketWise PurchaseRecord has a stable receipt-prefixed external ID, schemaVersion 1, cent-denominated total/budget, date, store and financeStatus, while ReceiptPantryImport derives deterministic pantry IDs from receipt ID plus line index. However PurchaseRecord.toJson omits its ID (the persistence key supplies it), and financeStatus accepts arbitrary strings. A MoneyWise adapter must explicitly carry source receipt ID and namespace, currency, immutable revision/digest, and typed reconciliation state; should it preserve BasketWise's existing ID as the idempotency key rather than inventing another? Source verified; actual MoneyWise import and live sync unverified.",
     "Owen independent challenge pending: BasketWise documents an offline-first pantry/receipt workflow with review-before-save OCR and separate guest/household scopes; MoneyWise documents Tasker-centered financial intake and proposed BasketWise integration, but its backend README explicitly says live Firebase SDK wiring still requires project configuration. Should cross-app receipt-to-transaction reconciliation begin as a versioned, consented export/import adapter with stable receipt ID, currency/amount/date, source provenance and duplicate-key tests, rather than shared Firestore writes? Documentation verified; transaction matching, actual integration and runtime unverified.",
     "Owen independent challenge pending: Road Deploy's persisted status update accepts any allowed status without checking the prior state or requiring an installation-proof reference. Thus its storage contract alone permits a queued deployment to be labeled launched, even though the device-side caller may impose further checks. Should authoritative deployment evidence enforce a transition graph and bind installed/launched states to a device-generated proof and release digest? Source verified; caller and live device behavior unverified.",
     "Owen independent challenge pending: Factory Dashboard completion-contract.js evaluateCompletion() treats required artifact evidence as any truthy value and does not validate APK identity, digest, signing, installation or physical-device smoke results. BasketWise test-android.ps1 runs emulator-only installation/instrumentation against a fixed emulator ID. Should a shared release-evidence manifest bind commit, APK SHA-256, package/version/signing identity, device ID class, install result and smoke-test outcome before any Wise app is called deployed? Source verified; Road Deploy and physical-device execution unverified.",
@@ -122,6 +123,12 @@
     "Owen independent challenge pending: read-only local Ollama inventory confirms installed model tags including Gemma 2 and multiple coding/reviewer candidates, while OpenHands, local memory MCP and Langfuse services are running. Installed model presence is not an authenticated BuildWise enabled profile or proof of agent-run integration. Should Mycelium inventory model installation, BuildWise authorization, active routing and trace evidence as four separate states?"
   ],
   "timeline": [
+    {
+      "date": "2026-11-20T11:16:36Z",
+      "title": "BasketWise receipt identity contract inspected",
+      "detail": "Source confirms externally keyed purchase IDs and deterministic pantry import IDs; proposed cross-app adapter must preserve receipt identity and add explicit currency/reconciliation semantics. No live integration verified.",
+      "state": "Proposal · Owen review pending"
+    },
     {
       "date": "2026-11-17T23:20:08.180Z",
       "title": "SurveyWise camera lifecycle risk identified",
