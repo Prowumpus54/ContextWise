@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.80",
-  "updated_at": "2026-11-20T01:19:11Z",
+  "revision": "3.81",
+  "updated_at": "2026-11-20T02:21:03Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: Factory Dashboard README documents a Foreman dependency-aware worker queue, agent/service controls, Ollama health, API governor, artifact registry and explicit Android smoke tests, while BuildWise is designated the canonical job lifecycle and Atlas a read-only observer. Are Foreman and BuildWise still independent active schedulers or historical/adapter layers? Inventory live ownership, model/profile IDs, queue persistence and cancellation semantics before naming one authoritative local-model registry. README claims only; running service behavior and OpenHands/OpenCode linkage unverified.",
     "Owen independent challenge pending: BuildWise System Atlas defines a strict buildwise.atlas.snapshot.v1 validator, but telemetry-publisher.cjs builds an allowlisted payload and sends it without invoking validateTelemetry. The agent entries expose worker/state/phase/progress but no model/profile or job-run provenance, so Atlas snapshots alone cannot establish which Gemma/Qwen worker executed a job. Should the publisher validate the final payload before transport, and should a separately versioned, sanitized worker-run evidence contract capture model identity and run linkage? Source-level finding only; relay and live model catalog unavailable.",
     "Owen independent review requested: MeshWise's checked-in Android prototype is a nearby-phone BLE locator, not a Raspberry Pi sensor mesh or MQTT transport. Its legacy BLE advertisement combines a full 128-bit service UUID with 128-bit service-data UUID and a 12-byte identity payload, likely exceeding the 31-byte advertising limit. Should MeshWise remain a proximity feature while a separate standards-based device gateway handles home automation? Validate advertising on two physical phones and measure payload fit before reusing discovery.",
     "Owen independent review requested: SurveyWise's checked-in plan pins use normalized page x/y and a mutable zero-based PDF page index, with no stable sheet identity, page dimensions, coordinate reference system or transform in persisted observations. ViewWise is not identifiable in the authenticated repository inventory. Should a versioned spatial interchange manifest carry source-document identity, immutable sheet/page ID, normalized coordinates, optional calibrated transform and confidence, while preserving SurveyWise as source of truth? Source verified; ViewWise implementation and device/export tests unavailable.",
@@ -786,6 +787,12 @@
       "title": "Atlas worker telemetry contract and validation boundary",
       "detail": "Authenticated source inspection finds a strict Atlas snapshot validator, while the opt-in telemetry publisher sends an allowlisted payload without calling it. Agent snapshots lack model/profile and run-provenance fields; they are status views, not proof of a particular AI worker execution. Propose publisher-side validation and separate bounded worker-run evidence, without replacing BuildWise orchestration. Live relay and Gemma catalog inaccessible; Owen review pending.",
       "state": "Source inspected · Design proposal · Independent review pending"
+    },
+    {
+      "date": "2026-11-20",
+      "title": "Local AI orchestration ownership overlap identified",
+      "detail": "Authenticated Factory Dashboard documentation describes Foreman job scheduling, Ollama controls, provider spending limits and artifact provenance, while Atlas documents BuildWise as canonical job lifecycle. This is a potential duplicate-control boundary, not proof of two active schedulers. Recommend read-only comparison of queue owners, model registry and stop/cancel behavior before consolidation; Owen challenge pending.",
+      "state": "Documentation inspected · Ownership unresolved · Design proposal"
     }
   ]
 }
