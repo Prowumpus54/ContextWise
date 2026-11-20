@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.90",
-  "updated_at": "2026-11-20T13:20:51Z",
+  "revision": "3.91",
+  "updated_at": "2026-11-20T14:23:33Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: ContextWise v0.1.11 local Project conversations use same-browser-profile BroadcastChannel, ephemeral in-memory messages and manual handoff copy; docs explicitly state there is no durable authenticated cross-device/agent relay or production memory registry. Should Mycelium reuse ContextWise for curated evidence/decision references while retaining BuildWise's existing bulletin as the operational agent transport until a separately authorized, audited relay passes cross-session delivery and provenance tests? Documentation verified; runtime and independent review unverified.",
     "Owen independent challenge pending: SurveyWise main-branch Android source currently persists all observations in one survey.json without stable observation IDs, schema version, export contract or multi-project separation; selecting a new PDF plan clears existing observations before saving. README proposes DOCX/ZIP exports and ViewWise-style spatial integration, but neither is present in inspected code. Should SurveyWise first adopt versioned project/observation IDs and non-destructive project switching, then expose a read-only spatial observation export adapter for ViewWise? Source verified; device behavior and alternate branches unverified.",
     "Owen independent challenge pending: MoneyWise's checked-in Android Models.kt defines accounts, bills, cash-flow events and household snapshots, but no Transaction entity, provider transaction identity, receipt reference or reconciliation status; recursive repository tree inspection also found no transaction-import implementation. Should MoneyWise first define a provider-scoped immutable transaction key and a separate many-to-one receipt-match relation, with integer minor-unit amounts and replay/idempotency fixtures, before Tasker or BasketWise integration? Source/tree verified; live app and alternate branches unverified.",
     "Owen independent challenge pending: BasketWise PurchaseRecord has a stable receipt-prefixed external ID, schemaVersion 1, cent-denominated total/budget, date, store and financeStatus, while ReceiptPantryImport derives deterministic pantry IDs from receipt ID plus line index. However PurchaseRecord.toJson omits its ID (the persistence key supplies it), and financeStatus accepts arbitrary strings. A MoneyWise adapter must explicitly carry source receipt ID and namespace, currency, immutable revision/digest, and typed reconciliation state; should it preserve BasketWise's existing ID as the idempotency key rather than inventing another? Source verified; actual MoneyWise import and live sync unverified.",
@@ -856,6 +857,12 @@
       "title": "SurveyWise observation identity and project-switch data-loss risk",
       "detail": "Main-branch Java source stores a single local survey.json, no stable observation identifiers or export implementation, and clears observations when a new PDF plan is chosen. Recommend project-scoped versioned records, safe switching and an explicit ViewWise export contract; independent review pending.",
       "state": "Source verified · proposal pending review"
+    },
+    {
+      "date": "2026-11-20T14:23:33Z",
+      "title": "ContextWise browser conversation preview is not an agent message bus",
+      "detail": "Current-state and relay design docs distinguish verified same-browser-tab preview and manually loaded archive from unimplemented durable cross-device agent messaging. Recommend keeping ContextWise as decision/evidence reference layer and reusing existing operational bulletin transport pending an authenticated relay contract; independent review pending.",
+      "state": "Documentation verified · proposal pending review"
     }
   ]
 }
