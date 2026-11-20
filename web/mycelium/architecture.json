@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.94",
-  "updated_at": "2026-11-20T17:25:43Z",
+  "revision": "3.95",
+  "updated_at": "2026-11-20T18:17:48Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: MeshWise DeviceIdentity derives a fixed six-digit pairing code solely from a persistent local device UUID and stores that UUID in app preferences; PeerDiscoveryManager broadcasts a truncated identifier over BLE. The code does not establish a rotating, authenticated pairing handshake. Should Mycelium treat these values as discovery hints only, and require an explicit ephemeral challenge/confirmation protocol before authorizing device trust? Source verified; full UI pairing enforcement and physical-phone tests unverified.",
     "Owen independent challenge pending: Factory Dashboard server/activity-store.js maintains a bounded (500/channel) operational activity history with ACT-sequence IDs and groupedFailure retry counters, but append() schedules a delayed full-file write and groupedFailure coalesces repeated failures. This is suitable for a UI diagnostic timeline, not a durable event acknowledgment ledger or immutable audit trail. Should Mycelium reuse ActivityStore for observability while keeping authoritative event receipt/deduplication in a separate transactionally persisted intake/outbox contract? Source verified; crash-window and live server tests unverified.",
     "Owen independent challenge pending: BuildWise Android InstallResultReceiver handles Android PackageInstaller success/failure and attempts asynchronous status reporting, but catches and discards reporting errors without durable retry; Tasker FactoryFeedbackBridge similarly sends one asynchronous HTTP request and reports failure through a callback. Should Mycelium define one small durable outbound event/outbox contract with stable IDs, bounded retry and server acknowledgment, while retaining app-specific adapters rather than building another broker? Source verified; runtime delivery and independent review unverified.",
     "Owen independent challenge pending: ContextWise's documented archive restore requires a separate Google Drive drive.readonly consent to discover the newest workspace snapshot, whereas routine folder access uses narrower drive.file; the same current-state document says real-account archive read and wrong-account/denial/expiry testing are unverified. Should Mycelium keep archive restore as an explicit, user-initiated import and investigate a folder-scoped index/manifest before any automated context injection, rather than silently broadening Drive permissions? Documentation verified; OAuth runtime and private archive access unverified.",
@@ -883,6 +884,12 @@
       "date": "2026-11-20T17:25:43Z",
       "title": "Operational activity history is not an acknowledgment ledger",
       "detail": "Inspected Factory Dashboard ActivityStore: channel-scoped 500-item history, delayed append flush, and failure grouping provide useful UI diagnostics but cannot establish durable intake acknowledgment or immutable event provenance. Recommend reuse for observability, separate authoritative receipt ledger; request Owen's challenge. Source verified, runtime unverified.",
+      "state": "Source verified · proposal pending independent review"
+    },
+    {
+      "date": "2026-11-20T18:17:48Z",
+      "title": "MeshWise discovery identity is not proof of pairing authorization",
+      "detail": "Inspected MeshWise Android DeviceIdentity and PeerDiscoveryManager. A fixed six-digit code is deterministically derived from the persistent device UUID, while BLE broadcasts a compact device identifier. Propose separating proximity discovery from authenticated, time-bounded pairing; request Owen's independent review. Source verified; runtime and full pairing flow unverified.",
       "state": "Source verified · proposal pending independent review"
     }
   ]
