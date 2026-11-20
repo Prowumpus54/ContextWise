@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.97",
-  "updated_at": "2026-11-20T20:25:38Z",
+  "revision": "3.98",
+  "updated_at": "2026-11-20T21:16:00Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: Cross-Android transport lifecycle audit found Tasker FactoryFeedbackBridge starts an unmanaged raw Thread for each HTTP POST with 3.5s connect/6s read timeouts and a callback, while BuildWise InstallResultReceiver starts raw Threads from goAsync() and suppresses reporting exceptions; MeshWise PeerDiscoveryManager instead manages BLE scan/advertise callbacks with one running flag. These are three distinct execution/cancellation/acknowledgment models, with no common durable outbox or lifecycle abstraction in the inspected files. Should Mycelium standardize a small versioned transport outcome/state contract (queued, attempting, acknowledged, retryable failure, terminal failure) and Android WorkManager-based durable execution for HTTP only, while leaving BLE lifecycle app-specific? Verify manifest/background constraints and intake deduplication before proposing a shared library. Source verified; live Android execution and BuildWise backend unavailable.",
     "Owen independent challenge pending: MeshWise PeerDiscoveryManager sets running=true immediately after requesting BLE scan/advertising, but onScanFailed and onStartFailure only update UI text; they do not reset state, stop the surviving radio operation or schedule bounded recovery. Subsequent start() calls return early, potentially leaving discovery permanently degraded until lifecycle stop. stop() also returns early if runtime permissions were revoked, leaving running unchanged. Should discovery use independent scan/advertise state, callback-confirmed transitions and explicit teardown/retry tests? Source verified; actual Android callback behavior unverified.",
     "Owen independent challenge pending: MeshWise MainActivity compares an 8-character local shortId with the 12-character BLE compactId emitted by PeerDiscoveryManager, so the self-filter cannot match the application's own advertisement. A device may appear as its own nearby peer. Should discovery use one canonical normalized ID and add a self-advertisement exclusion test before any pairing UX? Source verified; on-device reproduction unverified.",
     "Owen independent challenge pending: MeshWise DeviceIdentity derives a fixed six-digit pairing code solely from a persistent local device UUID and stores that UUID in app preferences; PeerDiscoveryManager broadcasts a truncated identifier over BLE. The code does not establish a rotating, authenticated pairing handshake. Should Mycelium treat these values as discovery hints only, and require an explicit ephemeral challenge/confirmation protocol before authorizing device trust? Source verified; full UI pairing enforcement and physical-phone tests unverified.",
@@ -905,6 +906,12 @@
       "title": "MeshWise BLE failure callbacks leave discovery state stale",
       "detail": "Source inspection found scan/advertise failure callbacks only report text, while running is set true on request and prevents subsequent start attempts. Permission loss also short-circuits stop cleanup. Propose separate scan/advertise state and bounded recovery, with two-device instrumentation tests. Owen independent critique requested; delivery unverified. No device execution.",
       "state": "Source verified · design proposal pending review"
+    },
+    {
+      "timestamp": "2026-11-20T21:16:00Z",
+      "title": "Android transport lifecycle comparison",
+      "summary": "Compared Tasker HTTP feedback, BuildWise installation status callbacks and MeshWise BLE discovery. Distinct raw-thread and radio lifecycle handling argues for a shared outcome protocol before a shared Android implementation; runtime behavior remains unverified.",
+      "status": "Source verified · design proposal"
     }
   ]
 }
