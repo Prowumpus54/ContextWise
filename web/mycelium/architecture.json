@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.96",
-  "updated_at": "2026-11-20T19:18:59.559Z",
+  "revision": "3.97",
+  "updated_at": "2026-11-20T20:25:38Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: MeshWise PeerDiscoveryManager sets running=true immediately after requesting BLE scan/advertising, but onScanFailed and onStartFailure only update UI text; they do not reset state, stop the surviving radio operation or schedule bounded recovery. Subsequent start() calls return early, potentially leaving discovery permanently degraded until lifecycle stop. stop() also returns early if runtime permissions were revoked, leaving running unchanged. Should discovery use independent scan/advertise state, callback-confirmed transitions and explicit teardown/retry tests? Source verified; actual Android callback behavior unverified.",
     "Owen independent challenge pending: MeshWise MainActivity compares an 8-character local shortId with the 12-character BLE compactId emitted by PeerDiscoveryManager, so the self-filter cannot match the application's own advertisement. A device may appear as its own nearby peer. Should discovery use one canonical normalized ID and add a self-advertisement exclusion test before any pairing UX? Source verified; on-device reproduction unverified.",
     "Owen independent challenge pending: MeshWise DeviceIdentity derives a fixed six-digit pairing code solely from a persistent local device UUID and stores that UUID in app preferences; PeerDiscoveryManager broadcasts a truncated identifier over BLE. The code does not establish a rotating, authenticated pairing handshake. Should Mycelium treat these values as discovery hints only, and require an explicit ephemeral challenge/confirmation protocol before authorizing device trust? Source verified; full UI pairing enforcement and physical-phone tests unverified.",
     "Owen independent challenge pending: Factory Dashboard server/activity-store.js maintains a bounded (500/channel) operational activity history with ACT-sequence IDs and groupedFailure retry counters, but append() schedules a delayed full-file write and groupedFailure coalesces repeated failures. This is suitable for a UI diagnostic timeline, not a durable event acknowledgment ledger or immutable audit trail. Should Mycelium reuse ActivityStore for observability while keeping authoritative event receipt/deduplication in a separate transactionally persisted intake/outbox contract? Source verified; crash-window and live server tests unverified.",
@@ -898,6 +899,12 @@
       "title": "MeshWise self-discovery exclusion uses incompatible identifier lengths",
       "detail": "Source review found the Android UI filters self-peers using an 8-character short ID, while BLE advertises a 12-character normalized ID. These values cannot match, so self-advertisements may be displayed as external peers. Recommend a single canonical peer identifier and an automated self-filter test before extending proximity features. Source verified; physical BLE reproduction unverified. Independent Owen challenge requested, delivery unverified.",
       "state": "Source verified · corrective design proposal pending review"
+    },
+    {
+      "date": "2026-11-20T20:25:38Z",
+      "title": "MeshWise BLE failure callbacks leave discovery state stale",
+      "detail": "Source inspection found scan/advertise failure callbacks only report text, while running is set true on request and prevents subsequent start attempts. Permission loss also short-circuits stop cleanup. Propose separate scan/advertise state and bounded recovery, with two-device instrumentation tests. Owen independent critique requested; delivery unverified. No device execution.",
+      "state": "Source verified · design proposal pending review"
     }
   ]
 }
