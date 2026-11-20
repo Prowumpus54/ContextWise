@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.92",
-  "updated_at": "2026-11-20T15:21:50Z",
+  "revision": "3.93",
+  "updated_at": "2026-11-20T16:22:31Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: BuildWise Android InstallResultReceiver handles Android PackageInstaller success/failure and attempts asynchronous status reporting, but catches and discards reporting errors without durable retry; Tasker FactoryFeedbackBridge similarly sends one asynchronous HTTP request and reports failure through a callback. Should Mycelium define one small durable outbound event/outbox contract with stable IDs, bounded retry and server acknowledgment, while retaining app-specific adapters rather than building another broker? Source verified; runtime delivery and independent review unverified.",
     "Owen independent challenge pending: ContextWise's documented archive restore requires a separate Google Drive drive.readonly consent to discover the newest workspace snapshot, whereas routine folder access uses narrower drive.file; the same current-state document says real-account archive read and wrong-account/denial/expiry testing are unverified. Should Mycelium keep archive restore as an explicit, user-initiated import and investigate a folder-scoped index/manifest before any automated context injection, rather than silently broadening Drive permissions? Documentation verified; OAuth runtime and private archive access unverified.",
     "Owen independent challenge pending: ContextWise v0.1.11 local Project conversations use same-browser-profile BroadcastChannel, ephemeral in-memory messages and manual handoff copy; docs explicitly state there is no durable authenticated cross-device/agent relay or production memory registry. Should Mycelium reuse ContextWise for curated evidence/decision references while retaining BuildWise's existing bulletin as the operational agent transport until a separately authorized, audited relay passes cross-session delivery and provenance tests? Documentation verified; runtime and independent review unverified.",
     "Owen independent challenge pending: SurveyWise main-branch Android source currently persists all observations in one survey.json without stable observation IDs, schema version, export contract or multi-project separation; selecting a new PDF plan clears existing observations before saving. README proposes DOCX/ZIP exports and ViewWise-style spatial integration, but neither is present in inspected code. Should SurveyWise first adopt versioned project/observation IDs and non-destructive project switching, then expose a read-only spatial observation export adapter for ViewWise? Source verified; device behavior and alternate branches unverified.",
@@ -870,6 +871,12 @@
       "title": "ContextWise archive restore consent and provenance boundary",
       "detail": "Documentation distinguishes narrow Drive folder access from broader explicit archive discovery consent; live owner-account import and denial/expiry behavior remain unverified. Propose a scoped archive index and consent-gated restore before automatic agent context retrieval; Owen critique requested but not delivered.",
       "state": "Documentation verified · proposal pending review"
+    },
+    {
+      "date": "2026-11-20T16:22:31Z",
+      "title": "Android installation acknowledgment durability gap",
+      "detail": "Source inspection located the BuildWise Android install-result receiver: PackageInstaller outcomes are reported asynchronously but reporting exceptions are ignored, without a durable retry in that receiver. Tasker feedback uses a separate one-shot HTTP callback bridge. Recommend a reusable, idempotent outbound evidence contract and replay test before consolidating transports; device runtime unverified.",
+      "state": "Source verified · proposal pending independent review"
     }
   ]
 }
