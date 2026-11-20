@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.88",
-  "updated_at": "2026-11-20T11:16:36Z",
+  "revision": "3.89",
+  "updated_at": "2026-11-20T12:17:18Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: MoneyWise's checked-in Android Models.kt defines accounts, bills, cash-flow events and household snapshots, but no Transaction entity, provider transaction identity, receipt reference or reconciliation status; recursive repository tree inspection also found no transaction-import implementation. Should MoneyWise first define a provider-scoped immutable transaction key and a separate many-to-one receipt-match relation, with integer minor-unit amounts and replay/idempotency fixtures, before Tasker or BasketWise integration? Source/tree verified; live app and alternate branches unverified.",
     "Owen independent challenge pending: BasketWise PurchaseRecord has a stable receipt-prefixed external ID, schemaVersion 1, cent-denominated total/budget, date, store and financeStatus, while ReceiptPantryImport derives deterministic pantry IDs from receipt ID plus line index. However PurchaseRecord.toJson omits its ID (the persistence key supplies it), and financeStatus accepts arbitrary strings. A MoneyWise adapter must explicitly carry source receipt ID and namespace, currency, immutable revision/digest, and typed reconciliation state; should it preserve BasketWise's existing ID as the idempotency key rather than inventing another? Source verified; actual MoneyWise import and live sync unverified.",
     "Owen independent challenge pending: BasketWise documents an offline-first pantry/receipt workflow with review-before-save OCR and separate guest/household scopes; MoneyWise documents Tasker-centered financial intake and proposed BasketWise integration, but its backend README explicitly says live Firebase SDK wiring still requires project configuration. Should cross-app receipt-to-transaction reconciliation begin as a versioned, consented export/import adapter with stable receipt ID, currency/amount/date, source provenance and duplicate-key tests, rather than shared Firestore writes? Documentation verified; transaction matching, actual integration and runtime unverified.",
     "Owen independent challenge pending: Road Deploy's persisted status update accepts any allowed status without checking the prior state or requiring an installation-proof reference. Thus its storage contract alone permits a queued deployment to be labeled launched, even though the device-side caller may impose further checks. Should authoritative deployment evidence enforce a transition graph and bind installed/launched states to a device-generated proof and release digest? Source verified; caller and live device behavior unverified.",
@@ -842,6 +843,12 @@
       "title": "BasketWise–MoneyWise integration boundary remains a documented plan",
       "detail": "README evidence distinguishes BasketWise offline-first receipt capture from MoneyWise planned financial intake and not-yet-wired Firebase SDK. Propose a consented versioned receipt-reference adapter and duplicate-key fixture before claiming shared transactions; independent review pending.",
       "state": "Documentation verified · integration unverified"
+    },
+    {
+      "date": "2026-11-20T12:17:18Z",
+      "title": "MoneyWise transaction reconciliation lacks a checked-in domain contract",
+      "detail": "Checked-in Android models cover account/bill/cash-flow summaries but no bank transaction entity or receipt-match identity. Propose provider-scoped transaction IDs, separate receipt associations and replay tests before BasketWise/Tasker financial import. Source verified; implementation and runtime unverified; independent review pending.",
+      "state": "Source verified · proposal pending review"
     }
   ]
 }
