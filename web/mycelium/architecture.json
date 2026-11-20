@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "3.84",
-  "updated_at": "2026-11-20T05:23:00Z",
+  "revision": "3.85",
+  "updated_at": "2026-11-20T06:17:48.703Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Three-node integration without custom broker: BuildWise, ContextWise and Android; compare direct authenticated APIs against thin adapter",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: Factory Dashboard completion-contract.js evaluateCompletion() treats required artifact evidence as any truthy value and does not validate APK identity, digest, signing, installation or physical-device smoke results. BasketWise test-android.ps1 runs emulator-only installation/instrumentation against a fixed emulator ID. Should a shared release-evidence manifest bind commit, APK SHA-256, package/version/signing identity, device ID class, install result and smoke-test outcome before any Wise app is called deployed? Source verified; Road Deploy and physical-device execution unverified.",
     "Owen independent challenge pending: Factory Dashboard worker-backend cancellation sets a stop intent and calls the backend's cancel method, but its authoritative CANCELLED transition and worktree/resource release occur later in asynchronous completion cleanup. This differs from direct child-process cancellation, which checks process cleanup before releasing ownership. Does cancellation acknowledgment mean requested or fully stopped, and can the API expose a verified terminal state? Source verified; live execution and BuildWise cross-scheduler behavior unverified.",
     "Owen independent challenge pending: Factory Dashboard job-dispatcher.js recover() unconditionally transitions persisted active jobs to FAILED on dispatcher startup and releases their worktree/resource ownership, without first verifying whether an original worker process remains alive. In contrast, its stale-job check probes process liveness and worktree activity. Could a surviving worker continue after restart while a new job acquires the released worktree? Review restart and cancellation authority against BuildWise, and design a read-only orphan-process/lease reconciliation test before changing code. Source verified; live behavior and BuildWise catalog unavailable.",
     "Owen independent challenge pending: Factory Dashboard's actual server/job-dispatcher.js and docs/JOB_DISPATCHER.md implement persistent dispatch jobs, profile/model selection, worktree locks, worker-backend registry, cancellation and restart reconciliation in factory-state.json. This is an implemented scheduler boundary, not merely a README aspiration. Before consolidating with BuildWise, compare authoritative store ownership and cancellation/restart semantics using a read-only job-ID trace; do not merge queues or retire Foreman without live evidence. Source verified; live BuildWise catalog unavailable.",
@@ -814,6 +815,12 @@
       "title": "Factory worker cancellation has asynchronous acknowledgment boundary",
       "detail": "Source inspection distinguishes cancellation request from confirmed worker completion and lease cleanup. Recommend separate cancel-requested and terminal-stop evidence before cross-scheduler integration; no incident demonstrated.",
       "state": "Source verified · independent review pending"
+    },
+    {
+      "date": "2026-11-20T06:17:48.703Z",
+      "title": "Android release evidence is not established by Factory artifact gate",
+      "detail": "Factory completion gate accepts an artifact string without verifying its identity; BasketWise script exercises a fixed emulator, not physical installation. Propose read-only release-evidence manifest and separate built, installed, and smoke-tested states; Owen review pending.",
+      "state": "Source verified · proposal pending review"
     }
   ]
 }
