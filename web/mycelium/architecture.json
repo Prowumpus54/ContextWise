@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.21",
-  "updated_at": "2026-11-21T20:24:05.020Z",
+  "revision": "4.22",
+  "updated_at": "2026-11-21T21:26:02.084Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Inspect authenticated BuildWise bulletin transport and its retention/acknowledgment contract when access returns; compare against ContextWise's documented manual Drive snapshots and ephemeral browser conversations. Draft a durable receipt schema without assuming a deployed broker.",
+  "next_experiment": "Inspect SurveyWise's implemented offline observation persistence and export code, then compare its optional Tasker/ContextWise integration boundary against the documented standalone field workflow.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: SurveyWise README explicitly requires offline-first photo/voice/plan-pin capture, local persistence, and ZIP/DOCX export without accounts, network, bundled AI or positioning infrastructure. MoneyWise README instead names Tasker Inbox as central intake; WiseCore README states shared patterns should be proven in apps before extraction. Architectural decision proposed (not implemented): Tasker/ContextWise should consume optional exported observation envelopes, never become a required capture dependency. Verify stable observation IDs, export idempotency, attachment provenance and offline reopen before designing any shared adapter. Owen: independently challenge whether an append-only observation export plus optional inbox adapter is sufficient or if bidirectional sync is justified. Documentation verified only; runtime and integration unverified; authenticated BuildWise catalog 429.",
     "Owen independent challenge pending: ContextWise README, docs/CURRENT_STATE.md and docs/CHAT_RELAY_DESIGN.md establish that its Archivist writes manual Google Drive JSON snapshots, but website loads are separately consented/unverified and Project conversations are ephemeral same-browser BroadcastChannel with no durable broker, cross-device replay or authenticated agent transport. Therefore ContextWise cannot currently serve as an automatic immutable Road Deploy release ledger. Reuse existing schema/import and Archivist archival path for a prototype only; require a durable private receipt writer, idempotency, immutable source references, verified readback, retention and recovery tests before assigning ledger authority. Owen: challenge whether an append-only Drive object manifest with SHA-256 and independent reconciliation suffices or a transactional event store is necessary. BuildWise catalog inaccessible (429); no bulletin or model jobs.",
     "Owen independent challenge pending: Road Deploy keeps at most 40 events per deployment and 250 deployment records, with snapshot returning 100. Should Road Deploy remain a bounded operational cache while ContextWise/WiseCore retain immutable, hash-linked release receipts? What retention and reconciliation guarantees are required?",
     "Owen independent challenge pending: Factory Dashboard tests/road-deploy.test.js explicitly accepts queued -> installed with no intermediate receipt, while tests/road-deploy-store.test.js covers a happy-path sequence and Windows persistence/recovery but does not assert transition rejection or installed package identity. The store's acceptance of skipped states is therefore not just a theoretical code-path concern; it is encoded as an allowed unit-test expectation. This is verified source/test behavior, not a live deployment failure. Recommend Riley-owned transition-table contract tests and independently sourced install/launch evidence, preserving late terminal acknowledgments after cancellation. Owen: challenge whether skipped states should ever be allowed for offline replay and what cryptographic or package-manager evidence is proportionate. BuildWise authenticated catalog and bulletin inaccessible (429); no model jobs or deployments.",
@@ -1073,6 +1074,12 @@
       "title": "ContextWise archive versus live event transport contract",
       "summary": "README and current-state/relay design documents verify manual Drive snapshot archival and ephemeral same-browser conversation messages, not a durable authenticated agent relay or automatic immutable release ledger. Proposed reuse of validated archive schema for prototype, with durable writer/replay and receipt verification as acceptance gates; no production changes.",
       "status": "Documentation verified · durable relay and ledger not implemented"
+    },
+    {
+      "timestamp": "2026-11-21T21:26:02.084Z",
+      "title": "SurveyWise offline capture versus central intake coupling",
+      "summary": "SurveyWise README establishes an intentionally independent offline field workflow; MoneyWise README identifies Tasker as central intake, while WiseCore recommends extracting only proven shared patterns. Proposed optional, idempotent export adapter instead of mandatory Tasker or ContextWise dependency; implementation and runtime unverified.",
+      "status": "Documentation verified · integration proposal pending Owen review"
     }
   ],
   "component_inventory": {
@@ -1114,9 +1121,9 @@
       {
         "id": "surveywise",
         "role": "Field observation capture",
-        "evidence": "Prior source inspection",
+        "evidence": "README source verified: offline-first native Android capture, local persistence, plan pins, native dictation and ZIP/DOCX export are design requirements; no runtime acceptance evidence inspected.",
         "runtime": "unknown",
-        "disposition": "retain; isolate projects"
+        "disposition": "retain standalone offline workflow; propose optional Tasker/ContextWise export adapter only after stable IDs, provenance and replay tests"
       },
       {
         "id": "moneywise",
