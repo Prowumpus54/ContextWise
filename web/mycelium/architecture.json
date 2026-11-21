@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.19",
-  "updated_at": "2026-11-21T18:17:01.224Z",
+  "revision": "4.20",
+  "updated_at": "2026-11-21T19:16:58.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Read-only audit of Road Deploy Android-side receiver/install callback implementation and its evidence payload; determine whether package-manager verification exists outside the server store.",
+  "next_experiment": "Audit BuildWise bulletin/event transport retention and ContextWise archival contracts; determine which system can retain immutable deployment evidence beyond Road Deploy's bounded operational cache.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: Road Deploy keeps at most 40 events per deployment and 250 deployment records, with snapshot returning 100. Should Road Deploy remain a bounded operational cache while ContextWise/WiseCore retain immutable, hash-linked release receipts? What retention and reconciliation guarantees are required?",
     "Owen independent challenge pending: Factory Dashboard tests/road-deploy.test.js explicitly accepts queued -> installed with no intermediate receipt, while tests/road-deploy-store.test.js covers a happy-path sequence and Windows persistence/recovery but does not assert transition rejection or installed package identity. The store's acceptance of skipped states is therefore not just a theoretical code-path concern; it is encoded as an allowed unit-test expectation. This is verified source/test behavior, not a live deployment failure. Recommend Riley-owned transition-table contract tests and independently sourced install/launch evidence, preserving late terminal acknowledgments after cancellation. Owen: challenge whether skipped states should ever be allowed for offline replay and what cryptographic or package-manager evidence is proportionate. BuildWise authenticated catalog and bulletin inaccessible (429); no model jobs or deployments.",
     "Owen independent challenge pending: Factory Dashboard RoadDeployStore.updateStatus accepts any status in a fixed set without checking the prior state, so an authenticated device update can move directly from queued to launched or regress installed to downloading; event details are free-form and no device-side proof is validated in this store. By contrast, release-channel buildRelease checks APK metadata and carries commit/SHA-256, and DeploymentManifest validates release identity and SHA-256 format. This is a source-verified release-receipt integrity gap, not evidence of a forged or failed live deployment. Recommend reuse existing release identity and add monotonic transitions, evidence-bound installed/launched attestations, and a cross-check against WiseCore G4/G5/G6; do not treat launched as G4/G6 acceptance. Owen: challenge whether Android device-signed attestation is necessary or whether a correlated package-manager readback plus smoke-test transcript is sufficient. BuildWise authenticated catalog/deployments/bulletin unavailable (429); no deployment or model job initiated.",
     "Owen independent challenge pending: WiseCore's adopted seven-gate release standard explicitly distinguishes build/test (G2), independent verification (G3), installed runtime smoke (G4), deployment receipt (G5), health window (G6) and evidence-backed closure (G7). It states the gates are required process, not evidence of implemented automation. Current Tasker and BasketWise Android Gradle configurations demonstrate different app versioning and test dependencies, but no release-gate receipts or installed-artifact hashes were inspected; BuildWise authenticated catalog/deployments unavailable (429). Recommend one shared evidence schema and a read-only cross-app release matrix before any claim that an APK build equals a tested installation. Owen: independently challenge whether G4 should be mandatory on a physical Android device or allow a representative emulator, and how to bind signed APK hash to installed package identity. Source verified; no builds or deployments initiated.",
@@ -1059,6 +1060,12 @@
       "title": "Road Deploy test expectations confirm skipped installation states",
       "summary": "Source tests explicitly accept queued-to-installed updates and cover happy-path and persistence, but not transition rejection or device package identity. Proposed a state-transition contract and evidence-bound Android acknowledgment tests; live device status remains unknown.",
       "status": "Source/test verified · runtime unknown"
+    },
+    {
+      "timestamp": "2026-11-21T19:16:58.000Z",
+      "title": "Road Deploy event retention and audit-ledger separation",
+      "summary": "Source inspection confirms deployment event history is capped at 40 entries, stored deployments at 250, and snapshot at 100. These limits make the operational store unsuitable as the sole long-term immutable release-evidence ledger. Proposed retaining its bounded cache and defining an archival receipt contract; runtime archival integration unverified.",
+      "status": "Source verified · archival integration unknown"
     }
   ],
   "component_inventory": {
