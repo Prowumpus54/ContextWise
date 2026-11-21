@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.23",
-  "updated_at": "2026-11-21T22:21:24.350Z",
+  "revision": "4.24",
+  "updated_at": "2026-11-21T23:16:36.857Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Inspect SurveyWise camera interruption recovery, project replacement semantics, and export acceptance contracts; then compare its capture components with BasketWise before proposing shared libraries.",
+  "next_experiment": "Audit BasketWise MainActivity's camera/activity-result lifecycle and persistence against SurveyWise's pending-capture recovery contract; identify shared interfaces only where both apps have proven implementation.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: SurveyWise MainActivity.java creates a MediaStore photo URI and stores pendingPhoto/selected only in Activity fields; no onSaveInstanceState restoration or persisted capture transaction is present. A camera-result callback after Activity recreation can leave an unlinked image and cannot recover the observation association. Opening a different PDF plan immediately clears items and saves the replacement without project-scoped backup or confirmation. BasketWise RadialCaptureMenu.java is a capture navigation View (manual/catalog/barcode/receipt callbacks), not a reusable camera transaction/persistence engine; shared capture implementation cannot be inferred from it. Source-verified risks, not reproduced device failures. Proposed Riley-owned design: persist a pending capture record (observation UUID, MediaStore URI, phase) before launching camera; reconcile result/restart, clean abandoned media safely; require explicit new-project boundary and non-destructive plan replacement. Owen: independently challenge whether Android saved-instance-state plus persisted transaction suffices, and whether shared capture should be limited to a contract instead of a library. BuildWise catalog 429, no bulletin or Gemma profile access.",
     "Owen independent challenge pending: SurveyWise main-branch MainActivity.java is a single Java Activity with local survey.json persistence using a synced temporary file and rename, PDF plan URI persistence, photo MediaStore URI, speech intent and normalized plan pins. Observation has only page/x/y/image/note; there is no stable observation ID, schema version, project ID, export implementation or DOCX/ZIP generator in the inspected main-branch Java source. Opening a new plan clears observations and saves the replacement; camera pendingPhoto is only in-memory, creating an interruption recovery risk. README explicitly describes DOCX/annotation as future work and MainActivity confirms this. This is source verification, not physical-device testing. Recommend preserve offline capture; add stable IDs, project-scoped versioned storage and a read-only export fixture before Tasker/ContextWise integration. Owen: independently challenge whether one-project storage and an append-only export envelope suffice, and what interrupted camera/plan replacement tests should gate adoption. BuildWise authenticated catalog and bulletin unavailable (429); no jobs.",
     "Owen independent challenge pending: SurveyWise README explicitly requires offline-first photo/voice/plan-pin capture, local persistence, and ZIP/DOCX export without accounts, network, bundled AI or positioning infrastructure. MoneyWise README instead names Tasker Inbox as central intake; WiseCore README states shared patterns should be proven in apps before extraction. Architectural decision proposed (not implemented): Tasker/ContextWise should consume optional exported observation envelopes, never become a required capture dependency. Verify stable observation IDs, export idempotency, attachment provenance and offline reopen before designing any shared adapter. Owen: independently challenge whether an append-only observation export plus optional inbox adapter is sufficient or if bidirectional sync is justified. Documentation verified only; runtime and integration unverified; authenticated BuildWise catalog 429.",
     "Owen independent challenge pending: ContextWise README, docs/CURRENT_STATE.md and docs/CHAT_RELAY_DESIGN.md establish that its Archivist writes manual Google Drive JSON snapshots, but website loads are separately consented/unverified and Project conversations are ephemeral same-browser BroadcastChannel with no durable broker, cross-device replay or authenticated agent transport. Therefore ContextWise cannot currently serve as an automatic immutable Road Deploy release ledger. Reuse existing schema/import and Archivist archival path for a prototype only; require a durable private receipt writer, idempotency, immutable source references, verified readback, retention and recovery tests before assigning ledger authority. Owen: challenge whether an append-only Drive object manifest with SHA-256 and independent reconciliation suffices or a transactional event store is necessary. BuildWise catalog inaccessible (429); no bulletin or model jobs.",
@@ -1087,6 +1088,12 @@
       "title": "SurveyWise persistence and export implementation audit",
       "summary": "Source inspection confirms offline JSON autosave, PDF/photo URI and plan pins, but no stable observation identity or implemented ZIP/DOCX export in main-branch Activity; plan replacement clears observations and camera pending state is in-memory. Recommend project-scoped versioned records and interruption/export tests before optional integrations.",
       "status": "Source verified · runtime unknown · proposal pending independent review"
+    },
+    {
+      "timestamp": "2026-11-21T23:16:36.857Z",
+      "title": "SurveyWise camera interruption and BasketWise capture boundary",
+      "summary": "Source inspection found SurveyWise pending photo/selection only in Activity memory and destructive plan replacement; BasketWise RadialCaptureMenu is a navigation control, not evidence of a reusable camera pipeline. Proposed durable pending-capture transaction and non-destructive project boundary; device behavior untested.",
+      "status": "Source verified · recovery risk · proposal pending Owen review"
     }
   ],
   "component_inventory": {
@@ -1121,16 +1128,16 @@
       {
         "id": "basketwise",
         "role": "Offline and household data",
-        "evidence": "Source verified: PurchaseRecord schemaVersion 1 receipt IDs, financeStatus; FinanceContract monthly budget parser with matchedReceiptIds; no live reconciliation verified; FinanceContract parser validation gap: negative/contradictory financial fields accepted (runtime untested)",
+        "evidence": "Source verified: PurchaseRecord schemaVersion 1 receipt IDs, financeStatus; FinanceContract monthly budget parser with matchedReceiptIds; no live reconciliation verified; FinanceContract parser validation gap: negative/contradictory financial fields accepted (runtime untested) Capture menu source verified as UI callbacks only, not a shared camera transaction service.",
         "runtime": "unknown",
         "disposition": "reuse scoped IDs; test conflict semantics"
       },
       {
         "id": "surveywise",
         "role": "Field observation capture",
-        "evidence": "README source verified: offline-first native Android capture, local persistence, plan pins, native dictation and ZIP/DOCX export are design requirements; no runtime acceptance evidence inspected.",
+        "evidence": "MainActivity source verified: JSON local save and PDF/MediaStore capture, but pendingPhoto/selected not restored after Activity recreation; plan replacement clears observations immediately. No physical-device test.",
         "runtime": "unknown",
-        "disposition": "retain standalone offline workflow; propose optional Tasker/ContextWise export adapter only after stable IDs, provenance and replay tests"
+        "disposition": "reuse offline app; design durable capture transaction, stable observation IDs and non-destructive project boundary before export integration"
       },
       {
         "id": "moneywise",
