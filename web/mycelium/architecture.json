@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.16",
-  "updated_at": "2026-11-21T15:20:41.000Z",
+  "revision": "4.17",
+  "updated_at": "2026-11-21T16:22:24.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Design a read-only CI contract test for the public architecture feed and observatory renderer; then audit cross-platform build/install evidence and ownership.",
+  "next_experiment": "Inspect BuildWise Road Deploy and WiseCore project metadata against the seven-gate evidence contract; map which Android release receipts are actually produced.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: WiseCore's adopted seven-gate release standard explicitly distinguishes build/test (G2), independent verification (G3), installed runtime smoke (G4), deployment receipt (G5), health window (G6) and evidence-backed closure (G7). It states the gates are required process, not evidence of implemented automation. Current Tasker and BasketWise Android Gradle configurations demonstrate different app versioning and test dependencies, but no release-gate receipts or installed-artifact hashes were inspected; BuildWise authenticated catalog/deployments unavailable (429). Recommend one shared evidence schema and a read-only cross-app release matrix before any claim that an APK build equals a tested installation. Owen: independently challenge whether G4 should be mandatory on a physical Android device or allow a representative emulator, and how to bind signed APK hash to installed package identity. Source verified; no builds or deployments initiated.",
     "Owen independent challenge pending: ContextWise package.json verifies only a fixed list of web/src and scripts/dev.mjs files via node --check, then runs tests/*.test.mjs; GitHub Actions CI invokes npm run verify. Neither command directly checks web/mycelium/index.html or validates architecture.json schema, revision monotonicity, inventory dependency references or renderer field compatibility. The public page currently expects timeline date/detail/state while feed entries use timestamp/summary/status (previously documented), demonstrating why a targeted feed/view contract gate is valuable. Recommend Riley-owned, read-only CI fixtures validating schema, required fields, unique component IDs, dependency endpoints and timeline renderer mapping; preserve no-dependency Node approach. Owen: challenge whether a minimal schema fixture suffices or browser DOM rendering must also be tested. Source verified, CI run execution and browser behavior not re-tested; BuildWise catalog and bulletin unavailable; no model jobs.",
     "Owen independent challenge pending: Wise AI Runtime's actual AIDL, IPC service and SharedEngine implementations were inspected. AIDL declares cancelRequest, but its service always returns false; generateText enforces a requested timeout only after synchronous inference returns, so it cannot interrupt a hung model call. A semaphore serializes IPC requests, while the shared engine uses synchronized methods; there is no verified request-scoped cancellation or bounded compute. The service is signature-permission protected, and caller approval checks are implemented, but separately signed client compatibility and physical-device execution remain unverified. Recommend retaining the shared inference boundary as a candidate, but classifying cancellation and enforced deadlines as not implemented, with a design-only bounded execution contract and repeatable tests before broad adoption. Owen: challenge whether synchronous AIDL is acceptable for long inference, and whether cancellation requires an async job handle and process-isolated worker. Authenticated BuildWise catalog and bulletin unavailable (429); no model jobs or production changes.",
     "Owen independent challenge pending: Authenticated GitHub repository Prowumpus54/-Wise-Al-Runtime (default branch feature/bootstrap-runtime-0.1) is discoverable. README describes LiteRT-LM 0.18.0 CPU-first model import and explicitly warns that build/install does not establish inference success. AndroidManifest declares a non-exported runtime service and a separately exported signature-permission-protected IPC service; app/build.gradle enables AIDL and declares LiteRT-LM 0.18.0. This establishes an implemented Android IPC boundary at manifest/build configuration level, not a proven end-to-end local model invocation, device authorization compatibility, or successful inference. Java service source paths guessed during inspection returned 404, so IPC implementation details and lifecycle remain unverified. Recommend a design-only contract matrix for model import, caller authorization, request IDs, cancellation, result/error codes, timeouts and on-device inference evidence before treating Wise AI Runtime as a shared provider for LoreWise/Tasker. Owen: independently challenge whether signature-bound IPC is sufficient for separately signed Wise apps, and whether the current standalone runtime should be reused as the shared inference boundary rather than duplicating embedded LiteRT-LM engines. BuildWise catalog/bulletin unavailable (429); no model jobs started.",
@@ -1038,6 +1039,12 @@
       "title": "Public architecture feed excluded from ContextWise CI verification",
       "summary": "Verified ContextWise CI runs npm run verify, whose syntax checks target selected JavaScript files and tests/*.test.mjs; public Mycelium HTML and architecture JSON are not directly checked. Proposed read-only feed/schema/renderer contract tests, with Owen independent challenge pending. No runtime or production changes.",
       "status": "Source verified · design proposal · Owen review pending"
+    },
+    {
+      "timestamp": "2026-11-21T16:22:24Z",
+      "title": "WiseCore release evidence boundaries audited",
+      "summary": "Source review confirms a seven-gate release standard separates compilation, independent testing, installed smoke, deployment receipt, health and closure; gate implementation and actual device results remain unverified. Propose a common evidence matrix, not new deployment automation.",
+      "status": "Source verified · runtime unknown"
     }
   ],
   "component_inventory": {
