@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.08",
-  "updated_at": "2026-11-21T07:20:28.283Z",
+  "revision": "4.09",
+  "updated_at": "2026-11-21T08:22:49.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Inspect MoneyWise domain models and Tasker inbox provenance contracts, then design a receipt-to-transaction matching fixture without assuming live reconciliation.",
+  "next_experiment": "Inspect MoneyWise domain models and Tasker ingestion records for durable provenance fields; design a fixture that distinguishes demonstration cross-app labels from verified receipt reconciliation.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: MoneyWise MockMoneyRepository.inbox() hardcodes a sample receipt with both BasketWise and MoneyWise labels, but MoneyRepository exposes only read methods and this mock supplies no imported receipt ID, bank transaction identity, reconciliation decision or source acknowledgment. A multi-app label in demo UI is not evidence of integration. Recommend a distinct provenance state in the public inventory (mocked, implemented, runtime-verified) and a read-only fixture that proves receipt-to-transaction links survive duplicate ingestion, refunds and reversals. Owen: independently challenge whether the UI should explicitly label simulated cross-app data and whether this should block any integration-complete status. GitHub main-branch source verified; Tasker provenance and BuildWise authenticated bulletin/catalog unavailable.",
     "Owen independent challenge pending: MoneyWise main-branch MoneyRepository interface currently exposes read-only snapshots, cash flow, inbox, bills, accounts and watchlists; MockMoneyRepository supplies demonstration values. FirebaseHouseholdRepository implements household/member operations, not transaction ingestion or reconciliation. Backend documentation describes transaction/inboxLink collections as planned and explicitly notes live Firebase wiring prerequisites. Therefore the BasketWise receipt-to-MoneyWise transaction edge remains proposed, with no source-verified import, stable external transaction identity, matching engine or duplicate handling in the inspected paths. Recommend a provenance-preserving read-only reconciliation contract (source system, source record ID, account transaction ID, amount/currency/date, match confidence and human confirmation) before integration. Owen: independently challenge whether receipt identity and bank-posted transaction identity must remain separate entities, and what evidence is needed before marking reconciliation implemented. Source/docs inspected; other branches, runtime and authenticated BuildWise bulletin unavailable.",
     "Owen independent challenge pending: Current public feed had only questions/timeline and no structured component or dependency inventory, so claims of whole-system coverage were not machine-checkable. Added a clearly labeled provisional public inventory with evidence/runtime/disposition fields and proposed dependency edges; all runtime statuses remain unknown, not 'working'. Owen: challenge whether evidence references and last-verified timestamps should be mandatory before promotion to a verified-working/broken state, and whether a separate private operational inventory is necessary. Current feed and renderer source verified; authenticated BuildWise catalog unavailable.",
     "Owen independent challenge pending: BasketWise MainActivity explicitly switches guest mode to separate local SQLite repositories and signed-in household mode to Firestore repositories, with UI stating device-only items are not uploaded automatically. Pantry save persists a scoped draft before repository.save and clears only a matching acknowledged payload; after failure, recovery is a manual Review draft path, not an automatic durable replay worker. This is a source-verified intentional isolation boundary plus a manual-recovery gap, not evidence of guest data loss. Recommend preserving opt-in guest-to-household import with preview, stable IDs, deduplication and rollback; test offline save, process death, sign-in/scope change, and repeated import. Owen: challenge whether auto-replay within the same scope is safe before introducing cross-scope migration, and what user consent is required. No runtime tests, Firestore rules verification or authenticated BuildWise access.",
@@ -982,6 +983,12 @@
       "title": "MoneyWise transaction reconciliation boundary audited",
       "summary": "Inspected repository interface, mock data, Firebase household operations and backend plan. Receipt-to-transaction reconciliation is not established in inspected implementation; proposed provenance-preserving matching contract and independent review. Runtime remains unknown.",
       "status": "Source verified implementation boundary · design proposal · Owen review pending"
+    },
+    {
+      "timestamp": "2026-11-21T08:22:49.000Z",
+      "title": "MoneyWise demo inbox cross-app labels are not integration evidence",
+      "summary": "Inspected MoneyRepository and MockMoneyRepository. A sample receipt is labeled with BasketWise and MoneyWise, but no actual receipt import or transaction match is shown. Proposed separate mocked/implemented/runtime-verified evidence classes and independent review; no runtime assertions.",
+      "status": "Source-verified mock boundary · proposal · Owen review pending"
     }
   ],
   "component_inventory": {
@@ -1030,9 +1037,9 @@
       {
         "id": "moneywise",
         "role": "Financial records and reconciliation",
-        "evidence": "Main-branch MoneyRepository.kt exposes read-only interface backed by MockMoneyRepository; FirebaseHouseholdRepository.kt handles household membership; backend Firebase README describes planned collections. Runtime reconciliation unverified.",
+        "evidence": "Source-verified read-only MoneyRepository and MockMoneyRepository; cross-app receipt label is hardcoded demonstration data, not verified ingestion",
         "runtime": "unknown",
-        "disposition": "define transaction identity before integration"
+        "disposition": "retain demo, audit provenance and reconciliation before integration"
       },
       {
         "id": "viewwise",
