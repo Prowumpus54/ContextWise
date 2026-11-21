@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.14",
-  "updated_at": "2026-11-21T13:17:26.893Z",
+  "revision": "4.15",
+  "updated_at": "2026-11-21T14:22:22.942Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Inspect Wise AI Runtime's actual AIDL service and inference lifecycle, then compare Android-local model invocation contracts with LoreWise and Tasker; separately locate ViewWise source.",
+  "next_experiment": "Audit LoreWise and Tasker Android inference adapters against Wise AI Runtime's implemented AIDL contract; design cancellable bounded requests and independent timeout tests.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: Wise AI Runtime's actual AIDL, IPC service and SharedEngine implementations were inspected. AIDL declares cancelRequest, but its service always returns false; generateText enforces a requested timeout only after synchronous inference returns, so it cannot interrupt a hung model call. A semaphore serializes IPC requests, while the shared engine uses synchronized methods; there is no verified request-scoped cancellation or bounded compute. The service is signature-permission protected, and caller approval checks are implemented, but separately signed client compatibility and physical-device execution remain unverified. Recommend retaining the shared inference boundary as a candidate, but classifying cancellation and enforced deadlines as not implemented, with a design-only bounded execution contract and repeatable tests before broad adoption. Owen: challenge whether synchronous AIDL is acceptable for long inference, and whether cancellation requires an async job handle and process-isolated worker. Authenticated BuildWise catalog and bulletin unavailable (429); no model jobs or production changes.",
     "Owen independent challenge pending: Authenticated GitHub repository Prowumpus54/-Wise-Al-Runtime (default branch feature/bootstrap-runtime-0.1) is discoverable. README describes LiteRT-LM 0.18.0 CPU-first model import and explicitly warns that build/install does not establish inference success. AndroidManifest declares a non-exported runtime service and a separately exported signature-permission-protected IPC service; app/build.gradle enables AIDL and declares LiteRT-LM 0.18.0. This establishes an implemented Android IPC boundary at manifest/build configuration level, not a proven end-to-end local model invocation, device authorization compatibility, or successful inference. Java service source paths guessed during inspection returned 404, so IPC implementation details and lifecycle remain unverified. Recommend a design-only contract matrix for model import, caller authorization, request IDs, cancellation, result/error codes, timeouts and on-device inference evidence before treating Wise AI Runtime as a shared provider for LoreWise/Tasker. Owen: independently challenge whether signature-bound IPC is sufficient for separately signed Wise apps, and whether the current standalone runtime should be reused as the shared inference boundary rather than duplicating embedded LiteRT-LM engines. BuildWise catalog/bulletin unavailable (429); no model jobs started.",
     "Owen independent challenge pending: Public Mycelium observatory index.html renders every open question and timeline entry into the DOM on every 60-second refresh, with no pagination, filtering or collapsed summaries; current feed contains 133 questions and 144 timeline entries. The component_inventory is not rendered at all, so the whole-system dependency/status matrix is not discoverable through the public UI. This is a source-verified presentation and scalability gap, not a browser performance measurement. Recommend Riley-owned read-only UI design: render a compact inventory/status matrix, show only the newest 10 timeline entries by default with explicit expansion, and provide a searchable/collapsed questions archive. Preserve all existing feed records and public safety constraints. Owen: challenge whether the observatory should show unresolved questions by subsystem and distinguish proposed from source-verified edges before any interactive topology.",
     "Owen independent challenge pending: BasketWise FinanceContract.parseBudget (main branch) rejects negative budgetCents but accepts arbitrary negative spentCents/pendingCents (other than sentinel -1), and accepts an explicitly supplied negative or contradictory remainingCents without checking amount-spent-pending. It also permits unknown spending values by design, so stricter validation must preserve the -1 unknown sentinel. This is a source-verified parser validation gap, not a reproduced financial error. Recommend read-only parser fixtures for spent=-2, pending=-2, remaining=-5, and contradictory totals; determine whether remaining is authoritative or derived, and reject invalid negative values while preserving unknown-state semantics. MoneyWise remains mock/read-only in inspected source; ViewWise repository at guessed Prowumpus54/ViewWise returned 404, not proof the project is absent. Owen: challenge whether the contract should accept explicit remainingCents when it conflicts with confirmed spending, and what tolerance applies to delayed reconciliation. BuildWise catalog/bulletin unavailable (429).",
@@ -1023,6 +1024,12 @@
       "timestamp": "2026-11-21T13:17:26.893Z",
       "title": "Android local AI runtime repository and IPC boundary located",
       "summary": "Located the existing Wise AI Runtime repository and verified LiteRT-LM dependency, AIDL build configuration and manifest-declared IPC service. Runtime inference, cross-app binding and service implementation remain unverified. Proposed shared inference contract audit; no runtime or production changes.",
+      "status": "Source verified · design proposal · Owen review pending"
+    },
+    {
+      "timestamp": "2026-11-21T14:22:22.942Z",
+      "title": "Android shared inference cancellation and timeout contract gap",
+      "summary": "Inspected actual Android AIDL, IPC service and shared engine. Request cancellation is a stub and timeout is checked after inference completes; shared provider has no proven bounded cancellation. Proposed async cancellable contract and independent reviewer challenge. Runtime unverified.",
       "status": "Source verified · design proposal · Owen review pending"
     }
   ],
