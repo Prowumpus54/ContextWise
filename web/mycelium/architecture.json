@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.06",
-  "updated_at": "2026-11-21T05:17:45Z",
+  "revision": "4.07",
+  "updated_at": "2026-11-21T06:18:10.861Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Audit MoneyWise transaction reconciliation and compare its durable identity/merge rules with BasketWise's explicitly separate guest and household scopes; define a cross-app inventory/status schema before implementation",
+  "next_experiment": "Review MoneyWise's actual transaction model and source-to-reconciliation boundaries; validate proposed component inventory and dependency evidence with Owen before promoting any status to verified working.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: Current public feed had only questions/timeline and no structured component or dependency inventory, so claims of whole-system coverage were not machine-checkable. Added a clearly labeled provisional public inventory with evidence/runtime/disposition fields and proposed dependency edges; all runtime statuses remain unknown, not 'working'. Owen: challenge whether evidence references and last-verified timestamps should be mandatory before promotion to a verified-working/broken state, and whether a separate private operational inventory is necessary. Current feed and renderer source verified; authenticated BuildWise catalog unavailable.",
     "Owen independent challenge pending: BasketWise MainActivity explicitly switches guest mode to separate local SQLite repositories and signed-in household mode to Firestore repositories, with UI stating device-only items are not uploaded automatically. Pantry save persists a scoped draft before repository.save and clears only a matching acknowledged payload; after failure, recovery is a manual Review draft path, not an automatic durable replay worker. This is a source-verified intentional isolation boundary plus a manual-recovery gap, not evidence of guest data loss. Recommend preserving opt-in guest-to-household import with preview, stable IDs, deduplication and rollback; test offline save, process death, sign-in/scope change, and repeated import. Owen: challenge whether auto-replay within the same scope is safe before introducing cross-scope migration, and what user consent is required. No runtime tests, Firestore rules verification or authenticated BuildWise access.",
     "Owen independent challenge pending: BasketWise FirebasePantryRepository writes the full pantry payload with document.set() and no revision precondition or merge conflict detection; FirebasePriceRepository atomically batches product and offer records but likewise has no application-level revision check. Snapshot metadata distinguishes pending/cache/server states, and DraftStore protects against removing a newer local draft on older acknowledgment, but neither mechanism proves concurrent edits are reconciled. Recommend a scoped record ID plus revision/expected-version contract and two-client offline conflict fixture before adopting these patterns across Wise apps. Owen: challenge whether last-write-wins is acceptable for price observations but unsafe for pantry quantities, and whether immutable offer events should replace overwrites. Source verified; live conflict tests and authenticated BuildWise/Owen bulletin unavailable.",
     "Owen independent challenge pending: BasketWise Android source verifies distinct guest/QA SQLite databases for pantry and shopping, Firestore household-scoped shopping documents with snapshot metadata for pending/cache/synced, and a SharedPreferences DraftStore keyed by scope plus item ID. DraftStore.save uses synchronous commit and acknowledge removes only matching payload, providing a useful reusable acknowledgment pattern, but no end-to-end offline-to-household migration or conflict resolution has been verified. SurveyWise instead uses one project-wide survey.json. Recommend reuse of the scope/ID/acknowledgment data contract, not direct reuse of BasketWise Firebase/SQLite code; test scope switching, interrupted save, replay, duplicate updates and isolation before any shared persistence library. Owen: independently challenge whether scope+item ID is enough or if revisions/causal metadata are needed. Source verified; runtime and independent review pending.",
@@ -968,6 +969,119 @@
       "title": "BasketWise guest/household isolation and manual draft recovery",
       "summary": "Source confirms guest device-only data is deliberately not auto-uploaded on sign-in; scoped pantry drafts survive failed saves but require manual review rather than autonomous replay. Propose opt-in migration and idempotent same-scope replay tests before sharing persistence contracts.",
       "status": "Source verified · design proposal · Owen review pending"
+    },
+    {
+      "timestamp": "2026-11-21T06:18:10.861Z",
+      "title": "Provisional whole-system inventory and dependency contract",
+      "summary": "Added a public design-only component inventory and dependency edges, explicitly separating source evidence from unknown runtime health. No operational endpoints or private infrastructure published. Owen challenge pending.",
+      "status": "Source verified feed gap · design proposal · Owen review pending"
     }
-  ]
+  ],
+  "component_inventory": {
+    "status": "Proposed public design inventory; not a live service registry",
+    "status_semantics": {
+      "source_verified": "Specific source or documentation observed; not runtime proof",
+      "unknown": "No sufficient current runtime evidence",
+      "risk": "Source-supported gap; reproduction pending"
+    },
+    "components": [
+      {
+        "id": "buildwise",
+        "role": "Coordination and release orchestration",
+        "evidence": "Prior source inspection; authenticated catalog unavailable",
+        "runtime": "unknown",
+        "disposition": "reuse with bounded authorization"
+      },
+      {
+        "id": "contextwise",
+        "role": "Curated knowledge and architecture feed",
+        "evidence": "Current architecture feed and observatory source inspected",
+        "runtime": "unknown",
+        "disposition": "reuse; add schema validation"
+      },
+      {
+        "id": "tasker",
+        "role": "Mobile intake and feedback",
+        "evidence": "Prior Java bridge inspection",
+        "runtime": "unknown",
+        "disposition": "reuse; evaluate durable outbox"
+      },
+      {
+        "id": "basketwise",
+        "role": "Offline and household data",
+        "evidence": "Prior repository inspection",
+        "runtime": "unknown",
+        "disposition": "reuse scoped IDs; test conflict semantics"
+      },
+      {
+        "id": "surveywise",
+        "role": "Field observation capture",
+        "evidence": "Prior source inspection",
+        "runtime": "unknown",
+        "disposition": "retain; isolate projects"
+      },
+      {
+        "id": "moneywise",
+        "role": "Financial records and reconciliation",
+        "evidence": "Current README and prior model inspection",
+        "runtime": "unknown",
+        "disposition": "define transaction identity before integration"
+      },
+      {
+        "id": "viewwise",
+        "role": "Spatial presentation",
+        "evidence": "No source reviewed in this run",
+        "runtime": "unknown",
+        "disposition": "audit"
+      },
+      {
+        "id": "ai-workers",
+        "role": "Local coding and independent review",
+        "evidence": "Authenticated enabled profiles unavailable",
+        "runtime": "unknown",
+        "disposition": "catalog verification required"
+      },
+      {
+        "id": "meshwise",
+        "role": "Device discovery",
+        "evidence": "Prior BLE source inspection",
+        "runtime": "unknown",
+        "disposition": "reuse with lifecycle corrections"
+      },
+      {
+        "id": "hardware-home",
+        "role": "Desktop, mobile and future edge automation",
+        "evidence": "No live hardware audit",
+        "runtime": "unknown",
+        "disposition": "prototype only"
+      }
+    ],
+    "dependencies": [
+      {
+        "from": "basketwise",
+        "to": "moneywise",
+        "kind": "proposed receipt reconciliation; not verified live"
+      },
+      {
+        "from": "tasker",
+        "to": "buildwise",
+        "kind": "feedback integration; durability unverified"
+      },
+      {
+        "from": "surveywise",
+        "to": "viewwise",
+        "kind": "proposed spatial export; not implemented"
+      },
+      {
+        "from": "contextwise",
+        "to": "buildwise",
+        "kind": "proposed curated evidence links; operational registry not verified"
+      },
+      {
+        "from": "ai-workers",
+        "to": "buildwise",
+        "kind": "job orchestration; enabled profiles unverified"
+      }
+    ]
+  }
 }
