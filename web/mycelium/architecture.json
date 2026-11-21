@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.20",
-  "updated_at": "2026-11-21T19:16:58.000Z",
+  "revision": "4.21",
+  "updated_at": "2026-11-21T20:24:05.020Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Audit BuildWise bulletin/event transport retention and ContextWise archival contracts; determine which system can retain immutable deployment evidence beyond Road Deploy's bounded operational cache.",
+  "next_experiment": "Inspect authenticated BuildWise bulletin transport and its retention/acknowledgment contract when access returns; compare against ContextWise's documented manual Drive snapshots and ephemeral browser conversations. Draft a durable receipt schema without assuming a deployed broker.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: ContextWise README, docs/CURRENT_STATE.md and docs/CHAT_RELAY_DESIGN.md establish that its Archivist writes manual Google Drive JSON snapshots, but website loads are separately consented/unverified and Project conversations are ephemeral same-browser BroadcastChannel with no durable broker, cross-device replay or authenticated agent transport. Therefore ContextWise cannot currently serve as an automatic immutable Road Deploy release ledger. Reuse existing schema/import and Archivist archival path for a prototype only; require a durable private receipt writer, idempotency, immutable source references, verified readback, retention and recovery tests before assigning ledger authority. Owen: challenge whether an append-only Drive object manifest with SHA-256 and independent reconciliation suffices or a transactional event store is necessary. BuildWise catalog inaccessible (429); no bulletin or model jobs.",
     "Owen independent challenge pending: Road Deploy keeps at most 40 events per deployment and 250 deployment records, with snapshot returning 100. Should Road Deploy remain a bounded operational cache while ContextWise/WiseCore retain immutable, hash-linked release receipts? What retention and reconciliation guarantees are required?",
     "Owen independent challenge pending: Factory Dashboard tests/road-deploy.test.js explicitly accepts queued -> installed with no intermediate receipt, while tests/road-deploy-store.test.js covers a happy-path sequence and Windows persistence/recovery but does not assert transition rejection or installed package identity. The store's acceptance of skipped states is therefore not just a theoretical code-path concern; it is encoded as an allowed unit-test expectation. This is verified source/test behavior, not a live deployment failure. Recommend Riley-owned transition-table contract tests and independently sourced install/launch evidence, preserving late terminal acknowledgments after cancellation. Owen: challenge whether skipped states should ever be allowed for offline replay and what cryptographic or package-manager evidence is proportionate. BuildWise authenticated catalog and bulletin inaccessible (429); no model jobs or deployments.",
     "Owen independent challenge pending: Factory Dashboard RoadDeployStore.updateStatus accepts any status in a fixed set without checking the prior state, so an authenticated device update can move directly from queued to launched or regress installed to downloading; event details are free-form and no device-side proof is validated in this store. By contrast, release-channel buildRelease checks APK metadata and carries commit/SHA-256, and DeploymentManifest validates release identity and SHA-256 format. This is a source-verified release-receipt integrity gap, not evidence of a forged or failed live deployment. Recommend reuse existing release identity and add monotonic transitions, evidence-bound installed/launched attestations, and a cross-check against WiseCore G4/G5/G6; do not treat launched as G4/G6 acceptance. Owen: challenge whether Android device-signed attestation is necessary or whether a correlated package-manager readback plus smoke-test transcript is sufficient. BuildWise authenticated catalog/deployments/bulletin unavailable (429); no deployment or model job initiated.",
@@ -1066,6 +1067,12 @@
       "title": "Road Deploy event retention and audit-ledger separation",
       "summary": "Source inspection confirms deployment event history is capped at 40 entries, stored deployments at 250, and snapshot at 100. These limits make the operational store unsuitable as the sole long-term immutable release-evidence ledger. Proposed retaining its bounded cache and defining an archival receipt contract; runtime archival integration unverified.",
       "status": "Source verified · archival integration unknown"
+    },
+    {
+      "timestamp": "2026-11-21T20:24:05.020Z",
+      "title": "ContextWise archive versus live event transport contract",
+      "summary": "README and current-state/relay design documents verify manual Drive snapshot archival and ephemeral same-browser conversation messages, not a durable authenticated agent relay or automatic immutable release ledger. Proposed reuse of validated archive schema for prototype, with durable writer/replay and receipt verification as acceptance gates; no production changes.",
+      "status": "Documentation verified · durable relay and ledger not implemented"
     }
   ],
   "component_inventory": {
