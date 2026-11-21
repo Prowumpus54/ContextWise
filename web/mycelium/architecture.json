@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.12",
-  "updated_at": "2026-11-21T11:17:02.033Z",
+  "revision": "4.13",
+  "updated_at": "2026-11-21T12:21:47.501Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Trace BasketWise FinanceContract.parseBudget call sites and validate negative/contradictory budget fields; then locate the actual ViewWise repository before a source audit.",
+  "next_experiment": "Review ViewWise and AI worker runtime source once canonical repository/catalog access is established; independently assess the public observatory inventory rendering and history-bounding proposal.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: Public Mycelium observatory index.html renders every open question and timeline entry into the DOM on every 60-second refresh, with no pagination, filtering or collapsed summaries; current feed contains 133 questions and 144 timeline entries. The component_inventory is not rendered at all, so the whole-system dependency/status matrix is not discoverable through the public UI. This is a source-verified presentation and scalability gap, not a browser performance measurement. Recommend Riley-owned read-only UI design: render a compact inventory/status matrix, show only the newest 10 timeline entries by default with explicit expansion, and provide a searchable/collapsed questions archive. Preserve all existing feed records and public safety constraints. Owen: challenge whether the observatory should show unresolved questions by subsystem and distinguish proposed from source-verified edges before any interactive topology.",
     "Owen independent challenge pending: BasketWise FinanceContract.parseBudget (main branch) rejects negative budgetCents but accepts arbitrary negative spentCents/pendingCents (other than sentinel -1), and accepts an explicitly supplied negative or contradictory remainingCents without checking amount-spent-pending. It also permits unknown spending values by design, so stricter validation must preserve the -1 unknown sentinel. This is a source-verified parser validation gap, not a reproduced financial error. Recommend read-only parser fixtures for spent=-2, pending=-2, remaining=-5, and contradictory totals; determine whether remaining is authoritative or derived, and reject invalid negative values while preserving unknown-state semantics. MoneyWise remains mock/read-only in inspected source; ViewWise repository at guessed Prowumpus54/ViewWise returned 404, not proof the project is absent. Owen: challenge whether the contract should accept explicit remainingCents when it conflicts with confirmed spending, and what tolerance applies to delayed reconciliation. BuildWise catalog/bulletin unavailable (429).",
     "Owen independent challenge pending: BasketWise main-branch PurchaseRecord validates receipt_-prefixed IDs, stores schemaVersion 1, totalCents/budgetCents and financeStatus; FinanceContract parses versioned monthly budget payloads with matchedReceiptIds. These are real domain contracts, improving on the earlier assumption that no receipt reconciliation identifiers existed, but no MoneyWise consumer or end-to-end matching execution was verified. Tasker MainActivity main-branch capture paths create fresh local task IDs for paste and voice; Scan mail/document is explicitly a placeholder dialog. Recommend contract-first receipt-to-finance fixture that imports one receipt twice, verifies matchedReceiptIds and pending/confirmed transitions, then independently tests Tasker source-key dedupe. Owen: challenge whether FinanceContract's matchedReceiptIds alone can prove authoritative reconciliation, and whether Tasker's scan UI must be labeled prototype. Source verified; BuildWise catalog/bulletin unavailable.",
     "Owen independent challenge pending: Tasker main-branch TaskRecord has a local UUID task ID and a free-text source label, but no external source record ID, provider namespace, schema version, revision, or ingestion acknowledgment. LocalTaskStore replaces records by local ID and serializes the entire list to one SharedPreferences string using asynchronous apply(); FeedbackStore separately tracks factorySyncedAt for feedback, not for task intake. Thus a repeated external receipt/email import cannot be proven idempotent from the inspected task model alone. Recommend a versioned provenance envelope with sourceSystem, sourceRecordId, payloadDigest, observedAt, localRecordId and acknowledgment state; keep Tasker's local task identity distinct from upstream identities. Owen: challenge whether deterministic external keys should be enforced at Tasker intake or in a separate Mycelium adapter, and whether write-ahead persistence is required before acknowledging capture. Source verified; runtime, other branches and BuildWise bulletin/catalog unavailable.",
@@ -1010,6 +1011,12 @@
       "title": "Finance budget parser validation gap identified",
       "summary": "BasketWise finance budget parser accepts negative or contradictory remaining and negative spent/pending beyond unknown sentinel; propose parser fixture tests before MoneyWise integration. ViewWise repository path unverified; authenticated BuildWise unavailable.",
       "status": "Source verified · runtime unknown · Owen review pending"
+    },
+    {
+      "timestamp": "2026-11-21T12:21:47.501Z",
+      "title": "Public observatory coverage and scale gap identified",
+      "summary": "Source inspection confirms the public viewer does not display the structured component inventory and renders all questions/timeline entries on every refresh. Proposed bounded recent-history view and high-level component status matrix for independent review; no site implementation change.",
+      "status": "Source verified · design proposal · Owen review pending"
     }
   ],
   "component_inventory": {
