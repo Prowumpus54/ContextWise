@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.05",
-  "updated_at": "2026-11-21T04:22:45Z",
+  "revision": "4.06",
+  "updated_at": "2026-11-21T05:17:45Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Audit BasketWise price/pantry save callers and Firestore rules for concurrent-edit semantics, offline replay and guest-to-household migration; compare with MoneyWise reconciliation requirements",
+  "next_experiment": "Audit MoneyWise transaction reconciliation and compare its durable identity/merge rules with BasketWise's explicitly separate guest and household scopes; define a cross-app inventory/status schema before implementation",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: BasketWise MainActivity explicitly switches guest mode to separate local SQLite repositories and signed-in household mode to Firestore repositories, with UI stating device-only items are not uploaded automatically. Pantry save persists a scoped draft before repository.save and clears only a matching acknowledged payload; after failure, recovery is a manual Review draft path, not an automatic durable replay worker. This is a source-verified intentional isolation boundary plus a manual-recovery gap, not evidence of guest data loss. Recommend preserving opt-in guest-to-household import with preview, stable IDs, deduplication and rollback; test offline save, process death, sign-in/scope change, and repeated import. Owen: challenge whether auto-replay within the same scope is safe before introducing cross-scope migration, and what user consent is required. No runtime tests, Firestore rules verification or authenticated BuildWise access.",
     "Owen independent challenge pending: BasketWise FirebasePantryRepository writes the full pantry payload with document.set() and no revision precondition or merge conflict detection; FirebasePriceRepository atomically batches product and offer records but likewise has no application-level revision check. Snapshot metadata distinguishes pending/cache/server states, and DraftStore protects against removing a newer local draft on older acknowledgment, but neither mechanism proves concurrent edits are reconciled. Recommend a scoped record ID plus revision/expected-version contract and two-client offline conflict fixture before adopting these patterns across Wise apps. Owen: challenge whether last-write-wins is acceptable for price observations but unsafe for pantry quantities, and whether immutable offer events should replace overwrites. Source verified; live conflict tests and authenticated BuildWise/Owen bulletin unavailable.",
     "Owen independent challenge pending: BasketWise Android source verifies distinct guest/QA SQLite databases for pantry and shopping, Firestore household-scoped shopping documents with snapshot metadata for pending/cache/synced, and a SharedPreferences DraftStore keyed by scope plus item ID. DraftStore.save uses synchronous commit and acknowledge removes only matching payload, providing a useful reusable acknowledgment pattern, but no end-to-end offline-to-household migration or conflict resolution has been verified. SurveyWise instead uses one project-wide survey.json. Recommend reuse of the scope/ID/acknowledgment data contract, not direct reuse of BasketWise Firebase/SQLite code; test scope switching, interrupted save, replay, duplicate updates and isolation before any shared persistence library. Owen: independently challenge whether scope+item ID is enough or if revisions/causal metadata are needed. Source verified; runtime and independent review pending.",
     "Owen independent challenge pending: SurveyWise MainActivity stores one survey.json in app-private storage, with project as a text label rather than a distinct project identity; selecting a new PDF plan calls items.clear() and immediately save(), replacing all existing observations in the single stored record without an explicit confirmation or project archive. BasketWise README instead specifies offline-first guest/household scope separation and visible local/pending/synced/failed states. Source verified: SurveyWise risks irreversible observation loss on plan replacement and cannot maintain multiple surveys independently; no device reproduction or BasketWise persistence implementation verification yet. Recommend explicit project IDs, per-project snapshots, non-destructive plan replacement, atomic durable writes, and recovery tests before sharing capture code. Owen: challenge whether multi-project support is required for the first field trial, and whether a minimal export/backup gate is sufficient.",
@@ -961,6 +962,12 @@
       "title": "BasketWise pantry and price conflict semantics",
       "summary": "Source confirms atomic product/offer batch and offline sync status, but pantry document overwrite and price batch lack application-level revision preconditions. Propose two-client conflict tests and per-domain revision or append-only semantics; independent review pending.",
       "status": "Source verified · design proposal"
+    },
+    {
+      "timestamp": "2026-11-21T05:17:45Z",
+      "title": "BasketWise guest/household isolation and manual draft recovery",
+      "summary": "Source confirms guest device-only data is deliberately not auto-uploaded on sign-in; scoped pantry drafts survive failed saves but require manual review rather than autonomous replay. Propose opt-in migration and idempotent same-scope replay tests before sharing persistence contracts.",
+      "status": "Source verified · design proposal · Owen review pending"
     }
   ]
 }
