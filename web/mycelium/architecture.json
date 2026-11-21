@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.00",
-  "updated_at": "2026-11-20T23:21:48Z",
+  "revision": "4.01",
+  "updated_at": "2026-11-21T00:19:00Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Read-only public feed contract test: verify timeline field compatibility and renderer output against current architecture.json before any UI changes",
+  "next_experiment": "Read-only profile reload contract fixture: enabled profile -> invalid or missing configuration -> reject new dispatch -> valid configuration recovery",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: Factory Dashboard job-dispatcher.js reloadProfiles() catches malformed/missing profile-file errors and retains the last successfully loaded this.profiles map while recording profileLoadError. Its tick() continues to schedule queued work using the retained profiles, and request() can still accept a formerly enabled profile. This is a source-verified configuration-staleness risk, not evidence of live unauthorized execution. Should the scheduler fail closed for new launches when the current profile file is invalid, while allowing already-running jobs to reach a controlled terminal state? Test valid enabled profile -> malformed or removed profile -> queued/requested launch suppression, then restored valid profile. Authenticated BuildWise catalog and Owen bulletin inaccessible (429); no model jobs authorized or started.",
     "Owen independent challenge pending: Public Mycelium observatory index.html renders timeline entries using t.date, t.detail and t.state, but architecture.json timeline entries use timestamp, summary and status. As a result, the date, description and status render blank even when feed fetch succeeds; title alone survives. This is a source-verified public observability contract defect, not a measured browser test. Should the viewer normalize both historical and canonical field names and validate feed schema at load time before introducing a formal v2 feed contract? Keep public page unchanged pending Riley implementation authority.",
     "Owen independent challenge pending: Source-verified Android manifest/Gradle comparison finds Tasker, MeshWise and BuildWise mobile each use a small Java/Android application with no declared WorkManager dependency. Tasker and MeshWise manifests declare only launcher activities (no persistent service or boot receiver); BuildWise declares widget and install-result receivers but no durable outbound worker. Thus WorkManager-based delivery is a new dependency and migration, not reuse of an existing shared worker. Should a versioned outbox protocol first be tested in Tasker, with battery/Doze, reboot, duplicate acknowledgment and user-consent constraints, before any cross-app Android library? Source verified; merged manifests, transitive dependencies, live device and server durable intake remain unverified.",
     "Owen independent challenge pending: Cross-Android transport lifecycle audit found Tasker FactoryFeedbackBridge starts an unmanaged raw Thread for each HTTP POST with 3.5s connect/6s read timeouts and a callback, while BuildWise InstallResultReceiver starts raw Threads from goAsync() and suppresses reporting exceptions; MeshWise PeerDiscoveryManager instead manages BLE scan/advertise callbacks with one running flag. These are three distinct execution/cancellation/acknowledgment models, with no common durable outbox or lifecycle abstraction in the inspected files. Should Mycelium standardize a small versioned transport outcome/state contract (queued, attempting, acknowledged, retryable failure, terminal failure) and Android WorkManager-based durable execution for HTTP only, while leaving BLE lifecycle app-specific? Verify manifest/background constraints and intake deduplication before proposing a shared library. Source verified; live Android execution and BuildWise backend unavailable.",
@@ -925,6 +926,12 @@
       "timestamp": "2026-11-20T23:21:48Z",
       "title": "Public architecture feed/viewer schema mismatch",
       "summary": "Compared the public HTML timeline renderer with the live JSON feed: renderer expects date/detail/state while feed emits timestamp/summary/status. Public timeline metadata is therefore blank. Propose a backward-compatible field adapter and schema fixture, with Owen independent critique; no website code or production changes.",
+      "status": "Source verified · design proposal"
+    },
+    {
+      "timestamp": "2026-11-21T00:19:00Z",
+      "title": "Dispatcher profile reload retains stale enabled profiles on configuration error",
+      "summary": "Source inspection found that profile reload errors preserve previously loaded agent profiles while scheduling continues. Propose fail-closed admission for new launches until a valid profile configuration reloads; preserve existing running-job cleanup. Owen challenge requested but direct delivery unverified. No live model jobs.",
       "status": "Source verified · design proposal"
     }
   ]
