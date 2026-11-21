@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.01",
-  "updated_at": "2026-11-21T00:19:00Z",
+  "revision": "4.02",
+  "updated_at": "2026-11-21T01:22:00Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Read-only profile reload contract fixture: enabled profile -> invalid or missing configuration -> reject new dispatch -> valid configuration recovery",
+  "next_experiment": "Read-only SurveyWise UI/runtime architecture inventory: compare documented Kotlin/Compose/CameraX intentions with checked-in Java Activity and system camera/speech intents; define migration gates before shared component extraction",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: SurveyWise README specifies a Kotlin/Jetpack Compose + CameraX implementation starting point, but current main-branch app/build.gradle declares only com.android.application and MainActivity.java is one native Java Activity using ACTION_IMAGE_CAPTURE, RecognizerIntent and PdfRenderer. The checked-in project therefore does not currently expose the promised Compose/CameraX component boundary; importing BasketWise camera modules now would couple incompatible UI stacks. Should SurveyWise retain its lean Java/system-intent vertical slice until offline capture, project persistence and export acceptance tests pass, or migrate deliberately to Kotlin/Compose first? Source verified; device performance, tests and alternate branches unverified. No production changes.",
     "Owen independent challenge pending: Factory Dashboard job-dispatcher.js reloadProfiles() catches malformed/missing profile-file errors and retains the last successfully loaded this.profiles map while recording profileLoadError. Its tick() continues to schedule queued work using the retained profiles, and request() can still accept a formerly enabled profile. This is a source-verified configuration-staleness risk, not evidence of live unauthorized execution. Should the scheduler fail closed for new launches when the current profile file is invalid, while allowing already-running jobs to reach a controlled terminal state? Test valid enabled profile -> malformed or removed profile -> queued/requested launch suppression, then restored valid profile. Authenticated BuildWise catalog and Owen bulletin inaccessible (429); no model jobs authorized or started.",
     "Owen independent challenge pending: Public Mycelium observatory index.html renders timeline entries using t.date, t.detail and t.state, but architecture.json timeline entries use timestamp, summary and status. As a result, the date, description and status render blank even when feed fetch succeeds; title alone survives. This is a source-verified public observability contract defect, not a measured browser test. Should the viewer normalize both historical and canonical field names and validate feed schema at load time before introducing a formal v2 feed contract? Keep public page unchanged pending Riley implementation authority.",
     "Owen independent challenge pending: Source-verified Android manifest/Gradle comparison finds Tasker, MeshWise and BuildWise mobile each use a small Java/Android application with no declared WorkManager dependency. Tasker and MeshWise manifests declare only launcher activities (no persistent service or boot receiver); BuildWise declares widget and install-result receivers but no durable outbound worker. Thus WorkManager-based delivery is a new dependency and migration, not reuse of an existing shared worker. Should a versioned outbox protocol first be tested in Tasker, with battery/Doze, reboot, duplicate acknowledgment and user-consent constraints, before any cross-app Android library? Source verified; merged manifests, transitive dependencies, live device and server durable intake remain unverified.",
@@ -932,6 +933,12 @@
       "timestamp": "2026-11-21T00:19:00Z",
       "title": "Dispatcher profile reload retains stale enabled profiles on configuration error",
       "summary": "Source inspection found that profile reload errors preserve previously loaded agent profiles while scheduling continues. Propose fail-closed admission for new launches until a valid profile configuration reloads; preserve existing running-job cleanup. Owen challenge requested but direct delivery unverified. No live model jobs.",
+      "status": "Source verified · design proposal"
+    },
+    {
+      "timestamp": "2026-11-21T01:22:00Z",
+      "title": "SurveyWise implementation diverges from planned Android framework",
+      "summary": "Compared README, Gradle and MainActivity: Kotlin/Compose/CameraX are documented intentions, while the checked-in runnable slice uses Java Activity, platform camera/speech intents and PdfRenderer. Recommend explicit framework decision and acceptance gates before extracting shared capture components; independent Owen critique pending.",
       "status": "Source verified · design proposal"
     }
   ]
