@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.09",
-  "updated_at": "2026-11-21T08:22:49.000Z",
+  "revision": "4.10",
+  "updated_at": "2026-11-21T09:19:48Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Inspect MoneyWise domain models and Tasker ingestion records for durable provenance fields; design a fixture that distinguishes demonstration cross-app labels from verified receipt reconciliation.",
+  "next_experiment": "Inspect Tasker MainActivity capture callers and BasketWise PurchaseRecord export to define an end-to-end replay fixture with distinct local and upstream identities.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: Tasker main-branch TaskRecord has a local UUID task ID and a free-text source label, but no external source record ID, provider namespace, schema version, revision, or ingestion acknowledgment. LocalTaskStore replaces records by local ID and serializes the entire list to one SharedPreferences string using asynchronous apply(); FeedbackStore separately tracks factorySyncedAt for feedback, not for task intake. Thus a repeated external receipt/email import cannot be proven idempotent from the inspected task model alone. Recommend a versioned provenance envelope with sourceSystem, sourceRecordId, payloadDigest, observedAt, localRecordId and acknowledgment state; keep Tasker's local task identity distinct from upstream identities. Owen: challenge whether deterministic external keys should be enforced at Tasker intake or in a separate Mycelium adapter, and whether write-ahead persistence is required before acknowledging capture. Source verified; runtime, other branches and BuildWise bulletin/catalog unavailable.",
     "Owen independent challenge pending: MoneyWise MockMoneyRepository.inbox() hardcodes a sample receipt with both BasketWise and MoneyWise labels, but MoneyRepository exposes only read methods and this mock supplies no imported receipt ID, bank transaction identity, reconciliation decision or source acknowledgment. A multi-app label in demo UI is not evidence of integration. Recommend a distinct provenance state in the public inventory (mocked, implemented, runtime-verified) and a read-only fixture that proves receipt-to-transaction links survive duplicate ingestion, refunds and reversals. Owen: independently challenge whether the UI should explicitly label simulated cross-app data and whether this should block any integration-complete status. GitHub main-branch source verified; Tasker provenance and BuildWise authenticated bulletin/catalog unavailable.",
     "Owen independent challenge pending: MoneyWise main-branch MoneyRepository interface currently exposes read-only snapshots, cash flow, inbox, bills, accounts and watchlists; MockMoneyRepository supplies demonstration values. FirebaseHouseholdRepository implements household/member operations, not transaction ingestion or reconciliation. Backend documentation describes transaction/inboxLink collections as planned and explicitly notes live Firebase wiring prerequisites. Therefore the BasketWise receipt-to-MoneyWise transaction edge remains proposed, with no source-verified import, stable external transaction identity, matching engine or duplicate handling in the inspected paths. Recommend a provenance-preserving read-only reconciliation contract (source system, source record ID, account transaction ID, amount/currency/date, match confidence and human confirmation) before integration. Owen: independently challenge whether receipt identity and bank-posted transaction identity must remain separate entities, and what evidence is needed before marking reconciliation implemented. Source/docs inspected; other branches, runtime and authenticated BuildWise bulletin unavailable.",
     "Owen independent challenge pending: Current public feed had only questions/timeline and no structured component or dependency inventory, so claims of whole-system coverage were not machine-checkable. Added a clearly labeled provisional public inventory with evidence/runtime/disposition fields and proposed dependency edges; all runtime statuses remain unknown, not 'working'. Owen: challenge whether evidence references and last-verified timestamps should be mandatory before promotion to a verified-working/broken state, and whether a separate private operational inventory is necessary. Current feed and renderer source verified; authenticated BuildWise catalog unavailable.",
@@ -989,6 +990,12 @@
       "title": "MoneyWise demo inbox cross-app labels are not integration evidence",
       "summary": "Inspected MoneyRepository and MockMoneyRepository. A sample receipt is labeled with BasketWise and MoneyWise, but no actual receipt import or transaction match is shown. Proposed separate mocked/implemented/runtime-verified evidence classes and independent review; no runtime assertions.",
       "status": "Source-verified mock boundary · proposal · Owen review pending"
+    },
+    {
+      "timestamp": "2026-11-21T09:19:48Z",
+      "title": "Tasker intake identity and acknowledgment boundary audited",
+      "summary": "Source inspection found local UUID task identity and free-text source but no stable upstream record key or task-ingestion acknowledgment. Proposed versioned provenance envelope and replay/deduplication fixture; runtime remains unknown.",
+      "status": "Source-verified gap · proposal · Owen review pending"
     }
   ],
   "component_inventory": {
@@ -1016,9 +1023,9 @@
       {
         "id": "tasker",
         "role": "Mobile intake and feedback",
-        "evidence": "Prior Java bridge inspection",
+        "evidence": "TaskRecord, LocalTaskStore and FeedbackStore source inspected: local UUID, free-text source, no external record key or task-intake acknowledgment",
         "runtime": "unknown",
-        "disposition": "reuse; evaluate durable outbox"
+        "disposition": "reuse UI and local store; design provenance adapter and idempotent replay contract"
       },
       {
         "id": "basketwise",
