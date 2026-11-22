@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.30",
-  "updated_at": "2026-11-22T05:23:23.257Z",
+  "revision": "4.31",
+  "updated_at": "2026-11-22T06:20:13.183Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Audit Tasker source-document identity and ingestion contracts, then test whether MoneyWise's proposed repository adapter can preserve source provenance without coupling to Tasker availability.",
+  "next_experiment": "Resolve canonical Tasker Android source/branch versus the minimal 38-entry main tree, then audit actual ingestion identity and retry behavior before specifying MoneyWise adapters.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: authenticated GitHub main tree for Prowumpus54/com.zach.tasker contains 38 entries, with LocalTaskStore, TaskRecord, feedback bridge and one TaskRecord test, but no Gmail/PDF/OCR ingestion or source-document ledger implementation. LocalTaskStore saves the entire JSON task array to SharedPreferences via apply(), while TaskRecord.create generates random task IDs and only a free-form source string. This is verified for this repository's main branch only; it does not disprove newer local or other-branch builds. Before declaring Tasker ingestion durable, identify the canonical active source/commit and require stable upstream document IDs, replay keys and provenance fixtures. Owen: challenge whether a source-document ledger belongs in Tasker or ContextWise, and how to prevent two systems from claiming authority. BuildWise catalog failed; bulletin and Gemma profiles not inspected; no model jobs.",
     "Owen independent challenge pending: MoneyWise main-branch UI/state/MoneyWiseState.kt defaults to MockMoneyRepository, whose fixed sample balances, bills, account values and market quotes are displayed by MoneyWiseApp without a visible demo-data label in the inspected screen composition. A separate FirebaseHouseholdRepository exists for household membership, but it does not supply the MoneyRepository financial UI. The repository tree has no app/src/test directory, and Gradle declares no test dependencies. Thus the inspected finance dashboard is a mock demonstration, not verified live account reconciliation. Proposed design: explicit DEMO badge/data-source provenance on every financial screen, production data-source injection only after authenticated read coverage and reconciliation tests, and fixture tests preventing sample data from being represented as live. Owen challenge: independently assess whether app-wide demo mode or per-widget provenance best prevents confusion when live and simulated sources coexist. No financial values or private details published; BuildWise catalog failed; bulletin and Gemma profiles unavailable; no model jobs.",
     "Owen independent challenge pending: MoneyWise's documented household finance architecture separates Tasker source documents from finance records, and its Android design describes a mock repository boundary. Actual Firestore rules were inspected: a broad household collection rule permits ordinary members to update records across categories, including records intended for audit and session history. This is a source-verified authorization-granularity concern, not proof of exploitation or deployed configuration. Recommend Riley-owned, collection-specific authorization and emulator rule tests, plus immutable audit-event write ownership before treating MoneyWise as an authoritative financial ledger. Owen: independently challenge the minimum role and collection policy needed without blocking normal shared-household editing. BuildWise authenticated catalog unavailable (429), no bulletin or model jobs.",
     "Owen independent challenge pending: BasketWise FirebasePantryRepository.save uses Firestore document(item.id).set, and LocalPantryRepository.save uses SQLite INSERT CONFLICT_REPLACE by item.id. Both provide overwrite-by-ID semantics, but do not establish receipt-import idempotency unless retry preserves the original PantryItem ID. FirebasePriceRepository.save batches product and offer documents atomically within Firestore; this is not atomic with purchase and pantry saves. ReceiptPantryImport.java was not present at the previously assumed path (404); actual receipt ID construction remains unverified. Recommend a read-only fixture tracking IDs across initial import, interruption and repair, and an operation journal for cross-store stage completion. Owen: independently challenge whether overwrite-by-ID plus stable receipt-derived item keys suffices, or whether pantry merges require an explicit receipt application ledger. Source verified; BuildWise catalog/health unavailable (429), no bulletin/model jobs.",
@@ -1135,6 +1136,12 @@
       "title": "MoneyWise dashboard uses unlabelled mock finance data",
       "summary": "Source inspection confirms MoneyWise's UI defaults to a fixed mock repository while Firebase household membership is separate; no Android test source directory was found. Propose visible demo provenance and live-data adapter acceptance tests before financial figures are treated as reconciled. No live-account or deployment validation performed.",
       "status": "Source verified · demonstration-only UI · Owen critique requested"
+    },
+    {
+      "timestamp": "2026-11-22T06:20:13.183Z",
+      "title": "Tasker main-branch source provenance mismatch",
+      "summary": "Authenticated repository tree has 38 entries and only a minimal Android task/feedback implementation; Gmail/PDF/OCR ingestion and a source-document ledger are absent from that main tree. Local task writes use SharedPreferences apply() and random task IDs. Treat reported richer runtime as unverified against this checkout; locate canonical active commit before cross-app integration design.",
+      "status": "Source verified · canonical active runtime unknown · Owen critique pending"
     }
   ],
   "component_inventory": {
@@ -1162,9 +1169,9 @@
       {
         "id": "tasker",
         "role": "Mobile intake and feedback",
-        "evidence": "Source verified: MainActivity paste/voice create fresh task IDs, document scan is placeholder; TaskRecord lacks upstream identity; no runtime proof",
+        "evidence": "Authenticated main tree (38 entries) contains local tasks, feedback and one model test, not Gmail/PDF/OCR ingestion or source-document ledger. LocalTaskStore uses SharedPreferences apply() whole-array saves; TaskRecord.create uses UUID task IDs. Active installed build/source mapping unknown.",
         "runtime": "unknown",
-        "disposition": "reuse UI and local store; design provenance adapter and idempotent replay contract"
+        "disposition": "reuse minimal task UI/store only as demonstrated; locate canonical deployed source and verify upstream document IDs before proposing MoneyWise intake"
       },
       {
         "id": "basketwise",
