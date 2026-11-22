@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.25",
-  "updated_at": "2026-11-22T00:16:41.000Z",
+  "revision": "4.26",
+  "updated_at": "2026-11-22T01:22:56.889Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Inspect BasketWise MainActivity scanner result handoff and lifecycle teardown, then design a shared capture transaction contract for SurveyWise and BasketWise without extracting camera UI prematurely.",
+  "next_experiment": "Inspect BasketWise receipt import's multi-store commit and retry semantics; distinguish duplicate detection from transactional exactly-once application before recommending a shared capture contract.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -157,7 +157,8 @@
     "Can destination evidence be exported into an independently verifiable audit receipt before expiry?",
     "Which Tasker endpoint supports durable operation identity and authoritative outcome lookup?",
     "How should human resolution be recorded without implying automatic replay permission?",
-    "Owen independent challenge pending: read-only local Ollama inventory confirms installed model tags including Gemma 2 and multiple coding/reviewer candidates, while OpenHands, local memory MCP and Langfuse services are running. Installed model presence is not an authenticated BuildWise enabled profile or proof of agent-run integration. Should Mycelium inventory model installation, BuildWise authorization, active routing and trace evidence as four separate states?"
+    "Owen independent challenge pending: read-only local Ollama inventory confirms installed model tags including Gemma 2 and multiple coding/reviewer candidates, while OpenHands, local memory MCP and Langfuse services are running. Installed model presence is not an authenticated BuildWise enabled profile or proof of agent-run integration. Should Mycelium inventory model installation, BuildWise authorization, active routing and trace evidence as four separate states?",
+    "Owen independent challenge pending: Should receipt imports use a durable operation ID and replayable per-effect checkpoints, or a single database transaction? How should genuine same-store/date/total purchases avoid false duplicate suppression?"
   ],
   "timeline": [
     {
@@ -1101,6 +1102,12 @@
       "title": "BasketWise CameraX scanner versus SurveyWise photo capture lifecycle",
       "summary": "Inspected BasketWise SmartScannerScreen and DraftStore. CameraX/ML Kit scanning is lifecycle-bound with explicit frame/resource cleanup; pantry drafts use synchronous scoped persistence and content-matched acknowledgment. Neither establishes durable pending photo capture or receipt-review recovery. Recommend shared transaction contract, not premature shared camera library; Owen review pending.",
       "status": "Source verified · design proposal · runtime unknown"
+    },
+    {
+      "timestamp": "2026-11-22T01:22:56.889Z",
+      "title": "BasketWise receipt review restoration and duplicate-import boundary",
+      "summary": "MainActivity saves route, scope and scanner mode in Activity state, but pendingReceipt and pendingShelf remain in-memory. After Activity recreation, ReceiptReview redirects to Scanner when pendingReceipt is null. Import checks approximate duplicates (store/date/total and >=80% line overlap) and writes a pending purchase before applying pantry and price effects; atomic exactly-once completion not established. Recommend durable review draft and transactional idempotency tests; runtime untested.",
+      "status": "Source verified · recovery and consistency risks · Owen review requested"
     }
   ],
   "component_inventory": {
@@ -1135,9 +1142,9 @@
       {
         "id": "basketwise",
         "role": "Offline and household data",
-        "evidence": "Source verified: PurchaseRecord schemaVersion 1 receipt IDs, financeStatus; FinanceContract monthly budget parser with matchedReceiptIds; no live reconciliation verified; FinanceContract parser validation gap: negative/contradictory financial fields accepted (runtime untested) Capture menu source verified as UI callbacks only, not a shared camera transaction service.",
+        "evidence": "Source verified: CameraX/ML Kit scanner hands receipt OCR to MainActivity pendingReceipt; Activity state restores route but not pending receipt review, so recreation redirects to scanner. Import has approximate duplicate detection and staged purchase/pantry/price writes; atomicity unverified.",
         "runtime": "unknown",
-        "disposition": "reuse scoped IDs; test conflict semantics"
+        "disposition": "reuse scanner and duplicate guard; add durable review draft and evidence-backed idempotent import contract"
       },
       {
         "id": "surveywise",
