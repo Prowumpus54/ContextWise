@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.44",
-  "updated_at": "2026-11-22T18:19:31.000Z",
+  "revision": "4.45",
+  "updated_at": "2026-11-22T19:18:09.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "MoneyWise: build a read-only per-entity authority matrix (local cache, Firestore, Tasker source, desktop) and synthetic offline/reinstall reconciliation fixtures; verify deployed data paths before declaring recovery.",
+  "next_experiment": "WiseCore: validate generated and legacy buildwise-project.json files against the published JSON Schema using read-only fixtures; separate metadata conformance from release-gate evidence.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: WiseCore's Test-WiseProjectDocs.ps1 performs manual structure and partial metadata checks but never loads or validates schemas/buildwise-project.schema.json. It checks schemaVersion, standardVersion and six project fields, omitting required project.slug/packageId, diagnostics, verification and wiseCore contracts. Consequently a manifest may pass the script yet fail the published JSON Schema. New-WiseProjectDocs.ps1 generates templates and preserves existing files; its output is not evidence of schema conformance. Source-verified validation gap; no script execution or application runtime test. Proposed Riley-owned design: keep the non-destructive bootstrap, add a read-only JSON Schema validation stage and fixture matrix (canonical pass, legacy BasketWise fail with actionable mapping, missing slug/diagnostics/verification fail), preserving separate release-gate receipts. Owen independent challenge requested: should validation be strict by default for new manifests and advisory for legacy, and how avoid blocking old apps? BuildWise catalog 429; bulletin and enabled Gemma 2 profiles inaccessible; no jobs.",
     "Owen independent challenge pending: MoneyWise main app Gradle declares Compose, Firebase Auth and Firestore but no Room, SQLite wrapper, DataStore or explicit persistence/recovery library. Android manifest disables OS backup. Thus a local durable cache cannot be assumed from dependencies; Firebase SDK may cache internally, but authoritative record ownership and offline recovery are unproven. Existing README describes Tasker intake and planned desktop companion, not an implemented cross-device reconciliation contract. Design proposal: inventory each finance entity by authoritative store, cache, export/recovery path and sourceRef; require synthetic offline-edit/reinstall/reconciliation fixtures before any authoritative data claim. Owen independent challenge: which records must be server-authoritative versus offline-first, and how can provenance survive reinstall without exposing sensitive records? Source verified; runtime unknown. BuildWise catalog unavailable (404); bulletin and exact Gemma 2 profiles not verified; no jobs.",
     "Owen independent challenge pending: MoneyWise main app/src/main/AndroidManifest.xml explicitly sets android:allowBackup=false, while README and docs/ARCHITECTURE.md envision Tasker-linked financial records and desktop companion. This prevents assuming Android OS backup will restore app data, but does not prove data loss or rule out cloud-backed restoration. No restoration, export, or source-reconciliation guarantee was established in inspected documents. Proposed contract: distinguish local cache from authoritative cloud records, require authenticated rehydration and sourceRef reconciliation with device-loss/restore fixtures, and retain backup-disabled privacy until independently evaluated. Owen: challenge minimum evidence for recoverability, privacy tradeoffs, and cross-device identity. Source verified; runtime unknown. BuildWise catalog 429, bulletin and enabled Gemma 2 profiles unavailable; no jobs.",
     "Owen independent challenge pending: SurveyWise main is a small Java Android alpha (one MainActivity.java source file; version 0.1.0-alpha), not the broader Kotlin/Compose/CameraX architecture proposed in README. Source verifies Android system-camera intent, native speech recognition, PDF rendering, plan pins, and local JSON persistence. No dedicated diagnostics implementation, test source or WiseCore manifest appears in the complete main tree. save() synchronously serializes the entire survey and fsyncs/renames it on the UI thread, including during note edits and volume counter changes; errors are only sent to Logcat. This creates a potential UI-latency and silent data-loss risk under slow storage or failed writes, not a demonstrated failure. Recommend retaining the functional vertical slice, adding structured local failure reporting and an off-main-thread single-writer persistence boundary before extracting BasketWise diagnostics. Owen: independently challenge whether shared diagnostics should be a minimal interface or Android library, and how to guarantee user-visible save failure without storing survey notes/photos in logs. Main-branch code verified; installed APK, other branches, physical tests and live reliability unknown. BuildWise catalog inaccessible (429); bulletin and exact enabled Gemma 2 profiles unverified; no jobs.",
@@ -1232,6 +1233,12 @@
       "title": "MoneyWise persistence dependencies do not establish a durable local finance ledger",
       "summary": "Inspected MoneyWise Android manifest, app Gradle, architecture and README. The app declares Firebase Auth/Firestore and Compose, with OS backup disabled, but no explicit local persistence dependency. This does not rule out Firebase SDK caching; it leaves offline authority and reinstall recovery unverified. Propose per-entity authority matrix and synthetic offline/reinstall reconciliation fixtures. Owen challenge requested, not delivered; runtime unknown.",
       "status": "Source verified · design proposal · runtime unknown"
+    },
+    {
+      "timestamp": "2026-11-22T19:18:09.000Z",
+      "title": "WiseCore project validator does not enforce its published metadata schema",
+      "summary": "Inspected WiseCore bootstrap script, Test-WiseProjectDocs.ps1 and JSON Schema. Structural test omits schema validation and several required properties, allowing false-positive project conformance. Recommend read-only schema fixture tests and explicit legacy compatibility reporting; no app changes or release claims. Owen challenge requested but not delivered.",
+      "status": "Source verified · validation gap · runtime unknown"
     }
   ],
   "component_inventory": {
