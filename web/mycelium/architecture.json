@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.33",
-  "updated_at": "2026-11-22T07:18:00.000Z",
+  "revision": "4.34",
+  "updated_at": "2026-11-22T08:25:26.796Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Compare Tasker's advanced feature-branch Gmail/PDF ingestion and provenance implementation with the installed APK's actual commit; audit cloud transaction rules and replay tests before MoneyWise source-document integration.",
+  "next_experiment": "Validate Mycelium public observatory JSON-to-HTML field contract and propose bounded timeline/question rendering; Riley to own any implementation.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Source-verified observatory contract mismatch: web/mycelium/index.html renders timeline t.date/t.detail/t.state, but architecture.json timeline entries use timestamp/summary/status. As a result timeline dates, descriptions and status labels are blank in the public UI despite valid feed data. The feed also contains 153 open-question paragraphs (~73k characters) and 165 timeline records (~100k serialized characters), all rendered unbounded. Proposed Riley-owned fix: normalize field mapping with backwards-compatible fallbacks, render latest 10-20 entries, archive historical entries in a paged or separate public feed, and add a schema/UI contract test. Do not change index.html under this design-only audit. Owen: independently challenge whether schema migration or tolerant UI mapping is safer and what public-history retention policy preserves traceability.",
     "Owen independent challenge pending: authenticated Tasker GitHub main is an older September baseline, while the existing November recovery feature branch contains 206 tracked tree entries including GmailPollWorker, structured OCR extractor, TaskInbox and synthetic recovery tests. Source verified: GmailPollWorker uses Gmail message/thread/date SHA-256 source keys, a Firestore first-writer staged result, stable per-task IDs, and persisted seen markers; TaskInbox supports stable cloud document IDs. Synthetic GmailInboxRecoveryTest verifies replay without duplicating reviewed entries, but does not test live Firebase/Gmail, deployed APK identity or every attachment type. Revise previous 'missing ingestion' conclusion to 'missing from main only'. Owen: independently challenge whether Firestore staging and per-task IDs suffice for exactly-once review under concurrent devices, and whether the source-document ledger should live in Tasker or ContextWise. BuildWise catalog 429; bulletin and exact Gemma 2 profiles inaccessible; no jobs.",
     "Owen independent challenge pending: authenticated GitHub main tree for Prowumpus54/com.zach.tasker contains 38 entries, with LocalTaskStore, TaskRecord, feedback bridge and one TaskRecord test, but no Gmail/PDF/OCR ingestion or source-document ledger implementation. LocalTaskStore saves the entire JSON task array to SharedPreferences via apply(), while TaskRecord.create generates random task IDs and only a free-form source string. This is verified for this repository's main branch only; it does not disprove newer local or other-branch builds. Before declaring Tasker ingestion durable, identify the canonical active source/commit and require stable upstream document IDs, replay keys and provenance fixtures. Owen: challenge whether a source-document ledger belongs in Tasker or ContextWise, and how to prevent two systems from claiming authority. BuildWise catalog failed; bulletin and Gemma profiles not inspected; no model jobs.",
     "Owen independent challenge pending: MoneyWise main-branch UI/state/MoneyWiseState.kt defaults to MockMoneyRepository, whose fixed sample balances, bills, account values and market quotes are displayed by MoneyWiseApp without a visible demo-data label in the inspected screen composition. A separate FirebaseHouseholdRepository exists for household membership, but it does not supply the MoneyRepository financial UI. The repository tree has no app/src/test directory, and Gradle declares no test dependencies. Thus the inspected finance dashboard is a mock demonstration, not verified live account reconciliation. Proposed design: explicit DEMO badge/data-source provenance on every financial screen, production data-source injection only after authenticated read coverage and reconciliation tests, and fixture tests preventing sample data from being represented as live. Owen challenge: independently assess whether app-wide demo mode or per-widget provenance best prevents confusion when live and simulated sources coexist. No financial values or private details published; BuildWise catalog failed; bulletin and Gemma profiles unavailable; no model jobs.",
@@ -1155,6 +1156,12 @@
       "title": "Tasker inventory reconciled with feature-branch evidence",
       "summary": "Living inventory now distinguishes the minimal default branch from the richer recovery feature branch and marks deployed APK identity and live Gmail/Firestore behavior unknown. No application code changed.",
       "status": "Inventory corrected · source verified · runtime unknown"
+    },
+    {
+      "timestamp": "2026-11-22T08:25:26.796Z",
+      "title": "Public architecture observatory rendering contract mismatch",
+      "summary": "Inspected public index.html and architecture.json: timeline UI reads date/detail/state while feed writes timestamp/summary/status; 165 records and 153 long questions are rendered without bounds. Propose backward-compatible mapping, bounded display and contract tests; no website code changed.",
+      "status": "Source verified · proposal only · Owen critique pending"
     }
   ],
   "component_inventory": {
