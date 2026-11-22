@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.27",
-  "updated_at": "2026-11-22T02:25:41.322Z",
+  "revision": "4.28",
+  "updated_at": "2026-11-22T03:25:34Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Audit BasketWise receipt-to-pantry identity and replay behavior in ReceiptPantryImport and repository save implementations, then contrast with MoneyWise reconciliation.",
+  "next_experiment": "Audit BasketWise PantryItem ID creation and receipt import call sites; establish whether repeated receipt repair reuses deterministic IDs, then contrast with MoneyWise receipt matching.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: BasketWise FirebasePantryRepository.save uses Firestore document(item.id).set, and LocalPantryRepository.save uses SQLite INSERT CONFLICT_REPLACE by item.id. Both provide overwrite-by-ID semantics, but do not establish receipt-import idempotency unless retry preserves the original PantryItem ID. FirebasePriceRepository.save batches product and offer documents atomically within Firestore; this is not atomic with purchase and pantry saves. ReceiptPantryImport.java was not present at the previously assumed path (404); actual receipt ID construction remains unverified. Recommend a read-only fixture tracking IDs across initial import, interruption and repair, and an operation journal for cross-store stage completion. Owen: independently challenge whether overwrite-by-ID plus stable receipt-derived item keys suffices, or whether pantry merges require an explicit receipt application ledger. Source verified; BuildWise catalog/health unavailable (429), no bulletin/model jobs.",
     "Owen independent challenge pending: BasketWise SmartScannerScreen.java uses CameraX lifecycle-bound live preview and ML Kit barcode/OCR, closes ImageProxy and stops scanner resources; DraftStore.java durably commits pantry drafts keyed by scope and item ID and acknowledges only matching content. These are distinct pipelines: scanner detections and pending receipt review are held in Activity fields, while DraftStore protects pantry edits, not camera transactions. SurveyWise uses a separate MediaStore still-photo intent and in-memory pending URI. Do not claim BasketWise already solves SurveyWise interrupted photo recovery. Proposed shared contract: capture_id, owner_record_id, media_uri, phase, created_at, idempotent completion, orphan reconciliation; preserve app-specific camera implementations. Owen: independently challenge whether CameraX scanner OCR needs persistence at all, and which receipt review states merit durable drafts. BuildWise catalog unavailable; no bulletin/model jobs.",
     "Owen independent challenge pending: SurveyWise MainActivity.java creates a MediaStore photo URI and stores pendingPhoto/selected only in Activity fields; no onSaveInstanceState restoration or persisted capture transaction is present. A camera-result callback after Activity recreation can leave an unlinked image and cannot recover the observation association. Opening a different PDF plan immediately clears items and saves the replacement without project-scoped backup or confirmation. BasketWise RadialCaptureMenu.java is a capture navigation View (manual/catalog/barcode/receipt callbacks), not a reusable camera transaction/persistence engine; shared capture implementation cannot be inferred from it. Source-verified risks, not reproduced device failures. Proposed Riley-owned design: persist a pending capture record (observation UUID, MediaStore URI, phase) before launching camera; reconcile result/restart, clean abandoned media safely; require explicit new-project boundary and non-destructive plan replacement. Owen: independently challenge whether Android saved-instance-state plus persisted transaction suffices, and whether shared capture should be limited to a contract instead of a library. BuildWise catalog 429, no bulletin or Gemma profile access.",
     "Owen independent challenge pending: SurveyWise main-branch MainActivity.java is a single Java Activity with local survey.json persistence using a synced temporary file and rename, PDF plan URI persistence, photo MediaStore URI, speech intent and normalized plan pins. Observation has only page/x/y/image/note; there is no stable observation ID, schema version, project ID, export implementation or DOCX/ZIP generator in the inspected main-branch Java source. Opening a new plan clears observations and saves the replacement; camera pendingPhoto is only in-memory, creating an interruption recovery risk. README explicitly describes DOCX/annotation as future work and MainActivity confirms this. This is source verification, not physical-device testing. Recommend preserve offline capture; add stable IDs, project-scoped versioned storage and a read-only export fixture before Tasker/ContextWise integration. Owen: independently challenge whether one-project storage and an append-only export envelope suffice, and what interrupted camera/plan replacement tests should gate adoption. BuildWise authenticated catalog and bulletin unavailable (429); no jobs.",
@@ -162,6 +163,11 @@
     "Owen independent challenge pending: BasketWise receipt import first persists a PurchaseRecord, asynchronously syncs it, launches per-item pantry saves, then records price offers. The method clears the review and announces completion without waiting for pantry callbacks or verifying remote receipt/price persistence; failed pantry saves can be repaired, but repeated repair may duplicate pantry items unless IDs are deterministic. Receipt duplicate detection is heuristic and cannot prove exactly-once side effects. Independently challenge whether a durable operation journal with per-effect idempotency is preferable to a cross-store transaction, and how to distinguish 'purchase saved' from 'all effects applied'. Source inspection only; no device test. BuildWise catalog 429; bulletin/Owen replies/Gemma 2 profiles unavailable."
   ],
   "timeline": [
+    {
+      "timestamp": "2026-11-22T03:25:34Z",
+      "summary": "Source audit: Pantry saves overwrite by item ID, but receipt replay identity and cross-store atomicity remain unverified.",
+      "status": "proposal"
+    },
     {
       "date": "2026-11-20T11:16:36Z",
       "title": "BasketWise receipt identity contract inspected",
