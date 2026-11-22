@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.38",
-  "updated_at": "2026-11-22T12:24:21.725Z",
+  "revision": "4.39",
+  "updated_at": "2026-11-22T13:23:34.396Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Inspect Tasker Gmail extraction task-count bounds and review/acknowledgement paths; define a typed, read-only provenance adapter fixture against ContextWise's proposed relay envelope without changing either app.",
+  "next_experiment": "Compare WiseCore project metadata schema against two actual app manifests and the seven-gate evidence standard; propose strict validation profiles without breaking legacy manifests.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: WiseCore docs/AUTONOMOUS_RELEASE_GATES_STANDARD.md requires seven append-only, artifact-bound and independently attested release gates; schemas/buildwise-project.schema.json instead validates only broad project/documentation/diagnostics/verification metadata, explicitly allows arbitrary top-level fields, and does not require gate receipts, artifact digests, gate state or provenance. This is not a defect in the schema's stated metadata purpose, but a contract-boundary risk if metadata validation is mistaken for release readiness. Proposal: retain permissive project discovery schema for backward compatibility; add a separate strict versioned gate-receipt schema and cross-record G1–G7 transition validator, with negative fixtures for missing evidence and mismatched commit/artifact. Owen: challenge whether strict gate evidence belongs in WiseCore schema or BuildWise policy engine, and how to avoid two competing authorities. Source and standard verified; live enforcement unverified. BuildWise catalog unavailable (429), bulletin and exact Gemma 2 profiles not inspected; no jobs.",
     "Owen independent review requested (not delivered): Tasker recovery branch GmailPollWorker.kt derives SHA-256 source keys from Gmail message/thread/date, stages the first extractor result in a Firestore transaction, then creates deterministic per-suggestion Inbox IDs; TaskInbox.java enforces a strict [0-2] suggestion-index suffix and retains staged results, including empty extraction failures. ContextWise CHAT_RELAY_DESIGN.md proposes separate message IDs, decisionRefs, sourceRefs, idempotencyKey, deliveryStatus and acknowledgements, but its relay is not implemented. Design proposal: do not reuse Tasker's Gmail source key as a relay message ID or decision authority; map it into a typed sourceRef, retain distinct immutable event/message IDs and explicit review/ack state. Verify extraction cardinality <=3, empty-stage recovery policy, and accepted/rejected review replay before integration. Owen should challenge whether first-writer empty failures must remain immutable or support a versioned human-authorized retry. Source verified; runtime untested. BuildWise catalog probe failed (404), health probe 429; bulletin/Owen replies/Gemma 2 profiles unavailable. No jobs.",
     "Cross-agent provenance contract review: ContextWise docs/CHAT_RELAY_DESIGN.md already specifies a proposed provider-neutral authenticated relay envelope with id, threadId, senderPrincipal, recipientPrincipals, replyTo, projectId, decisionRefs, kind, createdAt, body, sourceRefs, idempotencyKey and deliveryStatus, plus explicit acknowledgement, ordered replay and decision supersession. Actual web/src/conversation.mjs validates a narrower same-browser message contract (schemaVersion, actorId/actorLabel, projectId, contextRefs, replyTo) and handoffPacket(), with no authenticated delivery. Therefore the gap is implementation and contract conformance, not absence of an envelope design. Recommend reuse the documented envelope as a candidate v1, map ContextWise event refs and Tasker intake IDs via optional typed provenance references, and require contract fixtures before adding any broker. Owen should independently challenge whether the documented envelope has enough version/digest binding and whether transport and decision authority remain properly separate. This is source/document evidence, not runtime relay verification. BuildWise catalog inaccessible (429); bulletin and exact Gemma 2 profiles unverified; no jobs.",
     "ContextWise handoffPacket() in web/src/conversation.mjs copies decision IDs, dates, summaries and up to 12 sourceRefs, but does not include a source snapshot revision, content digest or supersession state. resolveContextRef() looks up current in-memory workspace events by ID. A previously copied handoff can therefore refer to an event whose content later changes without a machine-checkable indication of drift. This is a source-contract risk, not a demonstrated altered record. Design proposal: add optional eventRevision/contentDigest and sourceSnapshotId to handoff/agent event envelopes, verify on consumption, flag stale or superseded references, and keep unverified browser messages non-authoritative. Do not build a second message broker: reuse ContextWise decision IDs, with BuildWise transporting jobs and Tasker retaining intake source IDs. Owen: independently challenge whether immutable snapshot IDs or digest-bound event references are the smallest reliable cross-app contract, and what compatibility behavior old handoffs require. BuildWise catalog returned 429; bulletin, Owen replies and enabled Gemma 2 profiles unverified; no jobs.",
@@ -1189,6 +1190,12 @@
       "timestamp": "2026-11-22T12:24:21.725Z",
       "title": "Tasker Gmail identity is not an inter-agent delivery identity",
       "summary": "Inspected recovery-branch GmailPollWorker and TaskInbox against ContextWise relay design: deterministic Gmail source keys and first-writer Firestore staging protect intake deduplication, but relay message identity, delivery acknowledgement and decision provenance are separate contracts. Proposed typed source-reference adapter and bounded replay fixture; no runtime or production changes.",
+      "status": "Source verified · design proposal · Owen critique pending"
+    },
+    {
+      "timestamp": "2026-11-22T13:23:34.396Z",
+      "title": "WiseCore metadata validation is not release-gate evidence",
+      "summary": "Read WiseCore's seven-gate release standard and buildwise-project JSON schema. The standard requires independent, append-only artifact-bound receipts, while the permissive project metadata schema does not validate gate evidence. Recommend separate versioned gate receipt schema plus transition validator, preserving project metadata compatibility. Owen critique requested but not delivered.",
       "status": "Source verified · design proposal · Owen critique pending"
     }
   ],
