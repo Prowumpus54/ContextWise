@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.43",
-  "updated_at": "2026-11-22T17:17:43.714Z",
+  "revision": "4.44",
+  "updated_at": "2026-11-22T18:19:31.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "MoneyWise: design an explicit recovery and export contract for locally cached financial records, separating Android OS backup policy from authenticated cloud restoration and source-document reconciliation; verify actual deployed behavior before any release claim.",
+  "next_experiment": "MoneyWise: build a read-only per-entity authority matrix (local cache, Firestore, Tasker source, desktop) and synthetic offline/reinstall reconciliation fixtures; verify deployed data paths before declaring recovery.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: MoneyWise main app Gradle declares Compose, Firebase Auth and Firestore but no Room, SQLite wrapper, DataStore or explicit persistence/recovery library. Android manifest disables OS backup. Thus a local durable cache cannot be assumed from dependencies; Firebase SDK may cache internally, but authoritative record ownership and offline recovery are unproven. Existing README describes Tasker intake and planned desktop companion, not an implemented cross-device reconciliation contract. Design proposal: inventory each finance entity by authoritative store, cache, export/recovery path and sourceRef; require synthetic offline-edit/reinstall/reconciliation fixtures before any authoritative data claim. Owen independent challenge: which records must be server-authoritative versus offline-first, and how can provenance survive reinstall without exposing sensitive records? Source verified; runtime unknown. BuildWise catalog unavailable (404); bulletin and exact Gemma 2 profiles not verified; no jobs.",
     "Owen independent challenge pending: MoneyWise main app/src/main/AndroidManifest.xml explicitly sets android:allowBackup=false, while README and docs/ARCHITECTURE.md envision Tasker-linked financial records and desktop companion. This prevents assuming Android OS backup will restore app data, but does not prove data loss or rule out cloud-backed restoration. No restoration, export, or source-reconciliation guarantee was established in inspected documents. Proposed contract: distinguish local cache from authoritative cloud records, require authenticated rehydration and sourceRef reconciliation with device-loss/restore fixtures, and retain backup-disabled privacy until independently evaluated. Owen: challenge minimum evidence for recoverability, privacy tradeoffs, and cross-device identity. Source verified; runtime unknown. BuildWise catalog 429, bulletin and enabled Gemma 2 profiles unavailable; no jobs.",
     "Owen independent challenge pending: SurveyWise main is a small Java Android alpha (one MainActivity.java source file; version 0.1.0-alpha), not the broader Kotlin/Compose/CameraX architecture proposed in README. Source verifies Android system-camera intent, native speech recognition, PDF rendering, plan pins, and local JSON persistence. No dedicated diagnostics implementation, test source or WiseCore manifest appears in the complete main tree. save() synchronously serializes the entire survey and fsyncs/renames it on the UI thread, including during note edits and volume counter changes; errors are only sent to Logcat. This creates a potential UI-latency and silent data-loss risk under slow storage or failed writes, not a demonstrated failure. Recommend retaining the functional vertical slice, adding structured local failure reporting and an off-main-thread single-writer persistence boundary before extracting BasketWise diagnostics. Owen: independently challenge whether shared diagnostics should be a minimal interface or Android library, and how to guarantee user-visible save failure without storing survey notes/photos in logs. Main-branch code verified; installed APK, other branches, physical tests and live reliability unknown. BuildWise catalog inaccessible (429); bulletin and exact enabled Gemma 2 profiles unverified; no jobs.",
     "Owen independent challenge pending: BasketWise main Diagnostics.java implements a 1,000-entry device-only SQLite ring buffer, serialized background writes, duration spans, and Logcat mirroring; DiagnosticsScreen.java provides a 300-entry view and user-initiated clipboard report. docs/DIAGNOSTICS.md prohibits credentials, personal records and raw payloads, but Diagnostics.clean() only trims whitespace/length, and fail(Throwable) includes exception messages; therefore the documented privacy policy is not enforced by a field-aware redaction boundary. This is a source-contract risk, not evidence of leaked secrets. Proposal: retain BasketWise local recorder as prototype; introduce allowlisted structured error codes and deterministic secret/PII redaction fixtures before any WiseCore extraction or cross-agent export, preserving opt-in clipboard behavior. Owen: independently challenge whether allowlisted diagnostic fields or a centralized sanitizer provides stronger assurance without losing actionable debugging context. scripts/test-android.ps1 defines unit/build/lint/emulator instrumentation, but this audit did not execute it; physical device and backend verification unknown. BuildWise catalog unavailable (429), bulletin and exact Gemma 2 profiles unverified; no jobs.",
@@ -1225,6 +1226,12 @@
       "title": "MoneyWise Android backup policy lacks a documented restoration contract",
       "summary": "Inspected MoneyWise AndroidManifest.xml, app/build.gradle.kts, README and architecture documentation. Main Android manifest explicitly disables OS application backup; architecture proposes Tasker-linked finance records and a future desktop companion, but the inspected documents do not establish restoration or reconciliation guarantees. This is a recoverability evidence gap, not demonstrated data loss. Recommend retaining backup-disabled privacy posture while defining authenticated cloud rehydration, source-reference reconciliation, and device-loss test fixtures. Owen independent challenge requested: what minimum export/recovery proof is required before real financial records are authoritative? Live APK and cloud restore unverified.",
       "status": "Source verified · recovery design gap · runtime unknown"
+    },
+    {
+      "timestamp": "2026-11-22T18:19:31.000Z",
+      "title": "MoneyWise persistence dependencies do not establish a durable local finance ledger",
+      "summary": "Inspected MoneyWise Android manifest, app Gradle, architecture and README. The app declares Firebase Auth/Firestore and Compose, with OS backup disabled, but no explicit local persistence dependency. This does not rule out Firebase SDK caching; it leaves offline authority and reinstall recovery unverified. Propose per-entity authority matrix and synthetic offline/reinstall reconciliation fixtures. Owen challenge requested, not delivered; runtime unknown.",
+      "status": "Source verified · design proposal · runtime unknown"
     }
   ],
   "component_inventory": {
@@ -1273,9 +1280,9 @@
       {
         "id": "moneywise",
         "role": "Financial records and reconciliation",
-        "evidence": "Source-verified read-only MoneyRepository and MockMoneyRepository; cross-app receipt label is hardcoded demonstration data, not verified ingestion Android manifest sets allowBackup=false; inspected docs do not establish device-loss restore/reconciliation.",
+        "evidence": "Source-verified read-only MoneyRepository and MockMoneyRepository; cross-app receipt label is hardcoded demonstration data, not verified ingestion Android manifest sets allowBackup=false; inspected docs do not establish device-loss restore/reconciliation. App Gradle declares Firebase Auth/Firestore but no explicit Room/DataStore persistence dependency; offline authoritative store remains unverified.",
         "runtime": "unknown",
-        "disposition": "retain demo; define authoritative-source and authenticated recovery contract, then test BasketWise/Tasker reconciliation before integration"
+        "disposition": "retain demo; map authoritative stores and offline cache per finance entity; validate synthetic reinstall/reconciliation before live-data claims"
       },
       {
         "id": "viewwise",
