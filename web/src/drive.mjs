@@ -3,6 +3,8 @@
 import { GoogleAuthProvider, reauthenticateWithPopup } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 import { auth } from "./auth.mjs?v=0.1.11";
 import { normalizeWorkspace, MAX_IMPORT_BYTES } from "./validate.mjs";
+import { mergeAvaRecords } from "./ava-archive.mjs";
+import { fetchAvaIncrementals } from "./drive-incremental.mjs";
 import { parseDriveApiError, driveApiGuidance } from "./drive-error.mjs";
 
 const connect = document.getElementById("drive-connect");
@@ -123,8 +125,8 @@ async function latestArchive(accessToken, archiveFolder) {
   const list=await apiRequest(url,"list-private-archives",accessToken);
   const candidates=(list.files||[]).filter(file=>
     /^contextwise-workspace-[a-zA-Z0-9_-]+\.json$/.test(file.name||""));
-  if(!candidates.length)throw new Error("No combined ContextWise workspace JSON found in your Drive folder.");
-  return candidates[0];
+  if(list.nextPageToken)throw new Error("Too many combined archives to safely choose latest.");
+  return candidates[0] || null;
 }
 loadButton.addEventListener("click",async()=>{
   if(!auth.currentUser)return;
@@ -140,19 +142,24 @@ loadButton.addEventListener("click",async()=>{
     const readToken=await oauthToken(DRIVE_READ_SCOPE);
     const archiveFolder=await getFolderForRead(readToken);
     const file=await latestArchive(readToken,archiveFolder);
-    if(Number(file.size)>MAX_IMPORT_BYTES)throw new Error("Archive exceeds 2 MB import limit");
-    diagnostics.lastOperation="read-private-archive";
-    const raw=await apiRequest(
-      `https://www.googleapis.com/drive/v3/files/${encodeURIComponent(file.id)}?alt=media`,
-      "read-private-archive",readToken);
-    const workspace=normalizeWorkspace(raw);
+    const incrementalDocs=await fetchAvaIncrementals(readToken,archiveFolder);
+    if(!file && !incrementalDocs.length)throw new Error("No ContextWise archives found");
+    if(file && Number(file.size)>MAX_IMPORT_BYTES)throw new Error("Archive exceeds 2 MB import limit");
+    let raw=null;
+    if(file) {
+      diagnostics.lastOperation="read-private-archive";
+      raw=await apiRequest(
+        `https://www.googleapis.com/drive/v3/files/${encodeURIComponent(file.id)}?alt=media`,
+        "read-private-archive",readToken);
+    }
+    const {workspace,added}=mergeAvaRecords(raw,incrementalDocs);
     const n=workspace.projects.reduce((sum,p)=>sum+p.events.length,0);
     window.dispatchEvent(new CustomEvent("contextwise:workspace-loaded",{detail:{workspace}}));
     diagnostics.archiveLoad="loaded";
     window.contextwiseRecordAccess?.("archive","success");
     diagnostics.archiveProjectCount=workspace.projects.length;
     diagnostics.archiveRelationCount=workspace.relations.length;
-    loadStatus.textContent=`Loaded ${workspace.projects.length} projects, ${n} events and ${workspace.relations.length} relationships from your private Drive archive. Nothing was uploaded to Firebase.`;
+    loadStatus.textContent=`Loaded ${workspace.projects.length} projects, ${n} events and ${workspace.relations.length} relationships. Added ${added} unique Ava bulletin events from private incremental archives. Nothing was uploaded to Firebase.`;
   }catch(error){
     diagnostics.archiveLoad="error";
     window.contextwiseRecordAccess?.("archive","failed",String(error?.reason||error?.code||error?.name||"unknown"));
