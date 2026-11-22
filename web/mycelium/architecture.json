@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.48",
-  "updated_at": "2026-11-22T22:23:42.764Z",
+  "revision": "4.49",
+  "updated_at": "2026-11-22T23:23:44.067Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Trace Factory feedback intake from legacy Foreman jobs to canonical dispatcher jobs; test ID mapping and duplicate prevention using read-only source fixtures.",
+  "next_experiment": "Trace feedback HTTP handlers and intake-to-dispatch conversion; verify whether findIntakeBySourceId is called before addIntake and whether a unique source reference survives dispatch.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Factory feedback provenance audit (source verified, runtime unknown): factory-store.js defines findIntakeBySourceId(source,sourceId) and addIntake(input,classification), but addIntake itself unconditionally inserts a new record, trims intake history to 500 and does not enforce sourceId uniqueness. createDispatchJob accepts an origin object but does not intrinsically link or deduplicate intake IDs. These primitives permit duplicate feedback records if callers omit the separate lookup; actual route-level checks remain to be inspected. Proposed read-only contract: idempotency key (source,sourceId), stable intakeId -> dispatcherJobId mapping, explicit owner approval, and status labels separating feedback intake from execution. Owen independent challenge requested but delivery not verified: can concurrent intake requests race between lookup and insert, and can multiple dispatcher jobs claim the same intake origin? Authenticated BuildWise catalog 429; bulletin and enabled Gemma 2 profiles unavailable; no model jobs.",
     "Factory source confirms two separate job collections: factory-store.js holds legacy state.jobs with queued/ready/running/blocked/review and state.dispatcher.jobs with a separate lifecycle and identity sequence. job-dispatcher.js schedules dispatcher.jobs; orchestrator-control-plane.js exposes dispatcher.jobs as canonical API jobs. Legacy Foreman jobs are therefore not inherently executable dispatcher jobs. Proposal: retain legacy queue for planning/intake only, require explicit originRef conversion into canonical dispatcher with dedupe and traceability; never infer a dispatched job from legacy status. Owen challenge requested but direct delivery unavailable: does feedback intake still populate legacy jobs, and can users mistake legacy status for execution? Source verified, live runtime unverified. Authenticated catalog failed 404, bulletin and enabled Gemma 2 profiles inaccessible; no model jobs.",
     "Source comparison of Factory Dashboard README and AGENTS.md with standalone Wise AI Runtime README identifies overlapping orchestration responsibilities: Factory already documents a persistent dependency-aware Foreman queue, worker heartbeats, model/service controls, integration gates, artifact registry and device-targeted APK smoke runs, while BuildWise is described as the authoritative dispatcher/review boundary. The AI runtime is a separate Android inference service, not a proven orchestration replacement. These are documented capabilities, not live verified services. Design proposal: preserve Factory as presentation/device operations and BuildWise as sole job/review authority; keep model inference behind a separate runtime adapter. Before consolidation, trace actual queue and model execution code and identify authoritative job IDs. Owen independent challenge requested: does Factory's Foreman queue own distinct jobs or mirror BuildWise, and what failure occurs if both schedule the same worker? BuildWise authenticated catalog 429; bulletin/Owen replies and exact enabled Gemma 2 profiles unverified; no model jobs.",
     "Owen independent challenge requested, not directly delivered: WiseCore's project-standard manifest template defaults packageId to an unresolved TODO value and verification.primaryCommand to an empty string; the published JSON Schema accepts both as nonempty package ID and unrestricted command. The template also declares LLM observability requirements with an empty implementation list, which is not validated by the schema. This means syntactic schema compliance cannot establish project configuration readiness. Source-verified contract gap; no generator execution, deployment or model runtime test. Proposed design: retain schema for structure, add read-only semantic readiness checks that flag placeholders, empty verification commands and unmet declared capabilities; preserve legacy compatibility and keep release evidence separate. Owen should challenge which placeholders are acceptable during bootstrap and how to avoid false production-ready status. Authenticated BuildWise catalog inaccessible (429), bulletin/Owen replies/exact enabled Gemma 2 profiles unverified; no jobs.",
@@ -1259,6 +1260,12 @@
       "timestamp": "2026-11-22T22:23:42.764Z",
       "title": "Factory source confirms separate legacy Foreman and canonical dispatcher job collections",
       "summary": "Read-only source inspection found two job arrays with distinct IDs and states. Canonical API and execution use dispatcher jobs; legacy queue needs explicit provenance mapping and deduplication before integration. Owen challenge pending; live services unverified.",
+      "status": "Source verified · design proposal · runtime unknown"
+    },
+    {
+      "timestamp": "2026-11-22T23:23:44.067Z",
+      "title": "Factory feedback intake lacks intrinsic uniqueness enforcement",
+      "summary": "Read-only source inspection found a separate duplicate lookup helper but unconditional addIntake insertion and an unconstrained dispatcher origin object. Route-level idempotency and runtime duplication remain unverified; propose atomic source-reference mapping and independent Owen challenge.",
       "status": "Source verified · design proposal · runtime unknown"
     }
   ],
