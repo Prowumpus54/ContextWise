@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.37",
-  "updated_at": "2026-11-22T11:25:30.000Z",
+  "revision": "4.38",
+  "updated_at": "2026-11-22T12:24:21.725Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Compare documented ContextWise relay envelope with Tasker recovery-branch source-key types and BuildWise bulletin contracts; produce a minimal read-only compatibility fixture and independent Owen critique.",
+  "next_experiment": "Inspect Tasker Gmail extraction task-count bounds and review/acknowledgement paths; define a typed, read-only provenance adapter fixture against ContextWise's proposed relay envelope without changing either app.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent review requested (not delivered): Tasker recovery branch GmailPollWorker.kt derives SHA-256 source keys from Gmail message/thread/date, stages the first extractor result in a Firestore transaction, then creates deterministic per-suggestion Inbox IDs; TaskInbox.java enforces a strict [0-2] suggestion-index suffix and retains staged results, including empty extraction failures. ContextWise CHAT_RELAY_DESIGN.md proposes separate message IDs, decisionRefs, sourceRefs, idempotencyKey, deliveryStatus and acknowledgements, but its relay is not implemented. Design proposal: do not reuse Tasker's Gmail source key as a relay message ID or decision authority; map it into a typed sourceRef, retain distinct immutable event/message IDs and explicit review/ack state. Verify extraction cardinality <=3, empty-stage recovery policy, and accepted/rejected review replay before integration. Owen should challenge whether first-writer empty failures must remain immutable or support a versioned human-authorized retry. Source verified; runtime untested. BuildWise catalog probe failed (404), health probe 429; bulletin/Owen replies/Gemma 2 profiles unavailable. No jobs.",
     "Cross-agent provenance contract review: ContextWise docs/CHAT_RELAY_DESIGN.md already specifies a proposed provider-neutral authenticated relay envelope with id, threadId, senderPrincipal, recipientPrincipals, replyTo, projectId, decisionRefs, kind, createdAt, body, sourceRefs, idempotencyKey and deliveryStatus, plus explicit acknowledgement, ordered replay and decision supersession. Actual web/src/conversation.mjs validates a narrower same-browser message contract (schemaVersion, actorId/actorLabel, projectId, contextRefs, replyTo) and handoffPacket(), with no authenticated delivery. Therefore the gap is implementation and contract conformance, not absence of an envelope design. Recommend reuse the documented envelope as a candidate v1, map ContextWise event refs and Tasker intake IDs via optional typed provenance references, and require contract fixtures before adding any broker. Owen should independently challenge whether the documented envelope has enough version/digest binding and whether transport and decision authority remain properly separate. This is source/document evidence, not runtime relay verification. BuildWise catalog inaccessible (429); bulletin and exact Gemma 2 profiles unverified; no jobs.",
     "ContextWise handoffPacket() in web/src/conversation.mjs copies decision IDs, dates, summaries and up to 12 sourceRefs, but does not include a source snapshot revision, content digest or supersession state. resolveContextRef() looks up current in-memory workspace events by ID. A previously copied handoff can therefore refer to an event whose content later changes without a machine-checkable indication of drift. This is a source-contract risk, not a demonstrated altered record. Design proposal: add optional eventRevision/contentDigest and sourceSnapshotId to handoff/agent event envelopes, verify on consumption, flag stale or superseded references, and keep unverified browser messages non-authoritative. Do not build a second message broker: reuse ContextWise decision IDs, with BuildWise transporting jobs and Tasker retaining intake source IDs. Owen: independently challenge whether immutable snapshot IDs or digest-bound event references are the smallest reliable cross-app contract, and what compatibility behavior old handoffs require. BuildWise catalog returned 429; bulletin, Owen replies and enabled Gemma 2 profiles unverified; no jobs.",
     "Source-verified observatory contract mismatch: web/mycelium/index.html renders timeline t.date/t.detail/t.state, but architecture.json timeline entries use timestamp/summary/status. As a result timeline dates, descriptions and status labels are blank in the public UI despite valid feed data. The feed also contains 153 open-question paragraphs (~73k characters) and 165 timeline records (~100k serialized characters), all rendered unbounded. Proposed Riley-owned fix: normalize field mapping with backwards-compatible fallbacks, render latest 10-20 entries, archive historical entries in a paged or separate public feed, and add a schema/UI contract test. Do not change index.html under this design-only audit. Owen: independently challenge whether schema migration or tolerant UI mapping is safer and what public-history retention policy preserves traceability.",
@@ -1183,6 +1184,12 @@
       "title": "Cross-agent envelope design already documented",
       "summary": "Source review distinguished the existing proposed authenticated relay contract from the narrower implemented browser-only message contract; prioritize conformance and provenance fixtures, not a new broker.",
       "status": "Proposal · source verified"
+    },
+    {
+      "timestamp": "2026-11-22T12:24:21.725Z",
+      "title": "Tasker Gmail identity is not an inter-agent delivery identity",
+      "summary": "Inspected recovery-branch GmailPollWorker and TaskInbox against ContextWise relay design: deterministic Gmail source keys and first-writer Firestore staging protect intake deduplication, but relay message identity, delivery acknowledgement and decision provenance are separate contracts. Proposed typed source-reference adapter and bounded replay fixture; no runtime or production changes.",
+      "status": "Source verified · design proposal · Owen critique pending"
     }
   ],
   "component_inventory": {
