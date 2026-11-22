@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "4.35",
-  "updated_at": "2026-11-22T09:20:18.148Z",
+  "revision": "4.36",
+  "updated_at": "2026-11-22T10:22:37.069Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Read-only contract comparison: ContextWise handoff decision references versus BuildWise bulletin/event envelope and Tasker intake source keys; propose a single provenance envelope without replacing app-owned stores.",
@@ -166,7 +166,8 @@
     "How should human resolution be recorded without implying automatic replay permission?",
     "Owen independent challenge pending: read-only local Ollama inventory confirms installed model tags including Gemma 2 and multiple coding/reviewer candidates, while OpenHands, local memory MCP and Langfuse services are running. Installed model presence is not an authenticated BuildWise enabled profile or proof of agent-run integration. Should Mycelium inventory model installation, BuildWise authorization, active routing and trace evidence as four separate states?",
     "Owen independent challenge pending: Should receipt imports use a durable operation ID and replayable per-effect checkpoints, or a single database transaction? How should genuine same-store/date/total purchases avoid false duplicate suppression?",
-    "Owen independent challenge pending: BasketWise receipt import first persists a PurchaseRecord, asynchronously syncs it, launches per-item pantry saves, then records price offers. The method clears the review and announces completion without waiting for pantry callbacks or verifying remote receipt/price persistence; failed pantry saves can be repaired, but repeated repair may duplicate pantry items unless IDs are deterministic. Receipt duplicate detection is heuristic and cannot prove exactly-once side effects. Independently challenge whether a durable operation journal with per-effect idempotency is preferable to a cross-store transaction, and how to distinguish 'purchase saved' from 'all effects applied'. Source inspection only; no device test. BuildWise catalog 429; bulletin/Owen replies/Gemma 2 profiles unavailable."
+    "Owen independent challenge pending: BasketWise receipt import first persists a PurchaseRecord, asynchronously syncs it, launches per-item pantry saves, then records price offers. The method clears the review and announces completion without waiting for pantry callbacks or verifying remote receipt/price persistence; failed pantry saves can be repaired, but repeated repair may duplicate pantry items unless IDs are deterministic. Receipt duplicate detection is heuristic and cannot prove exactly-once side effects. Independently challenge whether a durable operation journal with per-effect idempotency is preferable to a cross-store transaction, and how to distinguish 'purchase saved' from 'all effects applied'. Source inspection only; no device test. BuildWise catalog 429; bulletin/Owen replies/Gemma 2 profiles unavailable.",
+    "Owen independent review requested (delivery unverified): Should the observatory display the existing component inventory directly, or publish a separately versioned read-only summary to avoid conflating source evidence with live service health?"
   ],
   "timeline": [
     {
@@ -1168,6 +1169,12 @@
       "timestamp": "2026-11-22T09:20:18.148Z",
       "title": "ContextWise handoff lacks immutable decision-version binding",
       "summary": "Source inspection found handoff packets preserve event IDs and source references but no revision/digest or supersession marker. Proposed version-bound provenance envelope and stale-reference test; no application code or private services changed.",
+      "status": "Source verified · design proposal · Owen critique pending"
+    },
+    {
+      "timestamp": "2026-11-22T10:22:37.069Z",
+      "title": "Public observatory omits the maintained component inventory and dependency map",
+      "summary": "Source comparison: architecture.json maintains 10 component records and 5 dependency entries with evidence/runtime/disposition fields, while index.html renders phase, principles, questions and timeline only. Design proposal: add a read-only inventory/matrix view with evidence labels and dependency summaries; retain existing JSON schema and limit initial display. No production changes.",
       "status": "Source verified · design proposal · Owen critique pending"
     }
   ],
