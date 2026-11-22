@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.45",
-  "updated_at": "2026-11-22T19:18:09.000Z",
+  "revision": "4.46",
+  "updated_at": "2026-11-22T20:23:04.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "WiseCore: validate generated and legacy buildwise-project.json files against the published JSON Schema using read-only fixtures; separate metadata conformance from release-gate evidence.",
+  "next_experiment": "WiseCore: add read-only semantic readiness fixtures for generated manifests (placeholder package ID, empty verification command, and unimplemented observability), separate from JSON Schema and release gates; then audit AI worker orchestration.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge requested, not directly delivered: WiseCore's project-standard manifest template defaults packageId to an unresolved TODO value and verification.primaryCommand to an empty string; the published JSON Schema accepts both as nonempty package ID and unrestricted command. The template also declares LLM observability requirements with an empty implementation list, which is not validated by the schema. This means syntactic schema compliance cannot establish project configuration readiness. Source-verified contract gap; no generator execution, deployment or model runtime test. Proposed design: retain schema for structure, add read-only semantic readiness checks that flag placeholders, empty verification commands and unmet declared capabilities; preserve legacy compatibility and keep release evidence separate. Owen should challenge which placeholders are acceptable during bootstrap and how to avoid false production-ready status. Authenticated BuildWise catalog inaccessible (429), bulletin/Owen replies/exact enabled Gemma 2 profiles unverified; no jobs.",
     "Owen independent challenge pending: WiseCore's Test-WiseProjectDocs.ps1 performs manual structure and partial metadata checks but never loads or validates schemas/buildwise-project.schema.json. It checks schemaVersion, standardVersion and six project fields, omitting required project.slug/packageId, diagnostics, verification and wiseCore contracts. Consequently a manifest may pass the script yet fail the published JSON Schema. New-WiseProjectDocs.ps1 generates templates and preserves existing files; its output is not evidence of schema conformance. Source-verified validation gap; no script execution or application runtime test. Proposed Riley-owned design: keep the non-destructive bootstrap, add a read-only JSON Schema validation stage and fixture matrix (canonical pass, legacy BasketWise fail with actionable mapping, missing slug/diagnostics/verification fail), preserving separate release-gate receipts. Owen independent challenge requested: should validation be strict by default for new manifests and advisory for legacy, and how avoid blocking old apps? BuildWise catalog 429; bulletin and enabled Gemma 2 profiles inaccessible; no jobs.",
     "Owen independent challenge pending: MoneyWise main app Gradle declares Compose, Firebase Auth and Firestore but no Room, SQLite wrapper, DataStore or explicit persistence/recovery library. Android manifest disables OS backup. Thus a local durable cache cannot be assumed from dependencies; Firebase SDK may cache internally, but authoritative record ownership and offline recovery are unproven. Existing README describes Tasker intake and planned desktop companion, not an implemented cross-device reconciliation contract. Design proposal: inventory each finance entity by authoritative store, cache, export/recovery path and sourceRef; require synthetic offline-edit/reinstall/reconciliation fixtures before any authoritative data claim. Owen independent challenge: which records must be server-authoritative versus offline-first, and how can provenance survive reinstall without exposing sensitive records? Source verified; runtime unknown. BuildWise catalog unavailable (404); bulletin and exact Gemma 2 profiles not verified; no jobs.",
     "Owen independent challenge pending: MoneyWise main app/src/main/AndroidManifest.xml explicitly sets android:allowBackup=false, while README and docs/ARCHITECTURE.md envision Tasker-linked financial records and desktop companion. This prevents assuming Android OS backup will restore app data, but does not prove data loss or rule out cloud-backed restoration. No restoration, export, or source-reconciliation guarantee was established in inspected documents. Proposed contract: distinguish local cache from authoritative cloud records, require authenticated rehydration and sourceRef reconciliation with device-loss/restore fixtures, and retain backup-disabled privacy until independently evaluated. Owen: challenge minimum evidence for recoverability, privacy tradeoffs, and cross-device identity. Source verified; runtime unknown. BuildWise catalog 429, bulletin and enabled Gemma 2 profiles unavailable; no jobs.",
@@ -1239,6 +1240,12 @@
       "title": "WiseCore project validator does not enforce its published metadata schema",
       "summary": "Inspected WiseCore bootstrap script, Test-WiseProjectDocs.ps1 and JSON Schema. Structural test omits schema validation and several required properties, allowing false-positive project conformance. Recommend read-only schema fixture tests and explicit legacy compatibility reporting; no app changes or release claims. Owen challenge requested but not delivered.",
       "status": "Source verified · validation gap · runtime unknown"
+    },
+    {
+      "timestamp": "2026-11-22T20:23:04.000Z",
+      "title": "WiseCore generated manifest passes structure while retaining bootstrap placeholders",
+      "summary": "Compared project generator, manifest template and JSON Schema. Default package ID placeholder and empty verification command are schema-acceptable; LLM observability requirements have no enforcement in this metadata schema. Recommend separate semantic readiness fixtures, not a rewrite or a release-ready claim. Owen critique requested, direct delivery unverified.",
+      "status": "Source verified · design recommendation · runtime unknown"
     }
   ],
   "component_inventory": {
