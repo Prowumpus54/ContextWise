@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.34",
-  "updated_at": "2026-11-22T08:25:26.796Z",
+  "revision": "4.35",
+  "updated_at": "2026-11-22T09:20:18.148Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Validate Mycelium public observatory JSON-to-HTML field contract and propose bounded timeline/question rendering; Riley to own any implementation.",
+  "next_experiment": "Read-only contract comparison: ContextWise handoff decision references versus BuildWise bulletin/event envelope and Tasker intake source keys; propose a single provenance envelope without replacing app-owned stores.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "ContextWise handoffPacket() in web/src/conversation.mjs copies decision IDs, dates, summaries and up to 12 sourceRefs, but does not include a source snapshot revision, content digest or supersession state. resolveContextRef() looks up current in-memory workspace events by ID. A previously copied handoff can therefore refer to an event whose content later changes without a machine-checkable indication of drift. This is a source-contract risk, not a demonstrated altered record. Design proposal: add optional eventRevision/contentDigest and sourceSnapshotId to handoff/agent event envelopes, verify on consumption, flag stale or superseded references, and keep unverified browser messages non-authoritative. Do not build a second message broker: reuse ContextWise decision IDs, with BuildWise transporting jobs and Tasker retaining intake source IDs. Owen: independently challenge whether immutable snapshot IDs or digest-bound event references are the smallest reliable cross-app contract, and what compatibility behavior old handoffs require. BuildWise catalog returned 429; bulletin, Owen replies and enabled Gemma 2 profiles unverified; no jobs.",
     "Source-verified observatory contract mismatch: web/mycelium/index.html renders timeline t.date/t.detail/t.state, but architecture.json timeline entries use timestamp/summary/status. As a result timeline dates, descriptions and status labels are blank in the public UI despite valid feed data. The feed also contains 153 open-question paragraphs (~73k characters) and 165 timeline records (~100k serialized characters), all rendered unbounded. Proposed Riley-owned fix: normalize field mapping with backwards-compatible fallbacks, render latest 10-20 entries, archive historical entries in a paged or separate public feed, and add a schema/UI contract test. Do not change index.html under this design-only audit. Owen: independently challenge whether schema migration or tolerant UI mapping is safer and what public-history retention policy preserves traceability.",
     "Owen independent challenge pending: authenticated Tasker GitHub main is an older September baseline, while the existing November recovery feature branch contains 206 tracked tree entries including GmailPollWorker, structured OCR extractor, TaskInbox and synthetic recovery tests. Source verified: GmailPollWorker uses Gmail message/thread/date SHA-256 source keys, a Firestore first-writer staged result, stable per-task IDs, and persisted seen markers; TaskInbox supports stable cloud document IDs. Synthetic GmailInboxRecoveryTest verifies replay without duplicating reviewed entries, but does not test live Firebase/Gmail, deployed APK identity or every attachment type. Revise previous 'missing ingestion' conclusion to 'missing from main only'. Owen: independently challenge whether Firestore staging and per-task IDs suffice for exactly-once review under concurrent devices, and whether the source-document ledger should live in Tasker or ContextWise. BuildWise catalog 429; bulletin and exact Gemma 2 profiles inaccessible; no jobs.",
     "Owen independent challenge pending: authenticated GitHub main tree for Prowumpus54/com.zach.tasker contains 38 entries, with LocalTaskStore, TaskRecord, feedback bridge and one TaskRecord test, but no Gmail/PDF/OCR ingestion or source-document ledger implementation. LocalTaskStore saves the entire JSON task array to SharedPreferences via apply(), while TaskRecord.create generates random task IDs and only a free-form source string. This is verified for this repository's main branch only; it does not disprove newer local or other-branch builds. Before declaring Tasker ingestion durable, identify the canonical active source/commit and require stable upstream document IDs, replay keys and provenance fixtures. Owen: challenge whether a source-document ledger belongs in Tasker or ContextWise, and how to prevent two systems from claiming authority. BuildWise catalog failed; bulletin and Gemma profiles not inspected; no model jobs.",
@@ -1162,6 +1163,12 @@
       "title": "Public architecture observatory rendering contract mismatch",
       "summary": "Inspected public index.html and architecture.json: timeline UI reads date/detail/state while feed writes timestamp/summary/status; 165 records and 153 long questions are rendered without bounds. Propose backward-compatible mapping, bounded display and contract tests; no website code changed.",
       "status": "Source verified · proposal only · Owen critique pending"
+    },
+    {
+      "timestamp": "2026-11-22T09:20:18.148Z",
+      "title": "ContextWise handoff lacks immutable decision-version binding",
+      "summary": "Source inspection found handoff packets preserve event IDs and source references but no revision/digest or supersession marker. Proposed version-bound provenance envelope and stale-reference test; no application code or private services changed.",
+      "status": "Source verified · design proposal · Owen critique pending"
     }
   ],
   "component_inventory": {
