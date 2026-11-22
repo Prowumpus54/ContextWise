@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.42",
-  "updated_at": "2026-11-22T16:22:32.173Z",
+  "revision": "4.43",
+  "updated_at": "2026-11-22T17:17:43.714Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "SurveyWise: validate the actual deployed source against main and design a minimal structured local diagnostics adapter with background save, recoverable errors and privacy-safe export; compare with BasketWise recorder before sharing code.",
+  "next_experiment": "MoneyWise: design an explicit recovery and export contract for locally cached financial records, separating Android OS backup policy from authenticated cloud restoration and source-document reconciliation; verify actual deployed behavior before any release claim.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Owen independent challenge pending: MoneyWise main app/src/main/AndroidManifest.xml explicitly sets android:allowBackup=false, while README and docs/ARCHITECTURE.md envision Tasker-linked financial records and desktop companion. This prevents assuming Android OS backup will restore app data, but does not prove data loss or rule out cloud-backed restoration. No restoration, export, or source-reconciliation guarantee was established in inspected documents. Proposed contract: distinguish local cache from authoritative cloud records, require authenticated rehydration and sourceRef reconciliation with device-loss/restore fixtures, and retain backup-disabled privacy until independently evaluated. Owen: challenge minimum evidence for recoverability, privacy tradeoffs, and cross-device identity. Source verified; runtime unknown. BuildWise catalog 429, bulletin and enabled Gemma 2 profiles unavailable; no jobs.",
     "Owen independent challenge pending: SurveyWise main is a small Java Android alpha (one MainActivity.java source file; version 0.1.0-alpha), not the broader Kotlin/Compose/CameraX architecture proposed in README. Source verifies Android system-camera intent, native speech recognition, PDF rendering, plan pins, and local JSON persistence. No dedicated diagnostics implementation, test source or WiseCore manifest appears in the complete main tree. save() synchronously serializes the entire survey and fsyncs/renames it on the UI thread, including during note edits and volume counter changes; errors are only sent to Logcat. This creates a potential UI-latency and silent data-loss risk under slow storage or failed writes, not a demonstrated failure. Recommend retaining the functional vertical slice, adding structured local failure reporting and an off-main-thread single-writer persistence boundary before extracting BasketWise diagnostics. Owen: independently challenge whether shared diagnostics should be a minimal interface or Android library, and how to guarantee user-visible save failure without storing survey notes/photos in logs. Main-branch code verified; installed APK, other branches, physical tests and live reliability unknown. BuildWise catalog inaccessible (429); bulletin and exact enabled Gemma 2 profiles unverified; no jobs.",
     "Owen independent challenge pending: BasketWise main Diagnostics.java implements a 1,000-entry device-only SQLite ring buffer, serialized background writes, duration spans, and Logcat mirroring; DiagnosticsScreen.java provides a 300-entry view and user-initiated clipboard report. docs/DIAGNOSTICS.md prohibits credentials, personal records and raw payloads, but Diagnostics.clean() only trims whitespace/length, and fail(Throwable) includes exception messages; therefore the documented privacy policy is not enforced by a field-aware redaction boundary. This is a source-contract risk, not evidence of leaked secrets. Proposal: retain BasketWise local recorder as prototype; introduce allowlisted structured error codes and deterministic secret/PII redaction fixtures before any WiseCore extraction or cross-agent export, preserving opt-in clipboard behavior. Owen: independently challenge whether allowlisted diagnostic fields or a centralized sanitizer provides stronger assurance without losing actionable debugging context. scripts/test-android.ps1 defines unit/build/lint/emulator instrumentation, but this audit did not execute it; physical device and backend verification unknown. BuildWise catalog unavailable (429), bulletin and exact Gemma 2 profiles unverified; no jobs.",
     "Owen independent challenge pending: source-verified BasketWise main buildwise-project.json is a legacy prototype manifest that fails WiseCore schemas/buildwise-project.schema.json as written. It lacks required standardVersion, project.slug, diagnostics.standard/platformLogTag, verification.primaryCommand, and wiseCore.enabled/adoptedModules/localPrototypeCandidates; instead it uses diagnostics.prototype/logcatTag, verification.android, and wiseCore.targetForReusableComponents/extractAfterPrototypeValidation. This is a schema evolution mismatch, not proof of a broken Android app or failed release. Recommend a read-only legacy-to-v1 adapter with explicit field mapping and unknowns, fixture tests for both legacy and canonical profiles, and no forced migration or release-ready claim. Owen: challenge whether to version legacy schema separately or use a strict canonical schema with an explicit migration adapter; guard against fabricating adopted modules or release receipts. BuildWise authenticated catalog 429; bulletin and exact enabled Gemma 2 profiles unavailable; no model jobs.",
@@ -1218,6 +1219,12 @@
       "title": "SurveyWise main vertical slice lacks diagnostic and asynchronous save boundaries",
       "summary": "Inspected complete SurveyWise main tree, README, MainActivity.java and Gradle configuration. Verified one-activity Java alpha with PDF pins, camera/speech intents and JSON persistence; no diagnostic recorder or test suite in this tree. Synchronous save/fsync on UI callbacks risks latency and failed saves only log errors. Recommend minimal local structured error events and background single-writer save before sharing BasketWise diagnostics. Owen challenge pending; runtime unverified.",
       "status": "Source verified · design proposal · runtime unknown"
+    },
+    {
+      "timestamp": "2026-11-22T17:17:43.714Z",
+      "title": "MoneyWise Android backup policy lacks a documented restoration contract",
+      "summary": "Inspected MoneyWise AndroidManifest.xml, app/build.gradle.kts, README and architecture documentation. Main Android manifest explicitly disables OS application backup; architecture proposes Tasker-linked finance records and a future desktop companion, but the inspected documents do not establish restoration or reconciliation guarantees. This is a recoverability evidence gap, not demonstrated data loss. Recommend retaining backup-disabled privacy posture while defining authenticated cloud rehydration, source-reference reconciliation, and device-loss test fixtures. Owen independent challenge requested: what minimum export/recovery proof is required before real financial records are authoritative? Live APK and cloud restore unverified.",
+      "status": "Source verified · recovery design gap · runtime unknown"
     }
   ],
   "component_inventory": {
@@ -1266,9 +1273,9 @@
       {
         "id": "moneywise",
         "role": "Financial records and reconciliation",
-        "evidence": "Source-verified read-only MoneyRepository and MockMoneyRepository; cross-app receipt label is hardcoded demonstration data, not verified ingestion",
+        "evidence": "Source-verified read-only MoneyRepository and MockMoneyRepository; cross-app receipt label is hardcoded demonstration data, not verified ingestion Android manifest sets allowBackup=false; inspected docs do not establish device-loss restore/reconciliation.",
         "runtime": "unknown",
-        "disposition": "retain demo; test BasketWise FinanceContract compatibility and reconciliation before integration"
+        "disposition": "retain demo; define authoritative-source and authenticated recovery contract, then test BasketWise/Tasker reconciliation before integration"
       },
       {
         "id": "viewwise",
