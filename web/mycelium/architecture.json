@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.26",
-  "updated_at": "2026-11-22T01:22:56.889Z",
+  "revision": "4.27",
+  "updated_at": "2026-11-22T02:25:41.322Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Inspect BasketWise receipt import's multi-store commit and retry semantics; distinguish duplicate detection from transactional exactly-once application before recommending a shared capture contract.",
+  "next_experiment": "Audit BasketWise receipt-to-pantry identity and replay behavior in ReceiptPantryImport and repository save implementations, then contrast with MoneyWise reconciliation.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -158,7 +158,8 @@
     "Which Tasker endpoint supports durable operation identity and authoritative outcome lookup?",
     "How should human resolution be recorded without implying automatic replay permission?",
     "Owen independent challenge pending: read-only local Ollama inventory confirms installed model tags including Gemma 2 and multiple coding/reviewer candidates, while OpenHands, local memory MCP and Langfuse services are running. Installed model presence is not an authenticated BuildWise enabled profile or proof of agent-run integration. Should Mycelium inventory model installation, BuildWise authorization, active routing and trace evidence as four separate states?",
-    "Owen independent challenge pending: Should receipt imports use a durable operation ID and replayable per-effect checkpoints, or a single database transaction? How should genuine same-store/date/total purchases avoid false duplicate suppression?"
+    "Owen independent challenge pending: Should receipt imports use a durable operation ID and replayable per-effect checkpoints, or a single database transaction? How should genuine same-store/date/total purchases avoid false duplicate suppression?",
+    "Owen independent challenge pending: BasketWise receipt import first persists a PurchaseRecord, asynchronously syncs it, launches per-item pantry saves, then records price offers. The method clears the review and announces completion without waiting for pantry callbacks or verifying remote receipt/price persistence; failed pantry saves can be repaired, but repeated repair may duplicate pantry items unless IDs are deterministic. Receipt duplicate detection is heuristic and cannot prove exactly-once side effects. Independently challenge whether a durable operation journal with per-effect idempotency is preferable to a cross-store transaction, and how to distinguish 'purchase saved' from 'all effects applied'. Source inspection only; no device test. BuildWise catalog 429; bulletin/Owen replies/Gemma 2 profiles unavailable."
   ],
   "timeline": [
     {
@@ -1108,6 +1109,12 @@
       "title": "BasketWise receipt review restoration and duplicate-import boundary",
       "summary": "MainActivity saves route, scope and scanner mode in Activity state, but pendingReceipt and pendingShelf remain in-memory. After Activity recreation, ReceiptReview redirects to Scanner when pendingReceipt is null. Import checks approximate duplicates (store/date/total and >=80% line overlap) and writes a pending purchase before applying pantry and price effects; atomic exactly-once completion not established. Recommend durable review draft and transactional idempotency tests; runtime untested.",
       "status": "Source verified · recovery and consistency risks · Owen review requested"
+    },
+    {
+      "timestamp": "2026-11-22T02:25:41.322Z",
+      "title": "BasketWise receipt multi-store partial-commit and repair semantics",
+      "summary": "MainActivity.importReceiptBatch persists a purchase locally, initiates cloud sync, starts asynchronous pantry saves and then records price offers; it clears review and reports confirmation before pantry completion, and the remote receipt write only has a failure callback. A repair button reruns pantry import. There is no observed cross-store commit or per-effect completion journal in this method. Recommend receipt operation ID plus durable stage receipts and deterministic pantry item identities; verify retry behavior before shared capture extraction. Source-verified flow, not reproduced failure.",
+      "status": "Source verified · partial-completion risk · Owen challenge pending"
     }
   ],
   "component_inventory": {
@@ -1142,9 +1149,9 @@
       {
         "id": "basketwise",
         "role": "Offline and household data",
-        "evidence": "Source verified: CameraX/ML Kit scanner hands receipt OCR to MainActivity pendingReceipt; Activity state restores route but not pending receipt review, so recreation redirects to scanner. Import has approximate duplicate detection and staged purchase/pantry/price writes; atomicity unverified.",
+        "evidence": "Source verified: receipt confirmation persists PurchaseRecord locally, initiates asynchronous cloud and pantry effects, records price offers, and clears review before all callbacks finish. Duplicate detection is heuristic; replay/repair idempotency unverified.",
         "runtime": "unknown",
-        "disposition": "reuse scanner and duplicate guard; add durable review draft and evidence-backed idempotent import contract"
+        "disposition": "reuse existing scanner and receipt records; add durable per-effect completion receipts and deterministic retry identities"
       },
       {
         "id": "surveywise",
