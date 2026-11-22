@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "revision": "4.32",
-  "updated_at": "2026-11-22T07:17:11.000Z",
+  "revision": "4.33",
+  "updated_at": "2026-11-22T07:18:00.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
   "next_experiment": "Compare Tasker's advanced feature-branch Gmail/PDF ingestion and provenance implementation with the installed APK's actual commit; audit cloud transaction rules and replay tests before MoneyWise source-document integration.",
@@ -1149,6 +1149,12 @@
       "title": "Tasker advanced ingestion located on feature branch",
       "summary": "Authenticated source inspection located a 206-entry November Tasker recovery branch with Gmail polling, OCR extraction, stable Gmail source keys, Firestore staging, and synthetic replay tests. This corrects the prior main-only gap: advanced ingestion exists in a feature branch, while installed APK correspondence and live end-to-end correctness remain unverified. Propose commit-to-APK provenance comparison and bounded integration tests.",
       "status": "Source verified · branch implementation · deployed runtime unknown · Owen critique requested"
+    },
+    {
+      "timestamp": "2026-11-22T07:18:00.000Z",
+      "title": "Tasker inventory reconciled with feature-branch evidence",
+      "summary": "Living inventory now distinguishes the minimal default branch from the richer recovery feature branch and marks deployed APK identity and live Gmail/Firestore behavior unknown. No application code changed.",
+      "status": "Inventory corrected · source verified · runtime unknown"
     }
   ],
   "component_inventory": {
@@ -1176,9 +1182,9 @@
       {
         "id": "tasker",
         "role": "Mobile intake and feedback",
-        "evidence": "Authenticated main tree (38 entries) contains local tasks, feedback and one model test, not Gmail/PDF/OCR ingestion or source-document ledger. LocalTaskStore uses SharedPreferences apply() whole-array saves; TaskRecord.create uses UUID task IDs. Active installed build/source mapping unknown.",
+        "evidence": "Main is a September minimal baseline; authenticated November recovery feature branch contains 206 tree entries, including Gmail polling, OCR extraction, Firestore staged Gmail results, stable source keys and synthetic replay tests. Source implementation verified; installed APK mapping and live integration unverified.",
         "runtime": "unknown",
-        "disposition": "reuse minimal task UI/store only as demonstrated; locate canonical deployed source and verify upstream document IDs before proposing MoneyWise intake"
+        "disposition": "reuse advanced feature-branch ingestion as candidate; verify release commit, Firestore rules and live replay before authoritative MoneyWise adapter"
       },
       {
         "id": "basketwise",
