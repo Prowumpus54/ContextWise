@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.50",
-  "updated_at": "2026-11-23T00:16:17.431Z",
+  "revision": "4.51",
+  "updated_at": "2026-11-23T01:24:50.718Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Inspect intake-to-dispatch identity mapping and concurrent request fixtures across agent inbox and legacy Foreman; distinguish recorded intake from executable jobs.",
+  "next_experiment": "Inspect AI worker backend registry and independent review handoff; distinguish configured profiles from authenticated live availability and actual model inventory.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "AI profile configuration audit (source verified, live state unknown): Factory config/agent-profiles.json contains 13 declared profiles: eight legacy local-coder profiles, two Codex profiles, two conditionally enabled Gemma 3 4B profiles, and one disabled smoke profile. No Gemma 2 profile appears in this checked-in configuration. job-dispatcher.js loadProfiles filters disabled entries, validates fields and backend compatibility, and can retain previously loaded profiles if a reload fails; therefore checked-in enabled flags do not prove runtime availability or the currently active model list. The authenticated BuildWise catalog could not be obtained in this run; exact enabled Gemma 2 profiles remain unknown, not disproven. Proposed design: maintain separate declared/configured/live/authorized profile inventories with provenance and timestamp; model review independence must be established from actual worker identity, not display labels. Owen challenge requested but direct delivery unverified: could profile reload failures leave stale enabled worker identities, and is reviewer independence enforced in code? No model jobs or production changes.",
     "Factory HTTP route audit (source verified, runtime unknown): factory-api.js does perform duplicate source-reference lookups before insertion for app feedback, generic intake and agent inbox, correcting the previous unresolved route-level question. However lookup and insert are separate operations without atomic uniqueness; agent inbox awaits worker routing between them, allowing a plausible concurrent duplicate race. Generic intake creates a legacy Foreman job; agent inbox creates a canonical dispatcher job; app feedback records intake only. Thus three endpoints have distinct execution semantics and should not share an ambiguous 'accepted' status. Proposed Riley-owned contract: atomic unique source key and stable intake-to-job association, explicit statuses for recorded/planned/dispatched, and concurrency fixtures. Owen challenge requested but direct delivery not verified: can simultaneous requests produce duplicate records or jobs, and does the UI mislabel legacy intake as execution? Authenticated BuildWise catalog unavailable (404); bulletin/Owen replies and exact enabled Gemma 2 profiles unverified; no model jobs.",
     "Factory feedback provenance audit (source verified, runtime unknown): factory-store.js defines findIntakeBySourceId(source,sourceId) and addIntake(input,classification), but addIntake itself unconditionally inserts a new record, trims intake history to 500 and does not enforce sourceId uniqueness. createDispatchJob accepts an origin object but does not intrinsically link or deduplicate intake IDs. These primitives permit duplicate feedback records if callers omit the separate lookup; actual route-level checks remain to be inspected. Proposed read-only contract: idempotency key (source,sourceId), stable intakeId -> dispatcherJobId mapping, explicit owner approval, and status labels separating feedback intake from execution. Owen independent challenge requested but delivery not verified: can concurrent intake requests race between lookup and insert, and can multiple dispatcher jobs claim the same intake origin? Authenticated BuildWise catalog 429; bulletin and enabled Gemma 2 profiles unavailable; no model jobs.",
     "Factory source confirms two separate job collections: factory-store.js holds legacy state.jobs with queued/ready/running/blocked/review and state.dispatcher.jobs with a separate lifecycle and identity sequence. job-dispatcher.js schedules dispatcher.jobs; orchestrator-control-plane.js exposes dispatcher.jobs as canonical API jobs. Legacy Foreman jobs are therefore not inherently executable dispatcher jobs. Proposal: retain legacy queue for planning/intake only, require explicit originRef conversion into canonical dispatcher with dedupe and traceability; never infer a dispatched job from legacy status. Owen challenge requested but direct delivery unavailable: does feedback intake still populate legacy jobs, and can users mistake legacy status for execution? Source verified, live runtime unverified. Authenticated catalog failed 404, bulletin and enabled Gemma 2 profiles inaccessible; no model jobs.",
@@ -1273,6 +1274,12 @@
       "timestamp": "2026-11-23T00:16:17.431Z",
       "title": "Factory feedback routes checked: dedupe lookup exists, but atomicity and job semantics diverge",
       "summary": "Source confirms duplicate lookups at three intake routes. Separate lookup and insert leave a concurrency gap; feedback records intake only, generic intake creates planning jobs, and agent inbox creates dispatcher jobs. Recommend atomic provenance and distinct status labels; runtime untested, Owen review pending.",
+      "status": "Source verified · design proposal · runtime unknown"
+    },
+    {
+      "timestamp": "2026-11-23T01:24:50.718Z",
+      "title": "AI worker profile inventory separates declared configuration from live authorization",
+      "summary": "Read-only source audit found 13 checked-in worker profiles, including conditional Gemma 3 4B entries but no Gemma 2 entry. Dispatcher loads and validates profiles dynamically; checked-in flags cannot establish live enabled models. Recommend declared/configured/live/authorized inventory and independent reviewer identity checks. Owen delivery and authenticated catalog unverified.",
       "status": "Source verified · design proposal · runtime unknown"
     }
   ],
