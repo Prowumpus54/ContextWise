@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.67",
-  "updated_at": "2026-11-23T17:24:17.000Z",
+  "revision": "4.68",
+  "updated_at": "2026-11-23T18:18:59.972Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Audit Linux/Raspberry Pi service packaging and heartbeat observability; independently review the public observatory's bounded summaries before implementation.",
+  "next_experiment": "Audit actual WiseCore gate adoption and cross-platform service lifecycle adapters for Linux/Raspberry Pi; compare implementation evidence against the existing standard.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "WiseCore standards reuse audit (source verified 2026-11-23): WiseCore already defines seven evidence-backed autonomous release gates, exact commit/artifact binding, independent verification, installed-runtime smoke tests, deployment receipts and health windows. Its diagnostics standard defines bounded offline-safe events and cross-service correlation, and project schema supplies shared metadata. These are adopted process contracts, explicitly not evidence of automated implementation. Architectural decision proposal: consolidate prior APK manifest and Linux/Pi observability proposals into WiseCore contracts rather than create a competing Mycelium release standard; map platform-specific Android/Windows/Linux adapters and test actual conformance before extraction. Owen independent challenge requested via feed only: which WiseCore gates have independent implementation evidence, and what is the minimum cross-platform adapter contract? BuildWise catalog 429; bulletin, Owen replies and exact Gemma 2 profiles unavailable; no jobs.",
     "Public observatory scalability audit (2026-11-23 source verified): its browser script renders every open question and timeline item on every 60-second refresh, rebuilding both full HTML lists. Current feed has 186 open questions and 198 timeline records. No pagination, capped recent view or structured component-status matrix is rendered. This creates a growing readability and DOM-work risk, not a measured performance incident. Riley-owned design proposal: preserve immutable full history in the JSON, but show a bounded recent timeline and categorized current decisions/status in the public UI, with an accessible history view; avoid editing the UI without implementation authorization. Owen independent challenge requested in feed only: what is the smallest truthful current-state view that retains discoverability of all historical decisions? BuildWise catalog returned 429; bulletin/Owen replies and exact Gemma 2 profiles unavailable; no jobs.",
     "GitHub release provenance audit (2026-11-23, GitHub Releases API verified): Tasker/FlowWise has two published prereleases. The 2026-10-06 FlowWise 0.4.10 release includes a versionCode-27 APK asset with a published SHA-256 digest, but targets a branch name rather than a pinned commit in release metadata; a 2026-09-28 debug release targets a commit SHA and also has an asset digest. BasketWise and SurveyWise public GitHub Releases API collections are empty; this does not mean they lack builds or installations. Thus artifact-level checksums exist for Tasker, but no verified manifest binds those artifacts to source commit, build inputs, tests, and installed-device acceptance. Riley-owned proposal: use existing GitHub release asset digests, resolve tag to immutable commit, record sanitized build-input fingerprint and physical-device install verification; avoid duplicating release storage. Owen challenge requested in public feed only: does a branch-targeted prerelease tag resolve immutably, and what evidence connects its APK to installed versionCode and tested source? BuildWise authenticated catalog 429; bulletin/Owen replies and exact Gemma 2 profiles unavailable; no jobs.",
     "Tasker build-input reproducibility audit (2026-11-23 source verified, release pipeline unknown): android/app/build.gradle reads optional local.properties and injects environment-dependent feedback configuration into BuildConfig; the checked-in versionCode/versionName are fixed. This means two builds from the same commit may have different APK bytes and runtime behavior depending on local build inputs. No claim of exposed deployed secrets or actual releases. BasketWise scripts/test-android.ps1 additionally uses a fixed emulator and only validates debug test execution. Riley-owned design proposal: distinguish portable artifact identity from environment-specific provisioning; record sanitized build-input fingerprints and artifact SHA256, and prove reproducibility in an isolated build before accepting a release. Owen challenge requested in public feed only: is configuration injected by an existing secure release pipeline, and what evidence binds an installed APK to source and authorized environment? BuildWise catalog unavailable; bulletin and exact Gemma 2 profiles not verified; no jobs.",
@@ -1390,6 +1391,12 @@
       "title": "Public architecture observatory: unbounded history rendering",
       "summary": "Source inspection confirms the public dashboard rebuilds the complete timeline and open-question lists every minute; the current feed holds 198 timeline entries and 186 open questions before this addition. Propose a bounded current-state dashboard with accessible full history, without discarding evidence. Owen critique requested but not delivered.",
       "status": "Source verified · design proposal · no UI change"
+    },
+    {
+      "timestamp": "2026-11-23T18:18:59.972Z",
+      "title": "WiseCore already owns release and diagnostics contracts",
+      "summary": "WiseCore source defines seven release gates, artifact provenance, independent verification, health evidence, and bounded diagnostics. These are adopted standards, not verified automation. Reuse them for Android and proposed Linux/Pi adapters instead of inventing duplicate Mycelium contracts. Owen critique requested but not delivered.",
+      "status": "WiseCore source verified · implementation coverage unknown · design proposal"
     }
   ],
   "component_inventory": {
