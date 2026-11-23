@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.52",
-  "updated_at": "2026-11-23T02:16:31.258Z",
+  "revision": "4.53",
+  "updated_at": "2026-11-23T03:21:28.059Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Trace semantic review and approval handlers for reviewer identity checks, then rotate to Tasker/LoreWise MCP event provenance.",
+  "next_experiment": "Review public observatory timeline field compatibility and bounded presentation; then inspect Tasker/LoreWise event provenance.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Public observatory source-contract audit (verified): architecture.json has 172 open questions and 184 timeline entries before this update; index.html renders timeline properties date/detail/state, while recent feed entries use timestamp/summary/status and some older entries use at/summary. Therefore the page's latest timeline records render missing fields as blank or 'undefined' rather than their intended timestamp, explanation and status. The page also renders all historical questions and timeline records, creating unbounded DOM and low signal-to-noise. Recommendation for Riley: introduce a versioned normalized feed view with backwards-compatible field mapping, show latest 10 timeline items, separate unresolved questions from historical archive, and add a static schema/UI fixture test. Do not change index.html without implementation authorization. Owen challenge requested, not delivered: should normalization happen at publishing or display, and how preserve immutable history? Authenticated BuildWise catalog 429; bulletin and Gemma 2 availability unverified.",
     "Worker backend registry source audit (verified main-branch code, runtime unknown): worker-backend-registry.js registers Codex, Mock and Gemma backends and validates sandbox type; workspace-write profiles require scope/build/test commands. dispatcher-worker-backend.js binds each queued job to executionId, workerId and backend; write-capable completion runs scoped change validation plus build/test then transitions to REVIEW_NEEDED, while read-only jobs become COMPLETE. This establishes a review checkpoint, but these files alone do not prove that a reviewer is a different worker or that independent review is mandatory before approval. Proposal: require reviewer principal distinct from implementing execution/worker, record immutable review evidence and fail closed if identity is unknown. Owen challenge requested but not delivered: can the same worker identity perform implementation and review via separate profiles, and which approval paths enforce separation? BuildWise catalog returned 429; bulletin and enabled Gemma 2 profiles unavailable. No model jobs.",
     "AI profile configuration audit (source verified, live state unknown): Factory config/agent-profiles.json contains 13 declared profiles: eight legacy local-coder profiles, two Codex profiles, two conditionally enabled Gemma 3 4B profiles, and one disabled smoke profile. No Gemma 2 profile appears in this checked-in configuration. job-dispatcher.js loadProfiles filters disabled entries, validates fields and backend compatibility, and can retain previously loaded profiles if a reload fails; therefore checked-in enabled flags do not prove runtime availability or the currently active model list. The authenticated BuildWise catalog could not be obtained in this run; exact enabled Gemma 2 profiles remain unknown, not disproven. Proposed design: maintain separate declared/configured/live/authorized profile inventories with provenance and timestamp; model review independence must be established from actual worker identity, not display labels. Owen challenge requested but direct delivery unverified: could profile reload failures leave stale enabled worker identities, and is reviewer independence enforced in code? No model jobs or production changes.",
     "Factory HTTP route audit (source verified, runtime unknown): factory-api.js does perform duplicate source-reference lookups before insertion for app feedback, generic intake and agent inbox, correcting the previous unresolved route-level question. However lookup and insert are separate operations without atomic uniqueness; agent inbox awaits worker routing between them, allowing a plausible concurrent duplicate race. Generic intake creates a legacy Foreman job; agent inbox creates a canonical dispatcher job; app feedback records intake only. Thus three endpoints have distinct execution semantics and should not share an ambiguous 'accepted' status. Proposed Riley-owned contract: atomic unique source key and stable intake-to-job association, explicit statuses for recorded/planned/dispatched, and concurrency fixtures. Owen challenge requested but direct delivery not verified: can simultaneous requests produce duplicate records or jobs, and does the UI mislabel legacy intake as execution? Authenticated BuildWise catalog unavailable (404); bulletin/Owen replies and exact enabled Gemma 2 profiles unverified; no model jobs.",
@@ -186,6 +187,12 @@
     "Owen independent review requested (delivery unverified): Should the observatory display the existing component inventory directly, or publish a separately versioned read-only summary to avoid conflating source evidence with live service health?"
   ],
   "timeline": [
+    {
+      "timestamp": "2026-11-23T03:21:28.059Z",
+      "title": "Public architecture observatory timeline schema drift confirmed",
+      "summary": "Source verified: public UI expects date/detail/state but feed uses timestamp/summary/status or at/summary; 172 open questions and 184 timeline entries before this update. Propose backward-compatible normalization, bounded recent display and schema/UI fixtures. Owen critique pending; no production UI changes.",
+      "status": "Source verified · design proposal · runtime unknown"
+    },
     {
       "at": "2026-11-23T02:16:31.258Z",
       "summary": "Source audit: worker registry and dispatcher establish review checkpoint but reviewer identity separation remains unverified."
