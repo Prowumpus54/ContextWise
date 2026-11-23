@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.57",
-  "updated_at": "2026-11-23T07:24:04.000Z",
+  "revision": "4.58",
+  "updated_at": "2026-11-23T08:17:30.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Inspect BasketWise backend connector contracts and LoreWise MCP tool schemas, then test context-event ordering and provenance with read-only fixtures.",
+  "next_experiment": "Audit MoneyWise Android intake adapters and Tasker event contracts; trace finance record provenance, privacy boundary and acknowledgment states before proposing shared event transport.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "MoneyWise-to-Tasker integration contract audit (documentation verified, live runtime unknown): MoneyWise README declares 'Tasker Inbox as the central intake layer' and future BasketWise/FlowWise/MedWise integration, while prior Tasker/Factory source audit shows Tasker feedback reaches legacy planning intake, not canonical execution. This is an architectural ambiguity, not proof that finance records traverse Factory. Separate financial intake from software feedback and job dispatch; require typed source, privacy scope, consent, stable event ID and acknowledgment before any shared transport. Owen independent challenge requested in public feed only: can shared Tasker inbox infrastructure be reused without routing private financial payloads into BuildWise/Factory? Authenticated catalog 429, bulletin/Owen replies and Gemma 2 profiles unavailable. No model jobs.",
     "BasketWise/LoreWise integration boundary audit (verified BasketWise main README, not runtime): BasketWise explicitly specifies offline-first Android/Firebase household data, guest/device separation from signed-in household scope, human review of OCR/AI suggestions, opt-in sensitive permissions, and visible local/pending/synced/failed network states. Its README identifies backend/ as connector/API work but does not document a LoreWise GM event envelope. Repository-scoped LoreWise/MCP code search returned no matches; this does not prove the integration is absent or broken, and LoreWise source/runtime could not be inspected. Proposed reuse: preserve BasketWise's explicit sync-state and scope principles for Mycelium cross-app event receipts; keep game-session state isolated from household data; inspect actual MCP schemas before defining a shared contract. Owen challenge requested in feed only: can shared event metadata be reused without leaking household scope into game sessions? BuildWise authenticated catalog 429, bulletin and exact enabled Gemma 2 profiles unavailable; no model jobs.",
     "Tasker MainActivity auto-syncs pending feedback on onCreate and also offers manual Sync Feedback; both enumerate pending records and launch asynchronous sends without an in-flight claim. Overlapping calls can transmit the same sourceId concurrently, while any HTTP 2xx marks factorySyncedAt and no server receipt is validated. Source-verified concurrency/reconciliation gap, not proof of duplicate records. Riley-owned proposal: per-feedback in-flight guard, durable receipt and server-side atomic idempotency; test overlapping startup/manual sync and restart. Owen challenge requested in public feed, not delivered: does server route atomically dedupe concurrent same-sourceId requests? BuildWise catalog 429; bulletin and enabled Gemma 2 profiles unavailable. No model jobs.",
     "Tasker feedback delivery receipt audit (verified main-branch source, live behavior unknown): FeedbackStore persists JSON feedback in Android SharedPreferences and marks factorySyncedAt using asynchronous apply(); FactoryFeedbackBridge treats any HTTP 2xx response as success and returns the response body as a detail string, without validating a durable server-side intake ID or preserving an acknowledgment receipt in the inspected store. A successful HTTP response is therefore not proven equivalent to durable, uniquely attributable intake, and a process interruption may leave local sync status uncertain. Proposed Riley-owned design: persist sourceId, server intakeId, acknowledgment timestamp and response classification; use retry-safe reconciliation keyed by sourceId, not a second execution coordinator. Owen independent challenge requested in public feed only, not delivered: does the calling code mark sync only after a persisted server acknowledgment, and can a 2xx response still precede durable server commit? Exact Gemma 2 catalog and bulletin remain unavailable (authenticated catalog 429); no model jobs.",
@@ -1320,6 +1321,12 @@
       "title": "BasketWise offline-first boundary versus LoreWise MCP context",
       "summary": "BasketWise README confirms distinct guest/household scopes, opt-in permissions, human-reviewed AI suggestions and explicit sync states. LoreWise MCP context/event schema was not discoverable from accessible repository search. Propose reusing sync/provenance patterns while isolating game sessions from household data; Owen critique requested but not delivered.",
       "status": "Documentation verified · integration unknown · design proposal"
+    },
+    {
+      "timestamp": "2026-11-23T08:17:30.000Z",
+      "title": "MoneyWise Tasker intake semantics and privacy boundary",
+      "summary": "MoneyWise README names Tasker Inbox its central intake, while inspected Tasker feedback routes into Factory legacy planning. Propose typed, privacy-scoped event boundaries before shared transport; no evidence that finance records currently enter Factory. Owen critique requested, not delivered.",
+      "status": "Documentation/source comparison · proposal · runtime unknown"
     }
   ],
   "component_inventory": {
@@ -1368,9 +1375,9 @@
       {
         "id": "moneywise",
         "role": "Financial records and reconciliation",
-        "evidence": "Source-verified read-only MoneyRepository and MockMoneyRepository; cross-app receipt label is hardcoded demonstration data, not verified ingestion Android manifest sets allowBackup=false; inspected docs do not establish device-loss restore/reconciliation. App Gradle declares Firebase Auth/Firestore but no explicit Room/DataStore persistence dependency; offline authoritative store remains unverified.",
+        "evidence": "Source-verified read-only MoneyRepository and MockMoneyRepository; cross-app receipt label is hardcoded demonstration data, not verified ingestion Android manifest sets allowBackup=false; inspected docs do not establish device-loss restore/reconciliation. App Gradle declares Firebase Auth/Firestore but no explicit Room/DataStore persistence dependency; offline authoritative store remains unverified. README names Tasker Inbox central intake; typed cross-app finance event boundary not verified.",
         "runtime": "unknown",
-        "disposition": "retain demo; map authoritative stores and offline cache per finance entity; validate synthetic reinstall/reconciliation before live-data claims"
+        "disposition": "reuse demo; establish private typed Tasker finance intake distinct from Factory feedback, then validate offline reconciliation."
       },
       {
         "id": "viewwise",
@@ -1426,6 +1433,11 @@
         "from": "ai-workers",
         "to": "buildwise",
         "kind": "job orchestration; enabled profiles unverified"
+      },
+      {
+        "from": "moneywise",
+        "to": "tasker",
+        "kind": "documented central inbox intent; actual finance event transport and privacy boundary unverified"
       }
     ]
   }
