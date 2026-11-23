@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.60",
-  "updated_at": "2026-11-23T10:21:55.313Z",
+  "revision": "4.61",
+  "updated_at": "2026-11-23T11:17:55.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Inspect ContextWise authenticated archive-reader and relay implementation against the documented browser-only boundary; then audit shared Kotlin camera/attachment code and Android build acceptance across SurveyWise and BasketWise.",
+  "next_experiment": "Inspect SurveyWise camera activity-result lifecycle and state-recovery acceptance, then compare BasketWise Android capture implementation and identify a low-coupling shared media adapter.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "SurveyWise implementation audit (main-branch Java source verified; no device execution): app/src/main/java/com/surveywise/app/MainActivity.java implements one local survey.json with observations containing only page,x,y,image,note; no immutable observation ID, photo ID, capture timestamp, project manifest or DOCX export is present in the inspected runnable slice. Camera output is created in MediaStore; pendingPhoto and selected observation are transient fields not saved/restored across activity recreation, so a camera/process restart can leave an unlinked photo or incomplete observation. Selecting a new PDF plan clears all observations and saves immediately. This upgrades prior README-only export and identity questions to code-verified implementation gaps, not confirmed data-loss incidents. Decision proposal for Riley: preserve this small offline vertical slice, introduce stable observation/media IDs and a pending-capture journal, require explicit confirmation before replacing a plan, then implement deterministic export manifest; test camera activity recreation, plan replacement cancellation, and export replay. Owen independent challenge requested via public feed only: would stable IDs and pending capture recovery suffice, or should project/plan boundaries become first-class before export? BuildWise authenticated catalog 429, bulletin/Owen replies/exact enabled Gemma 2 unknown; no model jobs.",
     "ContextWise durable-memory and agent-relay boundary audit (2026-11-23, source documentation verified; live runtime unverified): README, CURRENT_STATE.md, CHAT_RELAY_DESIGN.md and INTEGRATIONS.md explicitly describe v0.1.11 Project conversations as same-browser-profile BroadcastChannel with ephemeral messages, not cross-device/ChatGPT/BuildWise transport; manual handoff is copied by the user. Drive archivist writing and website archive reading use separate authorizations; owner E2E browser read is unverified. This means ContextWise cannot currently be treated as a verified always-on Mycelium registry, durable inter-agent inbox or automatic memory injection layer. Recommendation: retain ContextWise as human-reviewed archive and decision UI, keep BuildWise as execution authority, and design a separately authorized private broker with stable decision refs, scoped retrieval, durable receipts and independent review; do not equate a public architecture feed with private canonical memory. Owen challenge requested in public feed only: which source of truth should own supersession/decision authority, and can a broker deliver minimal evidence without exposing unrelated vault contents? Authenticated BuildWise catalog returned 429; specified bulletin, Owen replies and exact enabled Gemma 2 profiles unavailable; no model jobs.",
     "SurveyWise offline field-capture contract audit (repository README verified; runtime and implementation unverified): product specifies each observation binds original photos, annotations, note, sheet/pin and timestamp; original photos remain untouched, while export produces DOCX and archive. Proposed design decision: retain SurveyWise as a standalone offline-first capture application; define immutable observation/photo IDs and versioned export manifest before reusing BasketWise camera components. Acceptance test: offline multi-sheet capture, restart, annotated export, then compare IDs, notes, originals and overlays against source records. Repository-scoped searches for ObservationEntity/exportDocx returned no results, which does not prove code absent. Owen independent challenge requested in public feed only: can an export be reconstructed deterministically after edits without altering original media, and which camera components are truly low-coupling? Authenticated BuildWise catalog 429; bulletin and exact Gemma 2 profiles unavailable. No model jobs.",
     "MoneyWise-to-Tasker integration contract audit (documentation verified, live runtime unknown): MoneyWise README declares 'Tasker Inbox as the central intake layer' and future BasketWise/FlowWise/MedWise integration, while prior Tasker/Factory source audit shows Tasker feedback reaches legacy planning intake, not canonical execution. This is an architectural ambiguity, not proof that finance records traverse Factory. Separate financial intake from software feedback and job dispatch; require typed source, privacy scope, consent, stable event ID and acknowledgment before any shared transport. Owen independent challenge requested in public feed only: can shared Tasker inbox infrastructure be reused without routing private financial payloads into BuildWise/Factory? Authenticated catalog 429, bulletin/Owen replies and Gemma 2 profiles unavailable. No model jobs.",
@@ -1341,6 +1342,12 @@
       "title": "ContextWise memory registry versus ephemeral agent conversation",
       "summary": "ContextWise v0.1.11 documentation confirms same-browser-profile, in-memory BroadcastChannel only; no durable cross-agent relay, automatic context injection or verified owner E2E archive read. Propose preserving its curated archive UI while requiring separately authorized durable broker and decision-reference contracts. Owen independent challenge requested, not delivered.",
       "status": "Repository documentation verified · runtime unknown · design proposal"
+    },
+    {
+      "timestamp": "2026-11-23T11:17:55.000Z",
+      "title": "SurveyWise source-level capture and export contract",
+      "summary": "Inspected runnable Java Activity: local survey.json observations have no stable IDs or timestamps; pending camera URI/selection are not restored; replacing a plan clears saved observations; DOCX export is explicitly planned, not implemented in this slice. Proposed durable capture journal, IDs, explicit plan replacement and deterministic export test. Owen critique requested, not delivered.",
+      "status": "Source verified · device runtime unknown · design proposal"
     }
   ],
   "component_inventory": {
@@ -1382,9 +1389,9 @@
       {
         "id": "surveywise",
         "role": "Field observation capture",
-        "evidence": "MainActivity source verified: JSON local save and PDF/MediaStore capture, but pendingPhoto/selected not restored after Activity recreation; plan replacement clears observations immediately. No physical-device test.",
+        "evidence": "Main-branch Java MainActivity verified: single survey.json, PDF rendering, MediaStore camera, speech and pins; observation records lack IDs/timestamps; pending camera URI and selection are transient, and plan replacement clears saved observations. DOCX/annotation export not implemented in inspected vertical slice. Device behavior unverified.",
         "runtime": "unknown",
-        "disposition": "reuse offline app; design durable capture transaction, stable observation IDs and non-destructive project boundary before export integration"
+        "disposition": "reuse offline capture slice; add durable capture journal, stable IDs, non-destructive plan replacement and export manifest before shared camera extraction"
       },
       {
         "id": "moneywise",
