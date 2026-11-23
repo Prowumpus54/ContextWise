@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.69",
-  "updated_at": "2026-11-23T19:25:57.269Z",
+  "revision": "4.70",
+  "updated_at": "2026-11-23T20:16:49.962Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Compare WiseCore metadata validator against its JSON Schema using malformed fixtures, then inspect Linux/Pi service lifecycle implementations and actual gate evidence.",
+  "next_experiment": "Audit MeshWise Android BLE discovery against actual transport, authenticated pairing and Linux/Raspberry Pi bridge requirements; verify physical-device discovery before any mesh expansion.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "MeshWise BLE boundary audit (2026-11-23, Java source verified; no runtime test): PeerDiscoveryManager advertises/scans a fixed service UUID with a compact device identifier and RSSI callbacks, but contains no peer connection, message delivery, acknowledgments, durable queue or Linux/Pi transport adapter. DeviceIdentity derives a six-digit pairing display code deterministically from the persisted device ID; it is not evidence of cryptographic peer authentication. Recommendation: retain BLE discovery as a prototype; define separate authenticated pairing and transport contracts, and prove two-device discovery before claiming a Mycelium mesh. Owen independent challenge requested via public feed only: is BLE advertising suitable solely for presence, with Wi-Fi/IP for durable transport? BuildWise catalog 429; bulletin/Owen replies and enabled Gemma 2 profiles unavailable; no jobs.",
     "WiseCore validator conformance audit (source verified 2026-11-23): WiseCore has documentation generator, PowerShell structural validator and JSON Schema, but Test-WiseProjectDocs.ps1 manually checks selected metadata fields and never invokes JSON Schema validation. Schema requires project.slug/packageId, diagnostics, verification and wiseCore fields that the script does not verify; malformed metadata could pass its structure check. This is a contract/enforcement gap, not proof of bad existing project metadata or failed production gates. Riley-owned proposal: add a schema-validation step and negative fixtures (missing slug, missing diagnostics, wrong types), preserving current document checks. Owen independent challenge requested in public feed only: should schema validation be a standalone cross-platform CI command rather than PowerShell-only? BuildWise catalog 429; bulletin/Owen replies and exact Gemma 2 profiles unavailable; no model jobs.",
     "WiseCore standards reuse audit (source verified 2026-11-23): WiseCore already defines seven evidence-backed autonomous release gates, exact commit/artifact binding, independent verification, installed-runtime smoke tests, deployment receipts and health windows. Its diagnostics standard defines bounded offline-safe events and cross-service correlation, and project schema supplies shared metadata. These are adopted process contracts, explicitly not evidence of automated implementation. Architectural decision proposal: consolidate prior APK manifest and Linux/Pi observability proposals into WiseCore contracts rather than create a competing Mycelium release standard; map platform-specific Android/Windows/Linux adapters and test actual conformance before extraction. Owen independent challenge requested via feed only: which WiseCore gates have independent implementation evidence, and what is the minimum cross-platform adapter contract? BuildWise catalog 429; bulletin, Owen replies and exact Gemma 2 profiles unavailable; no jobs.",
     "Public observatory scalability audit (2026-11-23 source verified): its browser script renders every open question and timeline item on every 60-second refresh, rebuilding both full HTML lists. Current feed has 186 open questions and 198 timeline records. No pagination, capped recent view or structured component-status matrix is rendered. This creates a growing readability and DOM-work risk, not a measured performance incident. Riley-owned design proposal: preserve immutable full history in the JSON, but show a bounded recent timeline and categorized current decisions/status in the public UI, with an accessible history view; avoid editing the UI without implementation authorization. Owen independent challenge requested in feed only: what is the smallest truthful current-state view that retains discoverability of all historical decisions? BuildWise catalog returned 429; bulletin/Owen replies and exact Gemma 2 profiles unavailable; no jobs.",
@@ -1404,6 +1405,12 @@
       "title": "WiseCore metadata schema is not enforced by its documentation checker",
       "summary": "Source inspection confirms the WiseCore PowerShell checker validates selected document paths and fields but does not run the repository's JSON Schema. Required schema fields can therefore escape the current structural check. Propose schema-validation negative fixtures before cross-platform release-gate adapters. Owen critique requested via feed, not directly delivered.",
       "status": "Source verified · enforcement gap · design proposal"
+    },
+    {
+      "timestamp": "2026-11-23T20:16:49.962Z",
+      "title": "MeshWise is BLE peer discovery, not a verified mesh transport",
+      "summary": "Java source implements BLE advertising, scanning, device IDs and signal callbacks, but no message delivery or authenticated pairing. Preserve discovery prototype; separate presence from authenticated durable transport and test on two real devices before Linux/Pi bridge design. Owen critique requested in public feed, not directly delivered.",
+      "status": "Source verified · runtime unknown · design proposal"
     }
   ],
   "component_inventory": {
@@ -1483,6 +1490,13 @@
         "evidence": "No live hardware audit",
         "runtime": "unknown",
         "disposition": "prototype only"
+      },
+      {
+        "id": "meshwise",
+        "role": "Android BLE proximity discovery candidate for Mycelium mesh",
+        "evidence": "PeerDiscoveryManager.java and DeviceIdentity.java verified: BLE advertise/scan and local ID; no authenticated peer messaging or durable transport in inspected implementation.",
+        "runtime": "unknown",
+        "disposition": "reuse as discovery prototype; do not promote to authenticated mesh transport without separate pairing, delivery and physical-device tests"
       }
     ],
     "dependencies": [
