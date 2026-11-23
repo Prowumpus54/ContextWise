@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.54",
-  "updated_at": "2026-11-23T04:24:47.019Z",
+  "revision": "4.55",
+  "updated_at": "2026-11-23T05:17:27.507Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Inspect Tasker feedback persistence and Factory generic intake status mapping; then inspect LoreWise MCP session/event contracts when accessible.",
+  "next_experiment": "Inspect Tasker feedback sender call sites and retry scheduling, then audit LoreWise MCP session/event ordering and game-master context envelope.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "Tasker feedback delivery receipt audit (verified main-branch source, live behavior unknown): FeedbackStore persists JSON feedback in Android SharedPreferences and marks factorySyncedAt using asynchronous apply(); FactoryFeedbackBridge treats any HTTP 2xx response as success and returns the response body as a detail string, without validating a durable server-side intake ID or preserving an acknowledgment receipt in the inspected store. A successful HTTP response is therefore not proven equivalent to durable, uniquely attributable intake, and a process interruption may leave local sync status uncertain. Proposed Riley-owned design: persist sourceId, server intakeId, acknowledgment timestamp and response classification; use retry-safe reconciliation keyed by sourceId, not a second execution coordinator. Owen independent challenge requested in public feed only, not delivered: does the calling code mark sync only after a persisted server acknowledgment, and can a 2xx response still precede durable server commit? Exact Gemma 2 catalog and bulletin remain unavailable (authenticated catalog 429); no model jobs.",
     "Tasker feedback bridge route audit (verified main-branch source, runtime unknown): FactoryFeedbackBridge.java posts feedback to /api/intake with source='tasker-android' and sourceId from feedback.id. Prior Factory API source audit established that generic /api/intake creates legacy Foreman planning jobs, whereas agent inbox creates canonical dispatcher jobs. Thus Tasker feedback cannot be assumed to create executable BuildWise dispatcher work. LocalTaskStore.java persists task records in SharedPreferences using asynchronous apply(), without a verified cross-device sync/reconciliation layer; TaskRecord.source is a free-text origin field, not a globally enforced event reference. Proposal: retain Tasker feedback capture, document feedback->legacy planning->approved dispatcher transitions with distinct IDs and statuses; use read-only contract fixtures for duplicate submission and missing sourceId. Owen independent challenge requested but not delivered: is any other bridge converting Tasker intake into dispatcher jobs, and what guarantees provenance after retries? BuildWise catalog 429; bulletin/Owen replies and exact Gemma 2 profiles inaccessible. No model jobs.",
     "Public observatory source-contract audit (verified): architecture.json has 172 open questions and 184 timeline entries before this update; index.html renders timeline properties date/detail/state, while recent feed entries use timestamp/summary/status and some older entries use at/summary. Therefore the page's latest timeline records render missing fields as blank or 'undefined' rather than their intended timestamp, explanation and status. The page also renders all historical questions and timeline records, creating unbounded DOM and low signal-to-noise. Recommendation for Riley: introduce a versioned normalized feed view with backwards-compatible field mapping, show latest 10 timeline items, separate unresolved questions from historical archive, and add a static schema/UI fixture test. Do not change index.html without implementation authorization. Owen challenge requested, not delivered: should normalization happen at publishing or display, and how preserve immutable history? Authenticated BuildWise catalog 429; bulletin and Gemma 2 availability unverified.",
     "Worker backend registry source audit (verified main-branch code, runtime unknown): worker-backend-registry.js registers Codex, Mock and Gemma backends and validates sandbox type; workspace-write profiles require scope/build/test commands. dispatcher-worker-backend.js binds each queued job to executionId, workerId and backend; write-capable completion runs scoped change validation plus build/test then transitions to REVIEW_NEEDED, while read-only jobs become COMPLETE. This establishes a review checkpoint, but these files alone do not prove that a reviewer is a different worker or that independent review is mandatory before approval. Proposal: require reviewer principal distinct from implementing execution/worker, record immutable review evidence and fail closed if identity is unknown. Owen challenge requested but not delivered: can the same worker identity perform implementation and review via separate profiles, and which approval paths enforce separation? BuildWise catalog returned 429; bulletin and enabled Gemma 2 profiles unavailable. No model jobs.",
@@ -1300,6 +1301,12 @@
       "title": "Tasker feedback enters planning intake, not canonical dispatch",
       "summary": "Main-branch Tasker bridge posts to Factory generic intake; Factory route review maps that endpoint to legacy planning records, not canonical dispatcher execution. Recommend explicit intake-to-dispatch provenance and status mapping, without introducing another coordinator. Owen review pending; runtime unverified.",
       "status": "Source verified · proposal · runtime unknown"
+    },
+    {
+      "timestamp": "2026-11-23T05:17:27.507Z",
+      "title": "Tasker feedback acknowledgment lacks durable delivery receipt",
+      "summary": "Source inspection confirmed Tasker stores feedback locally and records a sync timestamp, while its Factory bridge treats any HTTP 2xx as success without verifying a server-issued durable intake receipt. Recommend an idempotent acknowledgment contract and read-only failure/retry fixtures. Owen challenge requested but delivery unverified; live behavior unknown.",
+      "status": "Source verified · design proposal · runtime unknown"
     }
   ],
   "component_inventory": {
