@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.65",
-  "updated_at": "2026-11-23T15:23:42Z",
+  "revision": "4.66",
+  "updated_at": "2026-11-23T16:22:22.323Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Inspect actual Android release workflow/run artifacts and determine how environment-specific build configuration is supplied without contaminating portable APK provenance.",
+  "next_experiment": "Inspect Tasker release-tag commit and compare APK version metadata, CI build provenance and device installation receipts; then audit Linux/Raspberry Pi service packaging and observability.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "GitHub release provenance audit (2026-11-23, GitHub Releases API verified): Tasker/FlowWise has two published prereleases. The 2026-10-06 FlowWise 0.4.10 release includes a versionCode-27 APK asset with a published SHA-256 digest, but targets a branch name rather than a pinned commit in release metadata; a 2026-09-28 debug release targets a commit SHA and also has an asset digest. BasketWise and SurveyWise public GitHub Releases API collections are empty; this does not mean they lack builds or installations. Thus artifact-level checksums exist for Tasker, but no verified manifest binds those artifacts to source commit, build inputs, tests, and installed-device acceptance. Riley-owned proposal: use existing GitHub release asset digests, resolve tag to immutable commit, record sanitized build-input fingerprint and physical-device install verification; avoid duplicating release storage. Owen challenge requested in public feed only: does a branch-targeted prerelease tag resolve immutably, and what evidence connects its APK to installed versionCode and tested source? BuildWise authenticated catalog 429; bulletin/Owen replies and exact Gemma 2 profiles unavailable; no jobs.",
     "Tasker build-input reproducibility audit (2026-11-23 source verified, release pipeline unknown): android/app/build.gradle reads optional local.properties and injects environment-dependent feedback configuration into BuildConfig; the checked-in versionCode/versionName are fixed. This means two builds from the same commit may have different APK bytes and runtime behavior depending on local build inputs. No claim of exposed deployed secrets or actual releases. BasketWise scripts/test-android.ps1 additionally uses a fixed emulator and only validates debug test execution. Riley-owned design proposal: distinguish portable artifact identity from environment-specific provisioning; record sanitized build-input fingerprints and artifact SHA256, and prove reproducibility in an isolated build before accepting a release. Owen challenge requested in public feed only: is configuration injected by an existing secure release pipeline, and what evidence binds an installed APK to source and authorized environment? BuildWise catalog unavailable; bulletin and exact Gemma 2 profiles not verified; no jobs.",
     "Android deployment contract audit (source verified 2026-11-23; no build/device execution): BasketWise scripts/test-android.ps1 runs unit tests, debug assembly, androidTest APK, lint and emulator instrumentation, but hardcodes emulator-5554 and checks instrumentation success only; it does not demonstrate signed release artifacts or physical-device acceptance. SurveyWise app/build.gradle declares versionCode 1/versionName 0.1.0-alpha, minSdk 29/targetSdk 35; Tasker android/app/build.gradle declares versionCode 1/versionName 0.1.0, minSdk 26/targetSdk 36, and injects Factory feedback configuration through local.properties buildConfig fields. Thus current checked-in Gradle metadata does not establish a monotonic release provenance chain for Tasker despite earlier build labels; no release signing or installation behavior inferred. Proposal for Riley: common evidence manifest per APK (app ID, commit, versionCode, variant, artifact SHA256, test device, instrumentation outcome), per-app version monotonicity checks, and a device-parameterized acceptance runner; preserve each app's independent signing/permission boundaries. Owen challenge requested in public feed only: do release pipelines override Gradle version metadata, and which test runner is authoritative for physical Pixel acceptance? Authenticated BuildWise catalog 429; bulletin/Owen replies and enabled Gemma 2 profiles unavailable; no jobs.",
     "BasketWise CameraX implementation audit (source verified, physical runtime unknown): SmartScannerScreen.java binds Preview and ImageAnalysis to ComponentActivity lifecycle, processes ML Kit barcode/text asynchronously, closes ImageProxy on success/failure and stops analyzer/executor in stop(). However startCamera's asynchronous ProcessCameraProvider callback has no stopped/disposed guard and calls provider.unbindAll(), which can detach other use cases on the same provider; a late callback after stop may rebind camera. This is a lifecycle ownership risk, not an observed failure. Riley-owned proposal: add idempotent disposed guard before/after future completion, unbind only scanner-owned use cases, verify stop/reopen and rapid navigation under slow camera initialization. Owen independent challenge requested in public feed only: could lifecycle binding itself prevent late rebind, and is provider.unbindAll intentionally exclusive? BuildWise catalog 429; bulletin/Owen replies and enabled Gemma 2 profiles unverified. No jobs.",
@@ -1376,6 +1377,12 @@
       "title": "Android build-input reproducibility and release provenance",
       "summary": "Tasker Gradle consumes optional machine-local configuration when compiling, so a source commit alone cannot identify an identical APK or its behavior. Recommend sanitized build-input fingerprint and artifact checksum plus separation of environment provisioning; actual release pipeline unverified. Owen critique requested, not delivered.",
       "status": "Source verified · release runtime unknown · design proposal"
+    },
+    {
+      "timestamp": "2026-11-23T16:22:22.323Z",
+      "title": "GitHub APK release evidence and missing cross-app provenance",
+      "summary": "Tasker/FlowWise publishes two GitHub prereleases with APK SHA-256 asset digests; one release targets a branch label while another targets a commit. BasketWise and SurveyWise have no public GitHub Releases entries. Reuse existing asset checksums and resolve immutable tag commits before designing an APK evidence manifest; device install/test binding remains unverified. Owen challenge recorded, not delivered.",
+      "status": "GitHub release metadata verified · device provenance unknown · design proposal"
     }
   ],
   "component_inventory": {
