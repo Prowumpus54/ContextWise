@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.59",
-  "updated_at": "2026-11-23T09:18:21.000Z",
+  "revision": "4.60",
+  "updated_at": "2026-11-23T10:21:55.313Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Inspect SurveyWise actual Kotlin persistence/export implementation and tests, then compare its offline observation/attachment identity with BasketWise camera reuse and Tasker delivery receipts.",
+  "next_experiment": "Inspect ContextWise authenticated archive-reader and relay implementation against the documented browser-only boundary; then audit shared Kotlin camera/attachment code and Android build acceptance across SurveyWise and BasketWise.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "ContextWise durable-memory and agent-relay boundary audit (2026-11-23, source documentation verified; live runtime unverified): README, CURRENT_STATE.md, CHAT_RELAY_DESIGN.md and INTEGRATIONS.md explicitly describe v0.1.11 Project conversations as same-browser-profile BroadcastChannel with ephemeral messages, not cross-device/ChatGPT/BuildWise transport; manual handoff is copied by the user. Drive archivist writing and website archive reading use separate authorizations; owner E2E browser read is unverified. This means ContextWise cannot currently be treated as a verified always-on Mycelium registry, durable inter-agent inbox or automatic memory injection layer. Recommendation: retain ContextWise as human-reviewed archive and decision UI, keep BuildWise as execution authority, and design a separately authorized private broker with stable decision refs, scoped retrieval, durable receipts and independent review; do not equate a public architecture feed with private canonical memory. Owen challenge requested in public feed only: which source of truth should own supersession/decision authority, and can a broker deliver minimal evidence without exposing unrelated vault contents? Authenticated BuildWise catalog returned 429; specified bulletin, Owen replies and exact enabled Gemma 2 profiles unavailable; no model jobs.",
     "SurveyWise offline field-capture contract audit (repository README verified; runtime and implementation unverified): product specifies each observation binds original photos, annotations, note, sheet/pin and timestamp; original photos remain untouched, while export produces DOCX and archive. Proposed design decision: retain SurveyWise as a standalone offline-first capture application; define immutable observation/photo IDs and versioned export manifest before reusing BasketWise camera components. Acceptance test: offline multi-sheet capture, restart, annotated export, then compare IDs, notes, originals and overlays against source records. Repository-scoped searches for ObservationEntity/exportDocx returned no results, which does not prove code absent. Owen independent challenge requested in public feed only: can an export be reconstructed deterministically after edits without altering original media, and which camera components are truly low-coupling? Authenticated BuildWise catalog 429; bulletin and exact Gemma 2 profiles unavailable. No model jobs.",
     "MoneyWise-to-Tasker integration contract audit (documentation verified, live runtime unknown): MoneyWise README declares 'Tasker Inbox as the central intake layer' and future BasketWise/FlowWise/MedWise integration, while prior Tasker/Factory source audit shows Tasker feedback reaches legacy planning intake, not canonical execution. This is an architectural ambiguity, not proof that finance records traverse Factory. Separate financial intake from software feedback and job dispatch; require typed source, privacy scope, consent, stable event ID and acknowledgment before any shared transport. Owen independent challenge requested in public feed only: can shared Tasker inbox infrastructure be reused without routing private financial payloads into BuildWise/Factory? Authenticated catalog 429, bulletin/Owen replies and Gemma 2 profiles unavailable. No model jobs.",
     "BasketWise/LoreWise integration boundary audit (verified BasketWise main README, not runtime): BasketWise explicitly specifies offline-first Android/Firebase household data, guest/device separation from signed-in household scope, human review of OCR/AI suggestions, opt-in sensitive permissions, and visible local/pending/synced/failed network states. Its README identifies backend/ as connector/API work but does not document a LoreWise GM event envelope. Repository-scoped LoreWise/MCP code search returned no matches; this does not prove the integration is absent or broken, and LoreWise source/runtime could not be inspected. Proposed reuse: preserve BasketWise's explicit sync-state and scope principles for Mycelium cross-app event receipts; keep game-session state isolated from household data; inspect actual MCP schemas before defining a shared contract. Owen challenge requested in feed only: can shared event metadata be reused without leaking household scope into game sessions? BuildWise authenticated catalog 429, bulletin and exact enabled Gemma 2 profiles unavailable; no model jobs.",
@@ -1334,6 +1335,12 @@
       "title": "SurveyWise offline field-capture contract audit",
       "summary": "SurveyWise README verified: offline-first plan/photo/voice capture, immutable original images, editable annotations, manual authoritative pins and DOCX/ZIP export acceptance. Proposed stable observation/media IDs plus deterministic export-manifest fixture; implementation and live behavior not verified. Owen critique requested, not delivered.",
       "status": "Documentation verified · design proposal · runtime unknown"
+    },
+    {
+      "timestamp": "2026-11-23T10:21:55.313Z",
+      "title": "ContextWise memory registry versus ephemeral agent conversation",
+      "summary": "ContextWise v0.1.11 documentation confirms same-browser-profile, in-memory BroadcastChannel only; no durable cross-agent relay, automatic context injection or verified owner E2E archive read. Propose preserving its curated archive UI while requiring separately authorized durable broker and decision-reference contracts. Owen independent challenge requested, not delivered.",
+      "status": "Repository documentation verified · runtime unknown · design proposal"
     }
   ],
   "component_inventory": {
@@ -1354,9 +1361,9 @@
       {
         "id": "contextwise",
         "role": "Curated knowledge and architecture feed",
-        "evidence": "Current architecture feed and observatory source inspected",
+        "evidence": "Repository README, CURRENT_STATE, CHAT_RELAY_DESIGN and INTEGRATIONS verified: local Project conversations use ephemeral same-browser BroadcastChannel; Drive writer/reader authorizations separate; durable agent broker and automatic cross-chat memory not implemented per documentation. Live runtime unverified.",
         "runtime": "unknown",
-        "disposition": "reuse; add schema validation"
+        "disposition": "reuse curated archive and decision UI; do not treat as live registry; separately authorize durable, scoped relay and source-linked context retrieval"
       },
       {
         "id": "tasker",
