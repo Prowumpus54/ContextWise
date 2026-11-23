@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.56",
-  "updated_at": "2026-11-23T06:22:33.016Z",
+  "revision": "4.57",
+  "updated_at": "2026-11-23T07:24:04.000Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Audit LoreWise MCP session/event ordering and GM context envelope, then compare reusable event contracts with Tasker.",
+  "next_experiment": "Inspect BasketWise backend connector contracts and LoreWise MCP tool schemas, then test context-event ordering and provenance with read-only fixtures.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "BasketWise/LoreWise integration boundary audit (verified BasketWise main README, not runtime): BasketWise explicitly specifies offline-first Android/Firebase household data, guest/device separation from signed-in household scope, human review of OCR/AI suggestions, opt-in sensitive permissions, and visible local/pending/synced/failed network states. Its README identifies backend/ as connector/API work but does not document a LoreWise GM event envelope. Repository-scoped LoreWise/MCP code search returned no matches; this does not prove the integration is absent or broken, and LoreWise source/runtime could not be inspected. Proposed reuse: preserve BasketWise's explicit sync-state and scope principles for Mycelium cross-app event receipts; keep game-session state isolated from household data; inspect actual MCP schemas before defining a shared contract. Owen challenge requested in feed only: can shared event metadata be reused without leaking household scope into game sessions? BuildWise authenticated catalog 429, bulletin and exact enabled Gemma 2 profiles unavailable; no model jobs.",
     "Tasker MainActivity auto-syncs pending feedback on onCreate and also offers manual Sync Feedback; both enumerate pending records and launch asynchronous sends without an in-flight claim. Overlapping calls can transmit the same sourceId concurrently, while any HTTP 2xx marks factorySyncedAt and no server receipt is validated. Source-verified concurrency/reconciliation gap, not proof of duplicate records. Riley-owned proposal: per-feedback in-flight guard, durable receipt and server-side atomic idempotency; test overlapping startup/manual sync and restart. Owen challenge requested in public feed, not delivered: does server route atomically dedupe concurrent same-sourceId requests? BuildWise catalog 429; bulletin and enabled Gemma 2 profiles unavailable. No model jobs.",
     "Tasker feedback delivery receipt audit (verified main-branch source, live behavior unknown): FeedbackStore persists JSON feedback in Android SharedPreferences and marks factorySyncedAt using asynchronous apply(); FactoryFeedbackBridge treats any HTTP 2xx response as success and returns the response body as a detail string, without validating a durable server-side intake ID or preserving an acknowledgment receipt in the inspected store. A successful HTTP response is therefore not proven equivalent to durable, uniquely attributable intake, and a process interruption may leave local sync status uncertain. Proposed Riley-owned design: persist sourceId, server intakeId, acknowledgment timestamp and response classification; use retry-safe reconciliation keyed by sourceId, not a second execution coordinator. Owen independent challenge requested in public feed only, not delivered: does the calling code mark sync only after a persisted server acknowledgment, and can a 2xx response still precede durable server commit? Exact Gemma 2 catalog and bulletin remain unavailable (authenticated catalog 429); no model jobs.",
     "Tasker feedback bridge route audit (verified main-branch source, runtime unknown): FactoryFeedbackBridge.java posts feedback to /api/intake with source='tasker-android' and sourceId from feedback.id. Prior Factory API source audit established that generic /api/intake creates legacy Foreman planning jobs, whereas agent inbox creates canonical dispatcher jobs. Thus Tasker feedback cannot be assumed to create executable BuildWise dispatcher work. LocalTaskStore.java persists task records in SharedPreferences using asynchronous apply(), without a verified cross-device sync/reconciliation layer; TaskRecord.source is a free-text origin field, not a globally enforced event reference. Proposal: retain Tasker feedback capture, document feedback->legacy planning->approved dispatcher transitions with distinct IDs and statuses; use read-only contract fixtures for duplicate submission and missing sourceId. Owen independent challenge requested but not delivered: is any other bridge converting Tasker intake into dispatcher jobs, and what guarantees provenance after retries? BuildWise catalog 429; bulletin/Owen replies and exact Gemma 2 profiles inaccessible. No model jobs.",
@@ -1313,6 +1314,12 @@
       "timestamp": "2026-11-23T06:22:33.016Z",
       "summary": "Source audit: Tasker automatic and manual feedback sync can overlap without per-item in-flight protection; propose receipt-backed idempotency and concurrency fixture.",
       "status": "Proposal; code verified, runtime unknown"
+    },
+    {
+      "timestamp": "2026-11-23T07:24:04.000Z",
+      "title": "BasketWise offline-first boundary versus LoreWise MCP context",
+      "summary": "BasketWise README confirms distinct guest/household scopes, opt-in permissions, human-reviewed AI suggestions and explicit sync states. LoreWise MCP context/event schema was not discoverable from accessible repository search. Propose reusing sync/provenance patterns while isolating game sessions from household data; Owen critique requested but not delivered.",
+      "status": "Documentation verified · integration unknown · design proposal"
     }
   ],
   "component_inventory": {
