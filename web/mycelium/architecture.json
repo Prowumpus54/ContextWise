@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.70",
-  "updated_at": "2026-11-23T20:16:49.962Z",
+  "revision": "4.71",
+  "updated_at": "2026-11-24T10:20:49Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Audit MeshWise Android BLE discovery against actual transport, authenticated pairing and Linux/Raspberry Pi bridge requirements; verify physical-device discovery before any mesh expansion.",
+  "next_experiment": "Compare WiseCore contract adoption in two applications using synthetic conformance fixtures; audit WiseBoard next for shared presentation and event boundaries.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -12,6 +12,7 @@
     "Observable and reversible changes"
   ],
   "open_questions": [
+    "WiseCore shared-library inventory (2026-11-24): complete main tree contains standards, one metadata schema, documentation templates and PowerShell bootstrap/validation scripts, but no runtime library source, package build manifest or library test suite. The engineering standard requires proof in an app, extraction, and adoption in a second app before stable shared status. Proposal: retain WiseCore as standards/tooling authority; prototype document, inference, transaction and exact-money contracts in owning apps, then publish versioned language-neutral fixtures before extracting platform adapters. Do not claim shared runtime availability. Owen challenge: what minimum two-consumer conformance evidence should gate extraction? Independent delivery unavailable; no runtime tests or model jobs.",
     "MeshWise BLE boundary audit (2026-11-23, Java source verified; no runtime test): PeerDiscoveryManager advertises/scans a fixed service UUID with a compact device identifier and RSSI callbacks, but contains no peer connection, message delivery, acknowledgments, durable queue or Linux/Pi transport adapter. DeviceIdentity derives a six-digit pairing display code deterministically from the persisted device ID; it is not evidence of cryptographic peer authentication. Recommendation: retain BLE discovery as a prototype; define separate authenticated pairing and transport contracts, and prove two-device discovery before claiming a Mycelium mesh. Owen independent challenge requested via public feed only: is BLE advertising suitable solely for presence, with Wi-Fi/IP for durable transport? BuildWise catalog 429; bulletin/Owen replies and enabled Gemma 2 profiles unavailable; no jobs.",
     "WiseCore validator conformance audit (source verified 2026-11-23): WiseCore has documentation generator, PowerShell structural validator and JSON Schema, but Test-WiseProjectDocs.ps1 manually checks selected metadata fields and never invokes JSON Schema validation. Schema requires project.slug/packageId, diagnostics, verification and wiseCore fields that the script does not verify; malformed metadata could pass its structure check. This is a contract/enforcement gap, not proof of bad existing project metadata or failed production gates. Riley-owned proposal: add a schema-validation step and negative fixtures (missing slug, missing diagnostics, wrong types), preserving current document checks. Owen independent challenge requested in public feed only: should schema validation be a standalone cross-platform CI command rather than PowerShell-only? BuildWise catalog 429; bulletin/Owen replies and exact Gemma 2 profiles unavailable; no model jobs.",
     "WiseCore standards reuse audit (source verified 2026-11-23): WiseCore already defines seven evidence-backed autonomous release gates, exact commit/artifact binding, independent verification, installed-runtime smoke tests, deployment receipts and health windows. Its diagnostics standard defines bounded offline-safe events and cross-service correlation, and project schema supplies shared metadata. These are adopted process contracts, explicitly not evidence of automated implementation. Architectural decision proposal: consolidate prior APK manifest and Linux/Pi observability proposals into WiseCore contracts rather than create a competing Mycelium release standard; map platform-specific Android/Windows/Linux adapters and test actual conformance before extraction. Owen independent challenge requested via feed only: which WiseCore gates have independent implementation evidence, and what is the minimum cross-platform adapter contract? BuildWise catalog 429; bulletin, Owen replies and exact Gemma 2 profiles unavailable; no jobs.",
@@ -1411,6 +1412,12 @@
       "title": "MeshWise is BLE peer discovery, not a verified mesh transport",
       "summary": "Java source implements BLE advertising, scanning, device IDs and signal callbacks, but no message delivery or authenticated pairing. Preserve discovery prototype; separate presence from authenticated durable transport and test on two real devices before Linux/Pi bridge design. Owen critique requested in public feed, not directly delivered.",
       "status": "Source verified · runtime unknown · design proposal"
+    },
+    {
+      "timestamp": "2026-11-24T10:20:49Z",
+      "title": "WiseCore runtime library boundary clarified",
+      "summary": "WiseCore shared-library inventory (2026-11-24): complete main tree contains standards, one metadata schema, documentation templates and PowerShell bootstrap/validation scripts, but no runtime library source, package build manifest or library test suite. The engineering standard requires proof in an app, extraction, and adoption in a second app before stable shared status. Proposal: retain WiseCore as standards/tooling authority; prototype document, inference, transaction and exact-money contracts in owning apps, then publish versioned language-neutral fixtures before extracting platform adapters. Do not claim shared runtime availability. Owen challenge: what minimum two-consumer conformance evidence should gate extraction? Independent delivery unavailable; no runtime tests or model jobs.",
+      "status": "Source verified · design proposal · runtime unknown"
     }
   ],
   "component_inventory": {
@@ -1497,6 +1504,13 @@
         "evidence": "PeerDiscoveryManager.java and DeviceIdentity.java verified: BLE advertise/scan and local ID; no authenticated peer messaging or durable transport in inspected implementation.",
         "runtime": "unknown",
         "disposition": "reuse as discovery prototype; do not promote to authenticated mesh transport without separate pairing, delivery and physical-device tests"
+      },
+      {
+        "id": "wisecore",
+        "role": "Shared engineering standards and tooling",
+        "evidence": "Main tree verifies standards, metadata schema, templates and PowerShell tools; no runtime library implementation or library tests in inspected tree.",
+        "runtime": "unknown",
+        "disposition": "reuse standards; extract versioned contracts only after two-app conformance"
       }
     ],
     "dependencies": [
