@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "revision": "4.71",
-  "updated_at": "2026-11-24T10:20:49Z",
+  "revision": "4.72",
+  "updated_at": "2026-11-24T11:20:46Z",
   "phase": "Architecture workshop",
   "status": "Design only · No deployment",
-  "next_experiment": "Compare WiseCore contract adoption in two applications using synthetic conformance fixtures; audit WiseBoard next for shared presentation and event boundaries.",
+  "next_experiment": "Test status presentation with partial data failures and stale snapshots; next audit ScanWise document intake and export.",
   "principles": [
     "Automatic discovery, explicit authorization",
     "Deterministic recovery before AI escalation",
@@ -1418,6 +1418,12 @@
       "title": "WiseCore runtime library boundary clarified",
       "summary": "WiseCore shared-library inventory (2026-11-24): complete main tree contains standards, one metadata schema, documentation templates and PowerShell bootstrap/validation scripts, but no runtime library source, package build manifest or library test suite. The engineering standard requires proof in an app, extraction, and adoption in a second app before stable shared status. Proposal: retain WiseCore as standards/tooling authority; prototype document, inference, transaction and exact-money contracts in owning apps, then publish versioned language-neutral fixtures before extracting platform adapters. Do not claim shared runtime availability. Owen challenge: what minimum two-consumer conformance evidence should gate extraction? Independent delivery unavailable; no runtime tests or model jobs.",
       "status": "Source verified · design proposal · runtime unknown"
+    },
+    {
+      "timestamp": "2026-11-24T11:20:46Z",
+      "title": "WiseBoard audio scope distinguished from BuildWise dashboards",
+      "summary": "WiseBoard main contains only a roadmap README for Discord sound playback, Windows audio routing and an optional virtual audio device. BuildWise has a separate implemented Android status widget; its source can report online even when a later data request fails. Preserve product boundaries and propose a shared status contract separating connectivity, data freshness and completeness. Owen challenge: can independent status dimensions prevent misleading health displays without a central dashboard service? Review delivery unavailable.",
+      "status": "Source verified · design proposal · runtime unknown"
     }
   ],
   "component_inventory": {
@@ -1511,6 +1517,13 @@
         "evidence": "Main tree verifies standards, metadata schema, templates and PowerShell tools; no runtime library implementation or library tests in inspected tree.",
         "runtime": "unknown",
         "disposition": "reuse standards; extract versioned contracts only after two-app conformance"
+      },
+      {
+        "id": "wiseboard",
+        "role": "Discord soundboard and desktop audio companion",
+        "evidence": "Main tree contains README only; audio features and virtual device are roadmap items.",
+        "runtime": "unknown",
+        "disposition": "retain separate audio product; validate playback prototype before shared audio extraction"
       }
     ],
     "dependencies": [
@@ -1543,6 +1556,11 @@
         "from": "moneywise",
         "to": "tasker",
         "kind": "documented central inbox intent; actual finance event transport and privacy boundary unverified"
+      },
+      {
+        "from": "buildwise",
+        "to": "wisecore",
+        "kind": "proposed status presentation contract; not implemented"
       }
     ]
   }
